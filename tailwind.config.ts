@@ -1,20 +1,32 @@
-import type { Config } from 'tailwindcss'
-
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx}',
+    './src/components/**/*.{js,ts,jsx,tsx}',
   ],
+  darkMode: 'class',
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      fontFamily: {
+        meditation: ['Meditation'],
+        heartwarming: ['HeartWarming'],
+      },
+      colors: {
+        lightGrey: '#F2F2F2',
+        darkGrey: '#BABABA',
+        white: '#FFFFFF',
+        yellow: '#D0CE94',
+        red: '#CC706F',
+        green: '#81957f',
+        black: '#292728',
+      },
+      fontSize: {
+        sm: ['14px', '17px'],
+        base: ['20px', '24px'],
+        lg: ['24px', '28px'],
+        xl: ['34px', '43px'],
       },
     },
   },
   plugins: [],
 }
-export default config

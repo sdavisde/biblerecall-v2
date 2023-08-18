@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: HeartWarming;
+    font-weight: 400;
+    src: url(../assets/fonts/HeartWarming.otf) format('otf');
+  }
+  @font-face {
+    font-family: Meditation;
+    font-weight: 400;
+    src: url(../assets/fonts/Meditation.ttf) format('ttf');
+  }
+}
+
+@layer components {
+  .centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+html {
+  font-size: 16px;
+}
+h2 {
+  font-size: 34px;
+  line-height: 60px;
+}
+h3 {
+  font-size: 28px;
+  line-height: 58px;
+}
