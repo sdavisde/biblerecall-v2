@@ -10,7 +10,7 @@ export default function Landing() {
           <h2>Memorize</h2>
           <h2 className='font-meditation'>Meditate</h2>
           <h2 className='font-heartwarming'>Connect</h2>
-          <h3 className='text-green'>With God's Word</h3>
+          <h3 className='text-green'>With God&apos;s Word</h3>
           <p className='mx-12 my-4 text-center'>
             Ephesians tells us that the sword of the Spirit is the word of God.
             Are you ready for the spiritual battles in your life?
