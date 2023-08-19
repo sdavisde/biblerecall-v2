@@ -29,7 +29,6 @@ export default function Landing() {
           width={715}
           height={367}
           alt='Bible Image'
-          className='absolute left-[-50px] bottom-[-20px]'
         />
       </div>
     </main>
