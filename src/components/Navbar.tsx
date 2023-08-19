@@ -7,8 +7,8 @@ export default function Navbar() {
         <Image
           src='/icons/menu.svg'
           alt='menu icon'
-          width='20'
-          height='20'
+          width={20}
+          height={20}
           className='m-4'
         />
         <h1 className='centered text-base font-light'>Bible Recall</h1>

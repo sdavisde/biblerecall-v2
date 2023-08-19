@@ -1,11 +1,15 @@
+export const dynamic = 'auto'
+
 import LottieImage from '@components/Lottie'
 import bookAnimation from '@assets/lottie/lordicon_book.json'
 import Lightbox from '@components/Lightbox'
-import Darkbox from '@components/Darkbox'
-import Image from 'next/image'
-import Link from 'next/link'
+import Loginbox from '@components/Loginbox'
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '@lib/auth'
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions)
+
   return (
     <div className='w-full h-[94%] flex flex-col items-center'>
       <div className='w-[95%] h-full flex flex-col items-center gap-6 mt-6'>
@@ -17,28 +21,7 @@ export default function Home() {
           <h4 className='text-base centered ml-4'>My Verses</h4>
         </div>
         <hr className='w-full bg-darkGrey h-[2px]' />
-        <Darkbox>
-          <div className='w-full relative centered'>
-            <Image
-              src='/icons/close.svg'
-              alt='close'
-              width={12}
-              height={12}
-              style={{ color: '#bababa' }}
-              className='absolute right-2 top-0'
-            />
-            <p className='text-sm text-center w-[81%]'>
-              Verses will be saved automatically to your device. If you would
-              like to view your verses on any device, <br />
-              <a
-                href='/'
-                className='text-underline'
-              >
-                Log In Here
-              </a>
-            </p>
-          </div>
-        </Darkbox>
+        <Loginbox loggedIn={session !== null} />
         <Lightbox title='+ Add Verse' />
       </div>
     </div>
