@@ -6,9 +6,9 @@ export default function HomeLayout({
   children: React.ReactNode
 }) {
   return (
-    <div>
+    <main className='w-full h-screen'>
       <Navbar />
       {children}
-    </div>
+    </main>
   )
 }
