@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Urbanist } from 'next/font/google'
 import './globals.css'
 import Provider from '@components/Provider'
-import { getServerSession } from 'next-auth/next'
+import { getServerSession } from 'next-auth'
 import { authOptions } from '@lib/auth'
 
 const urbanist = Urbanist({ subsets: ['latin'], weight: ['200', '300', '400'] })
@@ -18,6 +18,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   const session = getServerSession(authOptions)
+  console.log(session)
 
   return (
     <html lang='en'>
