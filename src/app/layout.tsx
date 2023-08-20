@@ -17,16 +17,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  // const session = getServerSession(authOptions)
-  // console.log(session)
-
   return (
     <html lang='en'>
-      <body className={urbanist.className}>
-        {/* <Provider session={session}> */}
-        {children}
-        {/* </Provider> */}
-      </body>
+      <body className={urbanist.className}>{children}</body>
     </html>
   )
 }
