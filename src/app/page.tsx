@@ -25,11 +25,11 @@ export default function Landing() {
           </div>
           <div className='centered w-full h-full mt-4 relative overflow-hidden'>
             <Image
+              className='z-2 absolute left-0 !max-w-[140%] md:!w-[140%]'
               src='/book.svg'
               width={715}
               height={367}
               alt='Bible Image'
-              className='z-2 absolute left-0 !max-w-[140%] md:!w-[140%]'
             />
           </div>
         </div>
