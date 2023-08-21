@@ -1,8 +1,12 @@
+import { PropsWithChildren } from 'react'
+
 type LightboxProps = {
-  title: string
   className?: string
 }
-export default function Lightbox({ title, className }: LightboxProps) {
+export default function Lightbox({
+  className,
+  children,
+}: PropsWithChildren<LightboxProps>) {
   return (
     <div
       className={
@@ -10,7 +14,7 @@ export default function Lightbox({ title, className }: LightboxProps) {
         (className ?? '')
       }
     >
-      <h5 className='centered'>{title}</h5>
+      {children}
     </div>
   )
 }

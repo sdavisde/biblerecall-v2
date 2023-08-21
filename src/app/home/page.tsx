@@ -6,6 +6,7 @@ import Lightbox from '@components/Lightbox'
 import Loginbox from '@components/Loginbox'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@lib/auth'
+import AddVerse from '@components/AddVerse'
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
@@ -22,7 +23,7 @@ export default async function Home() {
         </div>
         <hr className='w-full bg-darkGrey h-[2px]' />
         <Loginbox loggedIn={session !== null} />
-        <Lightbox title='+ Add Verse' />
+        <AddVerse />
       </div>
     </div>
   )
