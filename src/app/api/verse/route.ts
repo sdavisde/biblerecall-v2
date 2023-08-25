@@ -7,6 +7,8 @@ export async function GET(request: NextRequest) {
 
   const verse = createVerse(verseReference, '', version)
 
+  console.log(`verse being fetched: ${JSON.stringify(verse)}`)
+
   if (!verse) {
     return NextResponse.json({ error: 'Verse was not valid' })
   }
@@ -14,7 +16,7 @@ export async function GET(request: NextRequest) {
   const bookId = books.find((book) => book.name === verse.book)?.id ?? '1' // using genesis as a null safe default
 
   // Fetch is cached via the framework so this only refetches when url changes
-  const url = `https://bible-go-api.rkeplin.com/v1/books/${bookId}/chapters/${verse.chapter}`
+  const url = `https://bible-go-api.rkeplin.com/v1/books/${bookId}/chapters/${verse.chapter}?translation=${version}`
   const data = await fetch(url)
 
   if (!data) {

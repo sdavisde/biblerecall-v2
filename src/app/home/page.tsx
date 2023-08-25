@@ -5,7 +5,7 @@ import bookAnimation from '@assets/lottie/lordicon_book.json'
 import Loginbox from '@components/Loginbox'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@lib/auth'
-import AddVerse from '@components/AddVerse'
+import AddVerse from '@components/verse/AddVerse'
 
 export default async function Home() {
   const session = await getServerSession(authOptions)

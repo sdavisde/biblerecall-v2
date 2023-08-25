@@ -1,10 +1,11 @@
 'use client'
 
-import { FormEventHandler, startTransition, useState } from 'react'
+import { useState } from 'react'
 import { FormControl, Input, InputLabel, MenuItem, Select } from '@mui/material'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
-import Lightbox from '@components/Lightbox'
-import Darkbox from '@components/Darkbox'
+import CircularProgress from '@mui/material/CircularProgress'
+import Lightbox from '@components/common/Lightbox'
+import Darkbox from '@components/common/Darkbox'
 import { addVerse } from '@app/actions'
 import { createVerse } from '@app/api/verse/util'
 
@@ -13,7 +14,8 @@ const AddVerse = ({}: AddVerseProps) => {
   const [addingVerse, setAddingVerse] = useState(false)
   const [verseReference, setVerseReference] = useState('')
   const [verseText, setVerseText] = useState('')
-  const [version, setVersion] = useState('esv')
+  const [version, setVersion] = useState('ESV')
+  const [loading, setLoading] = useState(false)
 
   // const submitNewVerse: FormEventHandler<HTMLFormElement> = (e) => {
   //   console.log(e)
@@ -25,10 +27,14 @@ const AddVerse = ({}: AddVerseProps) => {
 
     const validated = validateReference(reference)
     if (validated) {
-      const { verseText } = await (
-        await fetch(`/api/verse?reference=${reference}&version=${version}`)
-      ).json()
+      setLoading(true)
+      const { verseText } = await fetch(
+        `/api/verse?reference=${reference}&version=${version}`
+      ).then((res) => res.json())
       setVerseText(verseText)
+      setLoading(false)
+    } else {
+      setVerseText('')
     }
   }
 
@@ -63,8 +69,9 @@ const AddVerse = ({}: AddVerseProps) => {
                   placeholder='Verse text will display here when you enter a reference'
                   value={verseText}
                   onChange={(e) => setVerseText(e.target.value)}
-                  className='bg-inherit w-4/5 resize-none text-black'
+                  className='bg-inherit w-4/5 resize-none text-black text-sm'
                 />
+                {loading && <CircularProgress color='primary' />}
                 <div className='w-1/5'>
                   <FormControl fullWidth>
                     <InputLabel id='version-label'>Version</InputLabel>
@@ -76,7 +83,7 @@ const AddVerse = ({}: AddVerseProps) => {
                       className='bg-inherit text-black'
                       label='Version'
                     >
-                      <MenuItem value='esv'>ESV</MenuItem>
+                      <MenuItem value='ESV'>ESV</MenuItem>
                     </Select>
                   </FormControl>
                 </div>

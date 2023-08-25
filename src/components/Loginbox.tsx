@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
-import Darkbox from '@components/Darkbox'
+import Darkbox from '@components/common/Darkbox'
 import { signIn } from 'next-auth/react'
 
 type LoginboxProps = {
@@ -28,8 +28,8 @@ const Loginbox = ({ loggedIn }: LoginboxProps) => {
           onClick={() => setShowBox((prev) => !prev)}
         />
         <p className='text-sm text-center w-[81%]'>
-          Verses will be saved automatically to your device. To view your verses
-          on any device, <br />
+          Verses will be saved automatically to your device. To view your verses on any device,{' '}
+          <br />
           <button
             onClick={() =>
               signIn('google', {
