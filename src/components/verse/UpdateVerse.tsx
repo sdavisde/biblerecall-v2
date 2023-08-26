@@ -7,7 +7,6 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Lightbox from '@components/common/Lightbox'
 import Darkbox from '@components/common/Darkbox'
 import { Verse, createVerse } from '@app/api/verse/util'
-import { useVerses } from 'hooks/verses'
 
 type UpdateVerseProps = {
   reference: string

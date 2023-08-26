@@ -4,7 +4,7 @@ import StarBorderIcon from '@mui/icons-material/StarBorder'
 import MUIStarIcon from '@mui/icons-material/Star'
 import Hovered from '@components/icons/Hovered'
 import { Verse } from '@app/api/verse/util'
-import { toggleFavoriteVerse } from '@lib/verses'
+import { updateVerse } from '@lib/verses'
 import { useVerses } from 'hooks/verses'
 
 type StarIconProps = {
@@ -19,7 +19,7 @@ const StarIcon = ({ verse }: StarIconProps) => {
 
   const toggleFavorite = async () => {
     setVerses([...verses.filter((v) => v.id !== verse.id), { ...verse, favorite: !verse.favorite }])
-    await toggleFavoriteVerse(verse.id, !(verse.favorite ?? false))
+    await updateVerse({ ...verse, favorite: !(verse.favorite ?? false) })
   }
 
   return (

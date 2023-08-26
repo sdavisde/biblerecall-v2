@@ -84,24 +84,22 @@ export async function deleteVerse(id: string | undefined) {
   return 'Removed verse Successfully'
 }
 
-export async function toggleFavoriteVerse(id: string | undefined, favorite: boolean) {
+export async function updateVerse(verse: Verse) {
   'use server'
 
-  if (!id) {
+  if (!verse.id) {
     return null
   }
 
   const session = await getServerSession(authOptions)
 
-  console.log('updating verse', id)
+  console.log('updating verse', verse)
 
   if (session && session.user && (session.user as DB_User).id) {
     const userId = (session.user as DB_User).id
     const collectionRef = collection(database, `Users/${userId}/verses`)
 
-    updateDoc(doc(database, 'Users', userId, 'verses', id), {
-      favorite: favorite,
-    })
+    updateDoc(doc(database, 'Users', userId, 'verses', verse.id), verse)
       .then(() => {
         return 'Updated verse successfully'
       })
@@ -111,9 +109,9 @@ export async function toggleFavoriteVerse(id: string | undefined, favorite: bool
   } else {
     const versesCookie = cookies().get('verses')?.value ?? '[]'
     const verses = JSON.parse(versesCookie) as Verse[]
-    const index = verses.findIndex((v) => v.id === id)
+    const index = verses.findIndex((v) => v.id === verse.id)
     const verseToUpdate = verses.splice(index, 1)
 
-    cookies().set('verses', JSON.stringify([...verses, { ...verseToUpdate, favorite: favorite }]))
+    cookies().set('verses', JSON.stringify([...verses, { ...verseToUpdate, ...verse }]))
   }
 }

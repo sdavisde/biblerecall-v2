@@ -6,6 +6,7 @@ import UpdateVerse from '@components/verse/UpdateVerse'
 import { addVerse } from '@lib/verses'
 import { Verse } from '@app/api/verse/util'
 import { useVerses } from 'hooks/verses'
+import OutsideAlerter from 'hooks/click'
 
 type AddVerseProps = {}
 const AddVerse = ({}: AddVerseProps) => {
@@ -25,12 +26,14 @@ const AddVerse = ({}: AddVerseProps) => {
     <>
       {addingVerse ? (
         <div className='w-full'>
-          <UpdateVerse
-            reference=''
-            text=''
-            version='ESV'
-            onSubmit={submitNewVerse}
-          />
+          <OutsideAlerter onOutsideClick={() => setAddingVerse(false)}>
+            <UpdateVerse
+              reference=''
+              text=''
+              version='ESV'
+              onSubmit={submitNewVerse}
+            />
+          </OutsideAlerter>
         </div>
       ) : (
         <div
