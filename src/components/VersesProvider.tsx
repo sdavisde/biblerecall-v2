@@ -1,17 +1,38 @@
 'use client'
 
-import { VerseDto } from '@app/api/verse/util'
-import { createContext } from 'react'
+import { Verse } from '@app/api/verse/util'
+import { createContext, useState } from 'react'
 
-const emptyVerses: VerseDto[] = []
-export const VersesContext = createContext(emptyVerses)
+type verseContext = {
+  verses: Verse[]
+  setVerses: (newVerses: Verse[]) => void
+}
+export const VersesContext = createContext<verseContext>({
+  verses: [],
+  setVerses: (newVerses: Verse[]) => {},
+})
 
 export default function VersesProvider({
   children,
   verses,
 }: {
   children: React.ReactNode
-  verses: VerseDto[]
+  verses: Verse[]
 }): React.ReactNode {
-  return <VersesContext.Provider value={verses}>{children}</VersesContext.Provider>
+  const [verseState, setVerseState] = useState<Verse[]>(verses)
+
+  const updateVerseState = (newVerses: Verse[]) => {
+    setVerseState(newVerses)
+  }
+
+  return (
+    <VersesContext.Provider
+      value={{
+        verses: verseState,
+        setVerses: updateVerseState,
+      }}
+    >
+      {children}
+    </VersesContext.Provider>
+  )
 }

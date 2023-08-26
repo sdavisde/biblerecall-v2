@@ -25,6 +25,9 @@ module.exports = {
         lg: ['24px', '28px'],
         xl: ['34px', '43px'],
       },
+      borderRadius: {
+        DEFAULT: '5px',
+      },
     },
   },
   plugins: [],

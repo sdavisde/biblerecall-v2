@@ -1,9 +1,10 @@
 'use client'
 
 import { VersesContext } from '@components/VersesProvider'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 export const useVerses = () => {
-  const verses = useContext(VersesContext)
-  return verses
+  const { verses, setVerses } = useContext(VersesContext)
+
+  return [verses, setVerses] as const
 }

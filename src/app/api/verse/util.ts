@@ -1,21 +1,26 @@
-export type Verse = {
-  book: string
-  chapter: string
-  verse: string
-  text: string
-  version: string
-}
-
-export type VerseDto = {
-  id: string
+export type Api_Verse = {
+  id: number
   book: {
     id: number
     name: string
     testament: string
   }
-  chapterId: number
   verseId: number
-  verse: string
+  verse: string // verse text
+}
+
+export type Verse = {
+  id?: string
+  book: {
+    id: number
+    name: string
+    testament?: string
+  }
+  chapter: number
+  start: number
+  end?: number
+  text: string
+  version: string
 }
 
 /**
@@ -28,12 +33,19 @@ export function createVerse(verseReference: string, text?: string, version?: str
   }
   const [book, rest] = verseReference.split(' ')
   const [chapter, verses] = rest.split(':')
-  // const [verse1, verse2] = verses.split('-')
+  const [start, end] = verses.split('-')
+
+  if (verseReference.includes('-')) {
+    if (!end || start > end) {
+      return null
+    }
+  }
 
   return {
-    book,
-    chapter,
-    verse: verses,
+    book: books.find((b) => b.name.toLowerCase() === book.toLowerCase()) ?? books[0],
+    chapter: parseInt(chapter),
+    start: parseInt(start),
+    end: parseInt(end),
     text: text ?? '',
     version: version ?? '',
   }

@@ -6,21 +6,27 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import CircularProgress from '@mui/material/CircularProgress'
 import Lightbox from '@components/common/Lightbox'
 import Darkbox from '@components/common/Darkbox'
-import { addVerse } from '@app/actions'
+import { addVerse } from '@lib/verses'
 import { createVerse } from '@app/api/verse/util'
+import { useVerses } from 'hooks/verses'
 
 type AddVerseProps = {}
 const AddVerse = ({}: AddVerseProps) => {
+  const [verses, setVerses] = useVerses()
   const [addingVerse, setAddingVerse] = useState(false)
   const [verseReference, setVerseReference] = useState('')
   const [verseText, setVerseText] = useState('')
   const [version, setVersion] = useState('ESV')
   const [loading, setLoading] = useState(false)
 
-  // const submitNewVerse: FormEventHandler<HTMLFormElement> = (e) => {
-  //   console.log(e)
-  //   e.preventDefault()
-  // }
+  const submitNewVerse = async () => {
+    if (validateReference(verseReference) && !loading && verseText !== '') {
+      const newVerse = createVerse(verseReference, verseText, version)
+      // non null assertion is okay because validateReference guarantees verse is defined
+      setVerses([newVerse!, ...verses])
+      await addVerse(verseReference, verseText, version)
+    }
+  }
 
   const onVerseUpdate = async (reference: string) => {
     setVerseReference(reference)
@@ -40,14 +46,14 @@ const AddVerse = ({}: AddVerseProps) => {
 
   const validateReference = (reference: string) => {
     const verse = createVerse(reference)
-    return verse && verse.book && verse.chapter && verse.verse
+    return verse && verse.book && verse.chapter && verse.start
   }
 
   return (
     <>
       {addingVerse ? (
         <div className='w-full'>
-          <form action={() => addVerse(verseReference, verseText, version)}>
+          <form action={() => submitNewVerse()}>
             <Lightbox className='text-center'>
               <Input
                 autoFocus
@@ -96,7 +102,7 @@ const AddVerse = ({}: AddVerseProps) => {
           onClick={() => setAddingVerse((prev) => !prev)}
           className='w-full hover:cursor-pointer'
         >
-          <Lightbox>
+          <Lightbox className='rounded'>
             <h5 className='centered'>+ Add Verse</h5>
           </Lightbox>
         </div>
