@@ -21,6 +21,7 @@ export type Verse = {
   end?: number
   text: string
   version: string
+  favorite?: boolean
 }
 
 /**
@@ -119,3 +120,8 @@ export const books = [
   { id: 65, name: 'Jude' },
   { id: 66, name: 'Revelation' },
 ]
+
+export function update(arr: Verse[], id: string, updatedData: Verse) {
+  let verse = arr.find((item) => item.id === id)
+  verse = updatedData
+}

@@ -1,7 +1,7 @@
 'use client'
 
-import { VersesContext } from '@components/VersesProvider'
-import { useContext, useEffect, useState } from 'react'
+import { VersesContext } from '@components/providers/VersesProvider'
+import { useContext } from 'react'
 
 export const useVerses = () => {
   const { verses, setVerses } = useContext(VersesContext)

@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers'
 import { getServerSession } from 'next-auth'
-import { getDocs, collection, addDoc, doc, deleteDoc } from 'firebase/firestore'
+import { getDocs, collection, addDoc, doc, deleteDoc, updateDoc } from 'firebase/firestore'
 import { Verse } from '@app/api/verse/util'
 import { database } from '@lib/firebase'
 import { DB_User, authOptions } from '@lib/auth'
@@ -62,7 +62,7 @@ export async function deleteVerse(id: string | undefined) {
   'use server'
 
   if (!id) {
-    return 'No verse id provided'
+    return null
   }
 
   const session = await getServerSession(authOptions)
@@ -82,4 +82,38 @@ export async function deleteVerse(id: string | undefined) {
     }
   }
   return 'Removed verse Successfully'
+}
+
+export async function toggleFavoriteVerse(id: string | undefined, favorite: boolean) {
+  'use server'
+
+  if (!id) {
+    return null
+  }
+
+  const session = await getServerSession(authOptions)
+
+  console.log('updating verse', id)
+
+  if (session && session.user && (session.user as DB_User).id) {
+    const userId = (session.user as DB_User).id
+    const collectionRef = collection(database, `Users/${userId}/verses`)
+
+    updateDoc(doc(database, 'Users', userId, 'verses', id), {
+      favorite: favorite,
+    })
+      .then(() => {
+        return 'Updated verse successfully'
+      })
+      .catch((error) => {
+        return error.toString()
+      })
+  } else {
+    const versesCookie = cookies().get('verses')?.value ?? '[]'
+    const verses = JSON.parse(versesCookie) as Verse[]
+    const index = verses.findIndex((v) => v.id === id)
+    const verseToUpdate = verses.splice(index, 1)
+
+    cookies().set('verses', JSON.stringify([...verses, { ...verseToUpdate, favorite: favorite }]))
+  }
 }

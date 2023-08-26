@@ -1,11 +1,17 @@
 'use client'
 
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+import { Delete } from '@mui/icons-material'
 import { deleteVerse } from '@lib/verses'
 import { useVerses } from 'hooks/verses'
+import Hovered from '@components/icons/Hovered'
 
 type DeleteIconProps = {
   id: string | undefined
+}
+
+const HoveredDeleteIcon = () => {
+  return <Delete color='warning' />
 }
 
 const DeleteIcon = ({ id }: DeleteIconProps) => {
@@ -18,7 +24,14 @@ const DeleteIcon = ({ id }: DeleteIconProps) => {
     }
   }
 
-  return <DeleteOutlineIcon onClick={onDelete} />
+  return (
+    <Hovered
+      className='w-fit'
+      default={DeleteOutlineIcon}
+      hovered={HoveredDeleteIcon}
+      onClick={onDelete}
+    />
+  )
 }
 
 export default DeleteIcon

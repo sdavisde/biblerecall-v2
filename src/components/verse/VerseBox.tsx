@@ -1,10 +1,9 @@
 import Lightbox from '@components/common/Lightbox'
 import Darkbox from '@components/common/Darkbox'
 import { Verse } from '@app/api/verse/util'
-import PlayArrowIcon from '@mui/icons-material/PlayArrow'
-import StarBorderIcon from '@mui/icons-material/StarBorder'
-import { deleteVerse } from '@lib/verses'
-import DeleteIcon from '@components/DeleteIcon'
+import DeleteIcon from '@components/icons/DeleteIcon'
+import PlayIcon from '@components/icons/PlayIcon'
+import StarIcon from '@components/icons/StarIcon'
 
 type VerseBoxProps = {
   verse: Verse
@@ -22,9 +21,9 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
           {verse.book.name} {verse.chapter}:{verse.start}
           {verse.end ? `-${verse.end}` : ''}
         </h4>
-        <div className='w-1/6 flex flex-row-reverse pr-3'>
-          <PlayArrowIcon color='primary' />
-          <StarBorderIcon color='primary' />
+        <div className='w-1/6 flex justify-end pr-3'>
+          <PlayIcon verse={verse} />
+          <StarIcon verse={verse} />
         </div>
       </Lightbox>
       <Darkbox className='rounded-bl rounded-br'>
