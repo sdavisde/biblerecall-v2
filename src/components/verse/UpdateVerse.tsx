@@ -53,7 +53,8 @@ const UpdateVerse = (props: UpdateVerseProps) => {
 
   return (
     <form action={() => submitNewVerse()}>
-      <Lightbox className='text-center'>
+      <Lightbox className='centered font'>
+        <div className='w-[10%]' />
         <Input
           autoFocus
           type='text'
@@ -61,10 +62,13 @@ const UpdateVerse = (props: UpdateVerseProps) => {
           value={reference}
           onChange={(e) => onVerseUpdate(e.target.value)}
           classes={{
-            input: 'text-center after:border-green',
+            input: 'text-center after:border-green text-base font-base',
           }}
         ></Input>
-        <button type='submit'>
+        <button
+          type='submit'
+          className='w-[10%]'
+        >
           <ArrowForwardIcon />
         </button>
       </Lightbox>

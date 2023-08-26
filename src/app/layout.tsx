@@ -3,7 +3,7 @@ import { Urbanist } from 'next/font/google'
 import './globals.css'
 import Theme from '@components/verse/ThemeProvider'
 
-const urbanist = Urbanist({ subsets: ['latin'], weight: ['200', '300', '400'] })
+const urbanist = Urbanist({ subsets: ['latin'], weight: ['100', '200', '300', '400', '500'] })
 
 export const metadata: Metadata = {
   title: 'Bible Recall',
