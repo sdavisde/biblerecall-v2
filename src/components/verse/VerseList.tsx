@@ -5,7 +5,6 @@ import VerseBox from '@components/verse/VerseBox'
 
 const VerseList = () => {
   const [verses] = useVerses()
-  console.log('verse list', verses)
 
   return (
     <>

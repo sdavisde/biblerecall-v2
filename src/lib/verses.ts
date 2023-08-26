@@ -2,10 +2,9 @@
 
 import { cookies } from 'next/headers'
 import { getServerSession } from 'next-auth'
-import { getDocs, collection, addDoc } from 'firebase/firestore'
+import { getDocs, collection, addDoc, doc, deleteDoc } from 'firebase/firestore'
 import { Verse } from '@app/api/verse/util'
 import { database } from '@lib/firebase'
-import { createVerse } from '@app/api/verse/util'
 import { DB_User, authOptions } from '@lib/auth'
 
 export async function fetchVerses(userId: string): Promise<Verse[]> {
@@ -33,10 +32,8 @@ export async function fetchVerses(userId: string): Promise<Verse[]> {
   }
 }
 
-export async function addVerse(verseReference: string, verseText: string, version: string) {
+export async function addVerse(verse: Verse) {
   'use server'
-
-  const verse = createVerse(verseReference, verseText, version)
 
   const session = await getServerSession(authOptions)
 
@@ -59,4 +56,30 @@ export async function addVerse(verseReference: string, verseText: string, versio
 
     cookies().set('verses', JSON.stringify(verses))
   }
+}
+
+export async function deleteVerse(id: string | undefined) {
+  'use server'
+
+  if (!id) {
+    return 'No verse id provided'
+  }
+
+  const session = await getServerSession(authOptions)
+
+  console.log('deleting verse', id)
+
+  if (session && session.user && (session.user as DB_User).id) {
+    const docRef = doc(database, `Users/${(session.user as DB_User).id}/verses/${id}`)
+    deleteDoc(docRef)
+  } else {
+    if (cookies().has('verses')) {
+      const verses = JSON.parse(cookies().get('verses')?.value!) as Verse[]
+      const result = verses.filter((v) => v.id !== id)
+      cookies().set('verses', JSON.stringify(result))
+    } else {
+      return 'No verses in cookies to delete'
+    }
+  }
+  return 'Removed verse Successfully'
 }
