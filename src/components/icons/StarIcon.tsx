@@ -20,18 +20,21 @@ const StarIcon = ({ verse }: StarIconProps) => {
   const toggleFavorite = async () => {
     setVerses([...verses.filter((v) => v.id !== verse.id), { ...verse, favorite: !verse.favorite }])
     await updateVerse({ ...verse, favorite: !(verse.favorite ?? false) })
+    event?.stopPropagation()
   }
 
   return (
-    <form action={toggleFavorite}>
-      <button type='submit'>
-        <Hovered
-          className='w-fit flex'
-          default={verse.favorite ? HoveredStarIcon : StarBorderIcon}
-          hovered={verse.favorite ? StarBorderIcon : HoveredStarIcon}
-        />
-      </button>
-    </form>
+    <span onClick={(e) => e.stopPropagation()}>
+      <form action={toggleFavorite}>
+        <button type='submit'>
+          <Hovered
+            className='w-fit flex'
+            default={verse.favorite ? HoveredStarIcon : StarBorderIcon}
+            hovered={verse.favorite ? StarBorderIcon : HoveredStarIcon}
+          />
+        </button>
+      </form>
+    </span>
   )
 }
 

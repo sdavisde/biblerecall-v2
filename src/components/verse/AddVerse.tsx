@@ -19,7 +19,7 @@ const AddVerse = ({}: AddVerseProps) => {
     await addVerse(verse)
     setTimeout(() => {
       setAddingVerse(false)
-    }, 400)
+    }, 200)
   }
 
   return (

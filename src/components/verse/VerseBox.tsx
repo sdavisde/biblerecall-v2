@@ -24,6 +24,9 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
   const onUpdate = async (newVerse: Verse) => {
     setVerses([...verses.filter((v) => v.id !== verse.id), newVerse])
     await updateVerse(verse)
+    setTimeout(() => {
+      setUpdate(false)
+    }, 200)
   }
 
   return (
@@ -43,7 +46,7 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
         </div>
       ) : (
         <div
-          className={className}
+          className={className + ' cursor-pointer'}
           onClick={() => setUpdate(true)}
         >
           <Lightbox className='rounded-tl rounded-tr flex justify-between items-center'>
@@ -59,8 +62,8 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
               <StarIcon verse={verse} />
             </div>
           </Lightbox>
-          <Darkbox className='rounded-bl rounded-br'>
-            <p className='text-sm m-6'>{verse.text}</p>
+          <Darkbox className='rounded-bl rounded-br h-fit'>
+            <p className='text-sm m-4'>{verse.text}</p>
           </Darkbox>
         </div>
       )}
