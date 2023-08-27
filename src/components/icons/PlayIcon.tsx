@@ -8,25 +8,19 @@ type PlayIconProps = {
 }
 
 const PlayIcon = ({ verse }: PlayIconProps) => {
-  const HoveredPlayIcon = () => {
-    return (
-      <Link
-        href={`/home/${verse.book.name.toLowerCase()}-${verse.chapter}-${verse.start}${
-          verse.end ? '-' + verse.end : ''
-        }`}
-        className='w-fit flex'
-      >
-        <PlayArrowIcon color='primary' />
-      </Link>
-    )
-  }
-
   return (
-    <Hovered
+    <Link
+      href={`/home/${verse.book.name.toLowerCase()}-${verse.chapter}-${verse.start}${
+        verse.end ? '-' + verse.end : ''
+      }`}
       className='w-fit flex'
-      default={PlayArrowIcon}
-      hovered={HoveredPlayIcon}
-    />
+    >
+      <Hovered
+        className='w-fit flex'
+        DefaultComp={PlayArrowIcon}
+        HoveredComp={PlayArrowIcon}
+      />
+    </Link>
   )
 }
 

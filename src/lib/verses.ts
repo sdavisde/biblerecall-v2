@@ -6,6 +6,7 @@ import { getDocs, collection, addDoc, doc, deleteDoc, updateDoc } from 'firebase
 import { Verse } from '@app/api/verse/util'
 import { database } from '@lib/firebase'
 import { DB_User, authOptions } from '@lib/auth'
+import { randomUUID } from 'crypto'
 
 export async function fetchVerses(userId: string): Promise<Verse[]> {
   'use server'
@@ -43,7 +44,7 @@ export async function addVerse(verse: Verse) {
     const userId = (session.user as DB_User).id
     const collectionRef = collection(database, `Users/${userId}/verses`)
 
-    addDoc(collectionRef, verse)
+    return addDoc(collectionRef, verse)
       .then(() => {
         return 'Added verse successfully'
       })
@@ -52,7 +53,8 @@ export async function addVerse(verse: Verse) {
       })
   } else {
     const versesCookie = cookies().get('verses')?.value ?? '[]'
-    const verses = [...JSON.parse(versesCookie), verse]
+    const newVerse = { ...verse, id: randomUUID() }
+    const verses = [...JSON.parse(versesCookie), newVerse]
 
     cookies().set('verses', JSON.stringify(verses))
   }
@@ -91,15 +93,15 @@ export async function updateVerse(verse: Verse) {
     return null
   }
 
+  console.log('here')
   const session = await getServerSession(authOptions)
 
   console.log('updating verse', verse)
 
   if (session && session.user && (session.user as DB_User).id) {
     const userId = (session.user as DB_User).id
-    const collectionRef = collection(database, `Users/${userId}/verses`)
 
-    updateDoc(doc(database, 'Users', userId, 'verses', verse.id), verse)
+    return updateDoc(doc(database, 'Users', userId, 'verses', verse.id), verse)
       .then(() => {
         return 'Updated verse successfully'
       })
@@ -108,10 +110,9 @@ export async function updateVerse(verse: Verse) {
       })
   } else {
     const versesCookie = cookies().get('verses')?.value ?? '[]'
-    const verses = JSON.parse(versesCookie) as Verse[]
-    const index = verses.findIndex((v) => v.id === verse.id)
-    const verseToUpdate = verses.splice(index, 1)
+    const verses = [...JSON.parse(versesCookie).filter((v: Verse) => v.id !== verse.id), verse]
 
-    cookies().set('verses', JSON.stringify([...verses, { ...verseToUpdate, ...verse }]))
+    cookies().set('verses', JSON.stringify(verses))
+    return cookies().get('verses')?.value
   }
 }

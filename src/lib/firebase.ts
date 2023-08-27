@@ -58,6 +58,7 @@ const signInWithGoogle = async () => {
 }
 
 const logout = () => {
+  console.log('signing out')
   signOut(auth)
 }
 

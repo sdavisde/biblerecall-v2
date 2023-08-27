@@ -23,10 +23,10 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
 
   const onUpdate = async (newVerse: Verse) => {
     setVerses([...verses.filter((v) => v.id !== verse.id), newVerse])
-    await updateVerse(verse)
-    setTimeout(() => {
-      setUpdate(false)
-    }, 200)
+    await updateVerse(newVerse)
+    // setTimeout(() => {
+    setUpdate(false)
+    // }, 200)
   }
 
   return (

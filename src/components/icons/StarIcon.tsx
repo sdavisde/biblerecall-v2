@@ -18,22 +18,24 @@ const StarIcon = ({ verse }: StarIconProps) => {
   }
 
   const toggleFavorite = async () => {
-    setVerses([...verses.filter((v) => v.id !== verse.id), { ...verse, favorite: !verse.favorite }])
-    await updateVerse({ ...verse, favorite: !(verse.favorite ?? false) })
-    event?.stopPropagation()
+    const newVerse = { ...verse, favorite: !(verse.favorite ?? false) }
+    console.log(newVerse)
+    const res = await updateVerse(newVerse)
+    console.log(verses)
+    console.log([newVerse, ...verses.filter((v) => v.id !== verse.id)])
+    setVerses([...verses.filter((v) => v.id !== verse.id), newVerse])
   }
 
   return (
     <span onClick={(e) => e.stopPropagation()}>
-      <form action={toggleFavorite}>
-        <button type='submit'>
-          <Hovered
-            className='w-fit flex'
-            default={verse.favorite ? HoveredStarIcon : StarBorderIcon}
-            hovered={verse.favorite ? StarBorderIcon : HoveredStarIcon}
-          />
-        </button>
-      </form>
+      <Hovered
+        className='w-fit flex'
+        DefaultComp={verse.favorite ? MUIStarIcon : StarBorderIcon}
+        HoveredComp={verse.favorite ? StarBorderIcon : MUIStarIcon}
+        onClick={() => toggleFavorite()}
+        override={verse.favorite}
+        type='primary'
+      />
     </span>
   )
 }

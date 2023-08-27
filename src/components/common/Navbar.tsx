@@ -1,3 +1,4 @@
+import Profile from '@components/Profile'
 import Image from 'next/image'
 
 export default function Navbar() {
@@ -13,7 +14,7 @@ export default function Navbar() {
         />
         <h1 className='centered text-base font-light'>Bible Recall</h1>
       </div>
-      {/* Add logged in user profile icon */}
+      <Profile />
     </div>
   )
 }

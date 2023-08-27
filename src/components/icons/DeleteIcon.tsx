@@ -10,10 +10,6 @@ type DeleteIconProps = {
   id: string | undefined
 }
 
-const HoveredDeleteIcon = () => {
-  return <Delete color='warning' />
-}
-
 const DeleteIcon = ({ id }: DeleteIconProps) => {
   const [verses, setVerses] = useVerses()
 
@@ -25,12 +21,15 @@ const DeleteIcon = ({ id }: DeleteIconProps) => {
   }
 
   return (
-    <Hovered
-      className='w-fit'
-      default={DeleteOutlineIcon}
-      hovered={HoveredDeleteIcon}
-      onClick={onDelete}
-    />
+    <span onClick={(e) => e.stopPropagation()}>
+      <Hovered
+        className='w-fit'
+        DefaultComp={DeleteOutlineIcon}
+        HoveredComp={Delete}
+        onClick={onDelete}
+        type='warning'
+      />
+    </span>
   )
 }
 

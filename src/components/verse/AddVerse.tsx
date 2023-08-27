@@ -17,9 +17,9 @@ const AddVerse = ({}: AddVerseProps) => {
     // non null assertion is okay because validateReference guarantees verse is defined
     setVerses([verse, ...verses])
     await addVerse(verse)
-    setTimeout(() => {
-      setAddingVerse(false)
-    }, 200)
+    // setTimeout(() => {
+    setAddingVerse(false)
+    // }, 200)
   }
 
   return (
