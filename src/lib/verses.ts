@@ -44,19 +44,24 @@ export async function addVerse(verse: Verse) {
     const userId = (session.user as DB_User).id
     const collectionRef = collection(database, `Users/${userId}/verses`)
 
-    return addDoc(collectionRef, verse)
+    return addDoc(collectionRef, { ...verse, id: randomUUID() })
       .then(() => {
-        return 'Added verse successfully'
+        return { success: true }
       })
       .catch((error) => {
-        return error.toString()
+        return { success: false }
       })
   } else {
-    const versesCookie = cookies().get('verses')?.value ?? '[]'
-    const newVerse = { ...verse, id: randomUUID() }
-    const verses = [...JSON.parse(versesCookie), newVerse]
+    try {
+      const versesCookie = cookies().get('verses')?.value ?? '[]'
+      const newVerse = { ...verse, id: randomUUID() }
+      const verses = [...JSON.parse(versesCookie), newVerse]
 
-    cookies().set('verses', JSON.stringify(verses))
+      cookies().set('verses', JSON.stringify(verses))
+      return { success: true }
+    } catch (e) {
+      return { success: false }
+    }
   }
 }
 
@@ -76,11 +81,16 @@ export async function deleteVerse(id: string | undefined) {
     deleteDoc(docRef)
   } else {
     if (cookies().has('verses')) {
-      const verses = JSON.parse(cookies().get('verses')?.value!) as Verse[]
-      const result = verses.filter((v) => v.id !== id)
-      cookies().set('verses', JSON.stringify(result))
+      try {
+        const verses = JSON.parse(cookies().get('verses')?.value!) as Verse[]
+        const result = verses.filter((v) => v.id !== id)
+        cookies().set('verses', JSON.stringify(result))
+        return { success: true }
+      } catch (e) {
+        return { success: false }
+      }
     } else {
-      return 'No verses in cookies to delete'
+      return { success: true, message: 'No verses to delete in cookies' }
     }
   }
   return 'Removed verse Successfully'
@@ -89,30 +99,33 @@ export async function deleteVerse(id: string | undefined) {
 export async function updateVerse(verse: Verse) {
   'use server'
 
+  console.log('updating verse', verse)
+
   if (!verse.id) {
     return null
   }
 
-  console.log('here')
   const session = await getServerSession(authOptions)
-
-  console.log('updating verse', verse)
 
   if (session && session.user && (session.user as DB_User).id) {
     const userId = (session.user as DB_User).id
 
     return updateDoc(doc(database, 'Users', userId, 'verses', verse.id), verse)
       .then(() => {
-        return 'Updated verse successfully'
+        return { success: true }
       })
       .catch((error) => {
-        return error.toString()
+        return { success: false }
       })
   } else {
-    const versesCookie = cookies().get('verses')?.value ?? '[]'
-    const verses = [...JSON.parse(versesCookie).filter((v: Verse) => v.id !== verse.id), verse]
+    try {
+      const versesCookie = cookies().get('verses')?.value ?? '[]'
+      const verses = [...JSON.parse(versesCookie).filter((v: Verse) => v.id !== verse.id), verse]
 
-    cookies().set('verses', JSON.stringify(verses))
-    return cookies().get('verses')?.value
+      cookies().set('verses', JSON.stringify(verses))
+      return { success: true }
+    } catch (e) {
+      return { success: false }
+    }
   }
 }

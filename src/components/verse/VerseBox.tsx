@@ -8,7 +8,7 @@ import DeleteIcon from '@components/icons/DeleteIcon'
 import PlayIcon from '@components/icons/PlayIcon'
 import StarIcon from '@components/icons/StarIcon'
 import UpdateVerse from './UpdateVerse'
-import { updateVerse } from '@lib/verses'
+import { addVerse, updateVerse } from '@lib/verses'
 import { useVerses } from 'hooks/verses'
 import OutsideAlerter from 'hooks/click'
 
@@ -22,11 +22,12 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
   const [update, setUpdate] = useState(false)
 
   const onUpdate = async (newVerse: Verse) => {
-    setVerses([...verses.filter((v) => v.id !== verse.id), newVerse])
-    await updateVerse(newVerse)
-    // setTimeout(() => {
-    setUpdate(false)
-    // }, 200)
+    console.log(newVerse)
+    const res = await updateVerse(newVerse)
+    if (res?.success) {
+      setVerses([...verses.filter((v) => v.id !== verse.id), newVerse])
+      setUpdate(false)
+    }
   }
 
   return (
@@ -38,6 +39,7 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
               reference={`${verse.book.name} ${verse.chapter}:${verse.start}${
                 verse.end ? '-' + verse.end : ''
               }`}
+              id={verse.id}
               text={verse.text}
               version={verse.version}
               onSubmit={onUpdate}

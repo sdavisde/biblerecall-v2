@@ -13,15 +13,12 @@ type StarIconProps = {
 
 const StarIcon = ({ verse }: StarIconProps) => {
   const [verses, setVerses] = useVerses()
-  const HoveredStarIcon = () => {
-    return <MUIStarIcon color='primary' />
-  }
 
   const toggleFavorite = async () => {
     const newVerse = { ...verse, favorite: !(verse.favorite ?? false) }
     console.log(newVerse)
     const res = await updateVerse(newVerse)
-    console.log(verses)
+    console.log(res)
     console.log([newVerse, ...verses.filter((v) => v.id !== verse.id)])
     setVerses([...verses.filter((v) => v.id !== verse.id), newVerse])
   }

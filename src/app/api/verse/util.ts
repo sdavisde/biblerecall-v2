@@ -28,7 +28,12 @@ export type Verse = {
  * Parses a verse reference into its different attributes
  * @param verseReference verse in the format: Book C:V or Book C:V-V2
  */
-export function createVerse(verseReference: string, text?: string, version?: string): Verse | null {
+export function createVerse(
+  verseReference: string,
+  text?: string,
+  version?: string,
+  id?: string
+): Verse | null {
   if (!verseReference.includes(' ') || !verseReference.includes(':')) {
     return null
   }
@@ -43,6 +48,7 @@ export function createVerse(verseReference: string, text?: string, version?: str
   }
 
   return {
+    id: id,
     book: books.find((b) => b.name.toLowerCase() === book.toLowerCase()) ?? books[0],
     chapter: parseInt(chapter),
     start: parseInt(start),

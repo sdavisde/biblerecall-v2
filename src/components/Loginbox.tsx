@@ -14,7 +14,7 @@ const Loginbox = ({ loggedIn }: LoginboxProps) => {
   const [showBox, setShowBox] = useState(true)
 
   return (
-    <Controlled shown={showBox || loggedIn}>
+    <Controlled shown={showBox && !loggedIn}>
       <Darkbox>
         <div className='w-full relative centered'>
           <Image
