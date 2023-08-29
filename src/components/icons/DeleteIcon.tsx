@@ -4,7 +4,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import { Delete } from '@mui/icons-material'
 import { deleteVerse } from '@lib/verses'
 import { useVerses } from 'hooks/verses'
-import Hovered from '@components/icons/Hovered'
+import Hovered from '@components/util/Hovered'
 
 type DeleteIconProps = {
   id: string | undefined

@@ -2,7 +2,7 @@
 
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import MUIStarIcon from '@mui/icons-material/Star'
-import Hovered from '@components/icons/Hovered'
+import Hovered from '@components/util/Hovered'
 import { Verse } from '@app/api/verse/util'
 import { updateVerse } from '@lib/verses'
 import { useVerses } from 'hooks/verses'
