@@ -14,7 +14,7 @@ const Loginbox = ({ loggedIn }: LoginboxProps) => {
   const [showBox, setShowBox] = useState(true)
 
   return (
-    <Controlled shown={!showBox || loggedIn}>
+    <Controlled shown={showBox || loggedIn}>
       <Darkbox>
         <div className='w-full relative centered'>
           <Image
@@ -27,7 +27,7 @@ const Loginbox = ({ loggedIn }: LoginboxProps) => {
             onClick={() => setShowBox((prev) => !prev)}
           />
           <p className='text-sm text-center w-[81%]'>
-            Verses will be saved automatically to your device. To view your verses on any device,{' '}
+            Verses will be saved automatically to your device. To view your verses on any device,
             <br />
             <button
               onClick={() =>
