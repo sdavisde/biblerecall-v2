@@ -16,11 +16,10 @@ const StarIcon = ({ verse }: StarIconProps) => {
 
   const toggleFavorite = async () => {
     const newVerse = { ...verse, favorite: !(verse.favorite ?? false) }
-    console.log(newVerse)
     const res = await updateVerse(newVerse)
-    console.log(res)
-    console.log([newVerse, ...verses.filter((v) => v.id !== verse.id)])
-    setVerses([...verses.filter((v) => v.id !== verse.id), newVerse])
+    if (res?.success) {
+      setVerses([...verses.filter((v) => v.id !== verse.id), newVerse])
+    }
   }
 
   return (
