@@ -7,11 +7,11 @@ import { Verse } from '@app/api/verse/util'
 import { updateVerse } from '@lib/verses'
 import { useVerses } from 'hooks/verses'
 
-type StarIconProps = {
+type FavoriteIconProps = {
   verse: Verse
 }
 
-const StarIcon = ({ verse }: StarIconProps) => {
+const FavoriteIcon = ({ verse }: FavoriteIconProps) => {
   const [verses, setVerses] = useVerses()
 
   const toggleFavorite = async () => {
@@ -36,4 +36,4 @@ const StarIcon = ({ verse }: StarIconProps) => {
   )
 }
 
-export default StarIcon
+export default FavoriteIcon

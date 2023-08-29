@@ -6,9 +6,9 @@ import Darkbox from '@components/common/Darkbox'
 import { Verse } from '@app/api/verse/util'
 import DeleteIcon from '@components/icons/DeleteIcon'
 import PlayIcon from '@components/icons/PlayIcon'
-import StarIcon from '@components/icons/StarIcon'
+import FavoriteIcon from '@components/icons/FavoriteIcon'
 import UpdateVerse from './UpdateVerse'
-import { addVerse, updateVerse } from '@lib/verses'
+import { updateVerse } from '@lib/verses'
 import { useVerses } from 'hooks/verses'
 import OutsideAlerter from 'hooks/click'
 
@@ -61,7 +61,7 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
             </h4>
             <div className='w-1/6 flex justify-end pr-3'>
               <PlayIcon verse={verse} />
-              <StarIcon verse={verse} />
+              <FavoriteIcon verse={verse} />
             </div>
           </Lightbox>
           <Darkbox className='rounded-bl rounded-br h-fit'>
