@@ -2,11 +2,35 @@
 
 import { cookies } from 'next/headers'
 import { getServerSession } from 'next-auth'
-import { getDocs, collection, addDoc, doc, deleteDoc, updateDoc } from 'firebase/firestore'
+import { getDocs, collection, addDoc, doc, deleteDoc, updateDoc, getDoc } from 'firebase/firestore'
 import { Verse } from '@app/api/verse/util'
 import { database } from '@lib/firebase'
 import { DB_User, authOptions } from '@lib/auth'
 import { randomUUID } from 'crypto'
+
+export async function getVerse(id: string): Promise<Verse | null> {
+  'use server'
+
+  if (!id) {
+    return null
+  }
+
+  const session = await getServerSession(authOptions)
+
+  if (session && session.user && (session.user as DB_User).id) {
+    const verseRef = doc(database, 'Users', (session.user as DB_User).id, 'verses', id)
+
+    return getDoc(verseRef).then((snapshot) => {
+      const verseData = snapshot.data()
+      return { ...verseData } as Verse
+    })
+
+    return null
+  } else {
+    // cookie logic
+    return null
+  }
+}
 
 export async function fetchVerses(userId: string): Promise<Verse[]> {
   'use server'
