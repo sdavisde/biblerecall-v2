@@ -7,6 +7,7 @@ import { getVerse } from '@lib/verses'
 
 export default async function GamePage({ params }: { params: { verse: string } }) {
   const verse = await getVerse(params.verse)
+  // get search params to view selected difficulty
 
   return (
     <div className='w-full min-h-[94%] flex flex-col items-center'>

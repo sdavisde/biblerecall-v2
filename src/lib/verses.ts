@@ -24,8 +24,6 @@ export async function getVerse(id: string): Promise<Verse | null> {
       const verseData = snapshot.data()
       return { ...verseData } as Verse
     })
-
-    return null
   } else {
     // cookie logic
     return null

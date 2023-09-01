@@ -10,7 +10,7 @@ export type Api_Verse = {
 }
 
 export type Verse = {
-  id?: string
+  id: string
   book: {
     id: number
     name: string
@@ -26,20 +26,19 @@ export type Verse = {
 
 /**
  * Parses a verse reference into its different attributes
- * @param verseReference verse in the format: Book C:V or Book C:V-V2
+ * @param verseReference verse in the format: Book C:V or 1 Book C:V-V2
  */
-export function createVerse(
-  verseReference: string,
-  text?: string,
-  version?: string,
-  id?: string
-): Verse | null {
+export function createVerse(verseReference: string, id: string, text?: string, version?: string): Verse | null {
   if (!verseReference.includes(' ') || !verseReference.includes(':')) {
     return null
   }
-  const [book, rest] = verseReference.split(' ')
-  const [chapter, verses] = rest.split(':')
-  const [start, end] = verses.split('-')
+  const [first, last] = verseReference.split(':')
+  const chapterIndex = first.lastIndexOf(' ')
+  const book = first.slice(0, chapterIndex)
+  const chapter = first.slice(chapterIndex)
+  const [start, end] = last.split('-')
+
+  console.log(book, chapter, start, end)
 
   if (verseReference.includes('-')) {
     if (!end || start > end) {
@@ -48,7 +47,7 @@ export function createVerse(
   }
 
   return {
-    id: id,
+    id,
     book: books.find((b) => b.name.toLowerCase() === book.toLowerCase()) ?? books[0],
     chapter: parseInt(chapter),
     start: parseInt(start),

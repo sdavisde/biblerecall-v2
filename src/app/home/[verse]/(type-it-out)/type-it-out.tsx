@@ -4,17 +4,15 @@ import { Verse } from '@app/api/verse/util'
 import Lightbox from '@components/common/Lightbox'
 import Reference from '@components/verse/Reference'
 import { CircularProgress } from '@mui/material'
-import Helpers from './helpers'
+import useHelpers from './helpers'
 
 export default function TypeItOut({ verse }: { verse: Verse }) {
-  const { displayedText, loading, onKeyDown, onChange, inputRef } = Helpers(verse)
+  const { displayedText, loading, inputRef, setGameMode, handleUserInput, triggerLoad } = useHelpers(verse)
 
   return (
     <div className='w-full centered gap-4 flex-col'>
       <Lightbox className='rounded'>
-        <h3 className='text-base text-center p-4'>
-          Type the first letter of each word to memorize this verse!
-        </h3>
+        <h3 className='text-base text-center p-4'>Type the first letter of each word to memorize this verse!</h3>
       </Lightbox>
       <div className='w-full flex flex-row justify-between'>
         <Reference
@@ -30,29 +28,22 @@ export default function TypeItOut({ verse }: { verse: Verse }) {
             <div
               id={'verse_word_' + index}
               key={index}
-              className={`verse_word ${index == 0 ? 'target' : ''} pr-[3px]`}
+              className={`verse_word ${index == 0 ? 'target' : ''} pr-[3px] font-normal`}
             >
               {text}
             </div>
           ))}
         </div>
       </div>
-      <div className='relative'>
-        {loading && (
-          <div className='absolute left-[50px] top-[-25px]'>
-            <CircularProgress color='primary' />
-          </div>
-        )}
-        <input
-          placeholder='Answer Here!'
-          onKeyDown={(e) => onKeyDown(e)}
-          onChange={(e) => onChange(e)}
-          className='bg-transparent bg-[length:16px_16px] border-b-darkGrey border-b-2 text-center'
-          ref={inputRef}
-          autoComplete='off'
-          autoFocus
-        />
-      </div>
+      <input
+        placeholder='Answer Here!'
+        onChange={(e) => handleUserInput(e)}
+        className='bg-transparent bg-[length:16px_16px] border-b-darkGrey border-b-2 text-center'
+        ref={inputRef}
+        autoComplete='off'
+        autoFocus
+      />
+      {loading && <CircularProgress color='primary' />}
     </div>
   )
 }

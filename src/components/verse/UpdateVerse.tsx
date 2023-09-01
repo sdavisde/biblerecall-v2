@@ -9,7 +9,7 @@ import Darkbox from '@components/common/Darkbox'
 import { Verse, createVerse } from '@app/api/verse/util'
 
 type UpdateVerseProps = {
-  id?: string
+  id: string
   reference: string
   text: string
   version: string
@@ -22,7 +22,7 @@ const UpdateVerse = (props: UpdateVerseProps) => {
   const [loading, setLoading] = useState(false)
 
   const submitNewVerse = async () => {
-    const verse = createVerse(reference, verseText, version, props.id)
+    const verse = createVerse(reference, props.id, verseText, version)
 
     if (verse && !loading && verseText !== '' && validateReference(reference)) {
       props.onSubmit(verse)
@@ -46,7 +46,7 @@ const UpdateVerse = (props: UpdateVerseProps) => {
   }
 
   const validateReference = (reference: string) => {
-    const verse = createVerse(reference)
+    const verse = createVerse(reference, props.id)
     if (verse && verse.book && verse.chapter && verse.start) {
       return verse
     }

@@ -17,9 +17,7 @@ const AddVerse = ({}: AddVerseProps) => {
     // non null assertion is okay because validateReference guarantees verse is defined
     setVerses([verse, ...verses])
     await addVerse(verse)
-    // setTimeout(() => {
     setAddingVerse(false)
-    // }, 200)
   }
 
   return (
@@ -28,6 +26,7 @@ const AddVerse = ({}: AddVerseProps) => {
         <div className='w-full'>
           <OutsideAlerter onOutsideClick={() => setAddingVerse(false)}>
             <UpdateVerse
+              id=''
               reference=''
               text=''
               version='ESV'

@@ -13,7 +13,7 @@ export default async function HomeLayout({ children }: { children: React.ReactNo
     <VersesProvider verses={verses}>
       <main className='w-full h-screen'>
         <Navbar />
-        {children}
+        <div className='w-full h-[88%]'>{children}</div>
         <Footer />
       </main>
     </VersesProvider>
