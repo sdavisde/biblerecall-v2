@@ -38,7 +38,7 @@ export default function TypeItOut({ verse }: { verse: Verse }) {
       <input
         placeholder='Answer Here!'
         onChange={(e) => handleUserInput(e)}
-        className='bg-transparent bg-[length:16px_16px] border-b-darkGrey border-b-2 text-center'
+        className='bg-transparent bg-[length:16px_16px] border-b-darkGrey border-b-2 text-center focus:outline-none'
         ref={inputRef}
         autoComplete='off'
         autoFocus

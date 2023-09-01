@@ -36,9 +36,7 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
         <div className='w-full'>
           <OutsideAlerter onOutsideClick={() => setUpdate(false)}>
             <UpdateVerse
-              reference={`${verse.book.name} ${verse.chapter}:${verse.start}${
-                verse.end ? '-' + verse.end : ''
-              }`}
+              reference={`${verse.book.name} ${verse.chapter}:${verse.start}${verse.end ? '-' + verse.end : ''}`}
               id={verse.id}
               text={verse.text}
               version={verse.version}
@@ -60,12 +58,14 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
               {verse.end ? `-${verse.end}` : ''}
             </h4>
             <div className='w-1/6 flex justify-end pr-3'>
-              <PlayIcon verse={verse} />
               <FavoriteIcon verse={verse} />
             </div>
           </Lightbox>
-          <Darkbox className='rounded-bl rounded-br h-fit'>
-            <p className='text-sm m-4'>{verse.text}</p>
+          <Darkbox className='rounded-bl rounded-br h-fit '>
+            <p className='text-sm m-4 w-[88%]'>{verse.text}</p>
+            <div className='w-[12%] centered scale-[1.5]'>
+              <PlayIcon verse={verse} />
+            </div>
           </Darkbox>
         </div>
       )}

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import PlayArrowIcon from '@mui/icons-material/PlayArrow'
+import PlayArrowIcon from '@mui/icons-material/PlayArrowRounded'
 import Hovered from '@components/util/Hovered'
 import { Verse } from '@app/api/verse/util'
 

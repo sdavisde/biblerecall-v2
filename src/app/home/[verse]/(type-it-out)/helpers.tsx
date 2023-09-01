@@ -8,7 +8,6 @@ import { Verse } from '@app/api/verse/util'
 export default function useHelpers(verse: Verse) {
   const [loading, setLoading] = useState(false)
   const [cursor, setCursor] = useState(0)
-  const [amountCompleted, setAmountCompleted] = useState(0)
   const displayedText = verse ? verse.text?.split(' ') : []
   // Same in every game mode, used for coloring logic.
   const textRefs = displayedText.map((word) => ({
@@ -46,18 +45,16 @@ export default function useHelpers(verse: Verse) {
       if ($(`.verse_word:nth-child(${cursor + 2})`)) $(`.verse_word:nth-child(${cursor + 2})`).addClass('target')
 
       const target = textRefs[cursor]
-      let matched = target.word[0] === keyPressed.toLowerCase()
-
-      if (matched) {
-        setWordsCorrect((prev) => prev + 1)
-      }
+      const matched = target.word[0] === keyPressed.toLowerCase()
 
       $(`#verse_word_${cursor}`)[0].classList.add(matched ? 'text-darkGreen' : 'text-red')
 
-      setCursor((prev) => prev + 1)
+      const update = matched ? 1 : 0
 
-      const correctPercent = Math.round((wordsCorrect / textRefs.length) * 100)
-      setAmountCompleted(correctPercent)
+      setCursor((prev) => prev + 1)
+      setWordsCorrect((prev) => prev + update)
+
+      const correctPercent = Math.round(((wordsCorrect + update) / textRefs.length) * 100)
 
       // Verse is complete! Evaluate player performance
       if (cursor >= textRefs.length - 1) {
@@ -71,7 +68,6 @@ export default function useHelpers(verse: Verse) {
    */
   async function onStageComplete(correctPercent: number) {
     if (correctPercent >= 90) {
-      console.log('here')
       await router.push(`/home/${verse.id}/success`)
     } else {
       await router.push(`/home/${verse.id}/failed`)
