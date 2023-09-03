@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Api_Verse, createVerse } from './util'
+import { Api_Verse, createVerse } from '../../../lib/util'
 
 export async function GET(request: NextRequest) {
   const verseReference = request.nextUrl.searchParams.get('reference') ?? ''

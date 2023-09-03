@@ -3,7 +3,7 @@ export const dynamic = 'auto'
 import LottieImage from '@components/icons/Lottie'
 import bookAnimation from '@assets/lottie/lordicon_book.json'
 import TypeItOut from './(type-it-out)/type-it-out'
-import { getVerse } from '@lib/verses'
+import { getVerse } from '@lib/api'
 
 export default async function GamePage({ params }: { params: { verse: string } }) {
   const verse = await getVerse(params.verse)

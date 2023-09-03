@@ -13,9 +13,7 @@ const VerseList = () => {
       {verses?.sort(sortFn).map((verse, i) => (
         <VerseBox
           verse={verse}
-          key={`${verse.book.name}-${verse.chapter}:${verse.start}-${
-            verse.end ?? verse.start
-          }(${i})`}
+          key={`${verse.book.name}-${verse.chapter}:${verse.start}-${verse.end ?? verse.start}(${i})`}
           className='w-full'
         />
       ))}

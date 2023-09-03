@@ -3,12 +3,11 @@
 import { useState } from 'react'
 import Lightbox from '@components/common/Lightbox'
 import Darkbox from '@components/common/Darkbox'
-import { Verse } from '@app/api/verse/util'
+import { Verse } from '@lib/util'
 import DeleteIcon from '@components/icons/DeleteIcon'
 import PlayIcon from '@components/icons/PlayIcon'
 import FavoriteIcon from '@components/icons/FavoriteIcon'
 import UpdateVerse from './UpdateVerse'
-import { updateVerse } from '@lib/verses'
 import { useVerses } from 'hooks/verses'
 import OutsideAlerter from 'hooks/click'
 
@@ -18,16 +17,12 @@ type VerseBoxProps = {
 }
 
 const VerseBox = ({ verse, className }: VerseBoxProps) => {
-  const [verses, setVerses] = useVerses()
+  const [, dispatchVerses] = useVerses()
   const [update, setUpdate] = useState(false)
 
   const onUpdate = async (newVerse: Verse) => {
-    console.log(newVerse)
-    const res = await updateVerse(newVerse)
-    if (res?.success) {
-      setVerses([...verses.filter((v) => v.id !== verse.id), newVerse])
-      setUpdate(false)
-    }
+    dispatchVerses(newVerse, 'update')
+    setUpdate(false)
   }
 
   return (

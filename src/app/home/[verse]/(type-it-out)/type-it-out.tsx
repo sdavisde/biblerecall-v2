@@ -1,6 +1,6 @@
 'use client'
 
-import { Verse } from '@app/api/verse/util'
+import { Verse } from '@lib/util'
 import Lightbox from '@components/common/Lightbox'
 import Reference from '@components/verse/Reference'
 import { CircularProgress } from '@mui/material'

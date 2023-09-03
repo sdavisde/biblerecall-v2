@@ -6,7 +6,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import CircularProgress from '@mui/material/CircularProgress'
 import Lightbox from '@components/common/Lightbox'
 import Darkbox from '@components/common/Darkbox'
-import { Verse, createVerse } from '@app/api/verse/util'
+import { Verse, createVerse } from '@lib/util'
 
 type UpdateVerseProps = {
   id: string
@@ -35,9 +35,9 @@ const UpdateVerse = (props: UpdateVerseProps) => {
     const verse = validateReference(reference)
     if (verse) {
       setLoading(true)
-      const { verseText } = await fetch(
-        `/api/verse?reference=${reference}&version=${version}`
-      ).then((res) => res.json())
+      const { verseText } = await fetch(`/api/verse?reference=${reference}&version=${version}`).then((res) =>
+        res.json()
+      )
       setVerseText(verseText)
       setLoading(false)
     } else {

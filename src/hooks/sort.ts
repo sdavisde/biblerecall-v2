@@ -1,6 +1,6 @@
 'use client'
 
-import { Verse } from '@app/api/verse/util'
+import { Verse } from '@lib/util'
 import { useState } from 'react'
 
 /**

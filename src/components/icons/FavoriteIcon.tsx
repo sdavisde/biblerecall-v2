@@ -3,8 +3,8 @@
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import MUIStarIcon from '@mui/icons-material/Star'
 import Hovered from '@components/util/Hovered'
-import { Verse } from '@app/api/verse/util'
-import { updateVerse } from '@lib/verses'
+import { Verse } from '@lib/util'
+import { updateVerse } from '@lib/api'
 import { useVerses } from 'hooks/verses'
 
 type FavoriteIconProps = {
@@ -12,13 +12,13 @@ type FavoriteIconProps = {
 }
 
 const FavoriteIcon = ({ verse }: FavoriteIconProps) => {
-  const [verses, setVerses] = useVerses()
+  const [verses, dispatchVerses] = useVerses()
 
   const toggleFavorite = async () => {
     const newVerse = { ...verse, favorite: !(verse.favorite ?? false) }
     const res = await updateVerse(newVerse)
     if (res?.success) {
-      setVerses([...verses.filter((v) => v.id !== verse.id), newVerse])
+      dispatchVerses(newVerse, 'update')
     }
   }
 

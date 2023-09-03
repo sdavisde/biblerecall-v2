@@ -3,7 +3,7 @@
 import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import $ from 'jquery'
-import { Verse } from '@app/api/verse/util'
+import { Verse } from '@lib/util'
 
 export default function useHelpers(verse: Verse) {
   const [loading, setLoading] = useState(false)
