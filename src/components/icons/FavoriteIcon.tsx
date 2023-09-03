@@ -16,10 +16,7 @@ const FavoriteIcon = ({ verse }: FavoriteIconProps) => {
 
   const toggleFavorite = async () => {
     const newVerse = { ...verse, favorite: !(verse.favorite ?? false) }
-    const res = await updateVerse(newVerse)
-    if (res?.success) {
-      dispatchVerses(newVerse, 'update')
-    }
+    dispatchVerses(newVerse, 'update')
   }
 
   return (

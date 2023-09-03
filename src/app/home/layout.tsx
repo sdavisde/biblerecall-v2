@@ -11,6 +11,10 @@ export default async function HomeLayout({ children }: { children: React.ReactNo
 
   return (
     <VersesProvider verses={verses}>
+      <meta
+        name='viewport'
+        content='width=device-width, initial-scale=1, maximum-scale=1'
+      ></meta>
       <main className='w-full h-screen'>
         <Navbar />
         <div className='w-full h-[88%] overflow-y-scroll'>{children}</div>
