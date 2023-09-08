@@ -9,16 +9,20 @@ export const useVerses = () => {
   const { verses, setVerses } = useContext(VersesContext)
 
   const setNewVerses = async (verse: Verse, action: 'add' | 'update' | 'delete') => {
+    let res = null
     switch (action) {
       case 'add':
+        res = await addVerse(verse)
         setVerses([verse, ...verses])
-        return await addVerse(verse)
+        return res
       case 'update':
+        res = await updateVerse(verse)
         setVerses([...verses.filter((v) => v.id !== verse.id), verse])
-        return await updateVerse(verse)
+        return res
       case 'delete':
+        res = await deleteVerse(verse.id)
         setVerses(verses.filter((v) => v.id !== verse.id))
-        return await deleteVerse(verse.id)
+        return res
     }
   }
 
