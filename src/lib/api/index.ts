@@ -52,7 +52,7 @@ export async function fetchVerses(userId: string): Promise<Verse[]> {
   }
 }
 
-export async function addVerse(verse: Verse): Promise<boolean> {
+export async function addVerse(verse: Verse): Promise<API_RESPONSE> {
   'use server'
 
   console.log('adding verse', verse)
@@ -71,13 +71,14 @@ export async function addVerse(verse: Verse): Promise<boolean> {
       .catch((e) => {
         throw new Error(e)
       })
-    return data.SUCCESS
+    console.log(data)
+    return data
   } else {
-    return (await Cookies.addVerse(verse)).SUCCESS
+    return await Cookies.addVerse(verse)
   }
 }
 
-export async function deleteVerse(id: string | undefined): Promise<boolean> {
+export async function deleteVerse(id: string | undefined): Promise<API_RESPONSE> {
   'use server'
 
   console.log('deleting verse', id)
@@ -95,13 +96,13 @@ export async function deleteVerse(id: string | undefined): Promise<boolean> {
       .catch((e) => {
         throw new Error(e)
       })
-    return data.SUCCESS
+    return data
   } else {
-    return (await Cookies.deleteVerse(id)).SUCCESS
+    return await Cookies.deleteVerse(id)
   }
 }
 
-export async function updateVerse(verse: Verse): Promise<boolean> {
+export async function updateVerse(verse: Verse): Promise<API_RESPONSE> {
   'use server'
 
   console.log('updating verse', verse)
@@ -120,8 +121,8 @@ export async function updateVerse(verse: Verse): Promise<boolean> {
       .catch((e) => {
         throw new Error(e)
       })
-    return data.SUCCESS
+    return data
   } else {
-    return (await Cookies.updateVerse(verse)).SUCCESS
+    return await Cookies.updateVerse(verse)
   }
 }
