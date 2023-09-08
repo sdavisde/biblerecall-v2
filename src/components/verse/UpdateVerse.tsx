@@ -35,7 +35,7 @@ const UpdateVerse = (props: UpdateVerseProps) => {
     const verse = validateReference(reference)
     if (verse) {
       setLoading(true)
-      const { verseText } = await fetch(`/api/verse?reference=${reference}&version=${version}`).then((res) =>
+      const { verseText } = await fetch(`/api/bible?reference=${reference}&version=${version}`).then((res) =>
         res.json()
       )
       setVerseText(verseText)

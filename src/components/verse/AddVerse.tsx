@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import Lightbox from '@components/common/Lightbox'
 import UpdateVerse from '@components/verse/UpdateVerse'
-import { addVerse } from '@lib/api/verses'
 import { Verse } from '@lib/util'
 import { useVerses } from 'hooks/verses'
 import OutsideAlerter from 'hooks/click'

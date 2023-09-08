@@ -26,6 +26,10 @@ const FavoriteIcon = ({ verse }: FavoriteIconProps) => {
         DefaultComp={verse.favorite ? MUIStarIcon : StarBorderIcon}
         HoveredComp={verse.favorite ? StarBorderIcon : MUIStarIcon}
         onClick={() => toggleFavorite()}
+        onTouchEnd={(e) => {
+          toggleFavorite()
+          e.stopPropagation()
+        }}
         override={verse.favorite}
         type='primary'
       />

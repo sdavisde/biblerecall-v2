@@ -9,14 +9,10 @@ export type Api_Verse = {
   verse: string // verse text
 }
 
-export class API_RESPONSE {
-  success: boolean
-  error?: string
-
-  constructor(success: boolean, error?: string) {
-    this.success = success
-    this.error = error
-  }
+export type API_RESPONSE = {
+  DATA?: any
+  SUCCESS: boolean
+  RESPONSE: string
 }
 
 export type Verse = {

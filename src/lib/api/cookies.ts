@@ -37,9 +37,9 @@ export async function addVerse(verse: Verse): Promise<API_RESPONSE> {
     const verses = [...versesCookie, newVerse]
 
     cookies().set('verses', JSON.stringify(verses))
-    return new API_RESPONSE(true)
+    return { SUCCESS: true, RESPONSE: 'Successfully added verse in cookie' }
   } catch (e: any) {
-    return new API_RESPONSE(false, e.toString())
+    return { SUCCESS: false, RESPONSE: 'Something went wrong while adding verse in cookie' }
   }
 }
 
@@ -49,7 +49,7 @@ export async function deleteVerse(id: string | undefined): Promise<API_RESPONSE>
   console.log('deleting verse', id)
 
   if (!id) {
-    return new API_RESPONSE(false, 'verse id is not defined')
+    return { SUCCESS: false, RESPONSE: 'verse id is not defined' }
   }
 
   if (cookies().has('verses')) {
@@ -57,12 +57,12 @@ export async function deleteVerse(id: string | undefined): Promise<API_RESPONSE>
       const verses = JSON.parse(cookies().get('verses')?.value!) as Verse[]
       const result = verses.filter((v) => v.id !== id)
       cookies().set('verses', JSON.stringify(result))
-      return new API_RESPONSE(true)
+      return { SUCCESS: true, RESPONSE: 'Deleting verse successfully in cookie' }
     } catch (e: any) {
-      return new API_RESPONSE(false, e.toString())
+      return { SUCCESS: false, RESPONSE: 'Something went wrong while deleting verse in cookie' }
     }
   } else {
-    return new API_RESPONSE(false, 'No verses to delete in cookies')
+    return { SUCCESS: false, RESPONSE: 'Verses cookie not defined' }
   }
 }
 
@@ -72,7 +72,7 @@ export async function updateVerse(verse: Verse): Promise<API_RESPONSE> {
   console.log('updating verse', verse)
 
   if (!verse.id) {
-    return new API_RESPONSE(false, 'verse id is not defined')
+    return { SUCCESS: false, RESPONSE: 'Verse id not provided' }
   }
 
   try {
@@ -80,8 +80,8 @@ export async function updateVerse(verse: Verse): Promise<API_RESPONSE> {
     const verses = [...JSON.parse(versesCookie).filter((v: Verse) => v.id !== verse.id), verse]
 
     cookies().set('verses', JSON.stringify(verses))
-    return new API_RESPONSE(true)
+    return { SUCCESS: true, RESPONSE: 'Updated verse successfully in cookie' }
   } catch (e: any) {
-    return new API_RESPONSE(false, e.toString())
+    return { SUCCESS: false, RESPONSE: 'Something went wrong while updating verse in cookie' }
   }
 }

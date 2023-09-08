@@ -8,14 +8,16 @@ interface ProfileIconProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export default function ProfileIcon(props: ProfileIconProps) {
+  const { imageSrc, ...rest } = props
+
   return (
     <div
       className='centered cursor-pointer'
       onClick={() => signOut()}
-      {...props}
+      {...rest}
     >
       <Image
-        src={props.imageSrc}
+        src={imageSrc}
         width={40}
         height={40}
         alt='Profile Pic'
