@@ -136,3 +136,30 @@ export function update(arr: Verse[], id: string, updatedData: Verse) {
   let verse = arr.find((item) => item.id === id)
   verse = updatedData
 }
+
+export function isValidVerse(verse: Verse): boolean {
+  // verse must have a book and chapter
+  if (!verse || !verse.book?.name || !verse.chapter) {
+    return false
+  }
+
+  // start must exist and be valid
+  if (!verse.start || verse.start <= 0) {
+    return false
+  }
+
+  // verse end should either not exist or be >= start
+  if (verse.end && verse.end < verse.start) {
+    return false
+  }
+
+  return true
+}
+
+export function makeReference(verse: Verse): string | null {
+  if (!isValidVerse) {
+    return null
+  }
+
+  return `${verse.book.name} ${verse.chapter}:${verse.start}${verse.end ? '-' + verse.end : ''}`
+}

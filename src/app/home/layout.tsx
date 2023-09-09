@@ -1,14 +1,11 @@
-import { getServerSession } from 'next-auth'
 import Navbar from '@components/common/Navbar'
 import Footer from '@components/common/Footer'
 import VersesProvider from '@components/providers/VersesProvider'
-import { DB_User, authOptions } from '@lib/auth'
 import { fetchVerses } from '@lib/api'
 import { Toaster } from 'react-hot-toast'
 
 export default async function HomeLayout({ children }: { children: React.ReactNode }) {
-  const session = await getServerSession(authOptions)
-  const verses = await fetchVerses((session?.user as DB_User)?.id)
+  const verses = await fetchVerses()
 
   return (
     <VersesProvider verses={verses}>

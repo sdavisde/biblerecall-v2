@@ -1,6 +1,5 @@
-import { randomUUID } from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
-import { collection, getDocs, addDoc } from 'firebase/firestore'
+import { collection, getDocs, addDoc, getDoc, doc } from 'firebase/firestore'
 import { Verse } from '@lib/util'
 import { database } from '@lib/firebase'
 import { getUserId, getVerse } from '.'
@@ -67,8 +66,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const collectionRef = collection(database, `Users/${userId}/verses`)
 
   try {
-    await addDoc(collectionRef, verse)
-    return NextResponse.json({ SUCCESS: true, RESPONSE: 'Added verse successfully' }, { status: 200, statusText: 'OK' })
+    const docRef = await addDoc(collectionRef, verse)
+
+    return NextResponse.json(
+      { DATA: { ...verse, id: docRef.id }, SUCCESS: true, RESPONSE: 'Added verse successfully' },
+      { status: 200, statusText: 'OK' }
+    )
   } catch (e) {
     return NextResponse.json(
       { SUCCESS: false, RESPONSE: 'Something went wrong while adding the verse' },

@@ -10,7 +10,6 @@ import { getUserId, getVerse } from '..'
 export async function GET(request: NextRequest, { params }: { params: { id: string } }): Promise<NextResponse> {
   const userId = getUserId(request)
   const verseId = params.id
-  console.log('here')
 
   if (!userId) {
     return NextResponse.json(
@@ -93,15 +92,21 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   }
   if (!verse) {
     return NextResponse.json(
-      { SUCCESS: false, RESPONSE: 'Verse informatino not provided' },
+      { SUCCESS: false, RESPONSE: 'Verse information not provided' },
       { status: 400, statusText: 'Verse information not provided' }
+    )
+  }
+  if (!verse.id) {
+    return NextResponse.json(
+      { SUCCESS: false, RESPONSE: 'Verse id not provided' },
+      { status: 400, statusText: 'Verse id not provided' }
     )
   }
 
   try {
     await updateDoc(doc(database, 'Users', userId, 'verses', verseId), verse)
     return NextResponse.json(
-      { SUCCESS: true, RESPONSE: 'Successfully updated verse' },
+      { DATA: verse, SUCCESS: true, RESPONSE: 'Successfully updated verse' },
       { status: 200, statusText: 'OK' }
     )
   } catch (e) {

@@ -1,10 +1,11 @@
 'use client'
 
 import { useContext } from 'react'
-import { API_RESPONSE, Verse } from '@lib/util'
+import { API_RESPONSE, Verse, makeReference } from '@lib/util'
 import { VersesContext } from '@components/providers/VersesProvider'
 import { addVerse, deleteVerse, updateVerse } from '@lib/api'
 import toast from 'react-hot-toast'
+import Reference from '@components/verse/Reference'
 
 export const useVerses = () => {
   const { verses, setVerses } = useContext(VersesContext)
@@ -15,8 +16,8 @@ export const useVerses = () => {
       case 'add':
         res = await addVerse(verse)
         if (res.SUCCESS) {
-          setVerses([verse, ...verses])
-          toast.success(res.RESPONSE)
+          setVerses([res.DATA, ...verses])
+          toast.success(`Added ${makeReference(verse)}`)
         } else {
           toast.error(res.RESPONSE)
         }
@@ -24,16 +25,17 @@ export const useVerses = () => {
       case 'update':
         res = await updateVerse(verse)
         if (res.SUCCESS) {
-          setVerses([...verses.filter((v) => v.id !== verse.id), verse])
+          setVerses([...verses.filter((v) => v.id !== verse.id), res.DATA])
+          toast.success('Updated verse')
         } else {
           toast.error(res.RESPONSE)
         }
         break
       case 'delete':
-        console.log('here')
         res = await deleteVerse(verse.id)
         if (res.SUCCESS) {
           setVerses(verses.filter((v) => v.id !== verse.id))
+          toast.success(res.RESPONSE)
         } else {
           toast.error(res.RESPONSE)
         }

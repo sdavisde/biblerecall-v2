@@ -25,10 +25,7 @@ const DeleteIcon = ({ id }: DeleteIconProps) => {
         DefaultComp={DeleteOutlineIcon}
         HoveredComp={Delete}
         onClick={onDelete}
-        onTouchEnd={(e) => {
-          onDelete()
-          e.stopPropagation()
-        }}
+        onTouchEnd={onDelete}
         type='warning'
       />
     </span>

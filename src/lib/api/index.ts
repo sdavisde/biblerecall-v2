@@ -5,6 +5,7 @@ import { Verse } from '@lib/util'
 import { DB_User, authOptions } from '@lib/auth'
 import { API_RESPONSE } from '@lib/util'
 import * as Cookies from './cookies'
+import { cookies } from 'next/headers'
 
 export async function getVerse(id: string): Promise<Verse | null> {
   'use server'
@@ -24,6 +25,7 @@ export async function getVerse(id: string): Promise<Verse | null> {
     })
       .then(async (data) => (await data.json()) as Verse)
       .catch((e) => {
+        console.error(e)
         throw new Error(e)
       })
     return data
@@ -32,14 +34,16 @@ export async function getVerse(id: string): Promise<Verse | null> {
   }
 }
 
-export async function fetchVerses(userId: string): Promise<Verse[]> {
+export async function fetchVerses(): Promise<Verse[]> {
   'use server'
 
-  if (userId) {
+  const session = await getServerSession(authOptions)
+
+  if (session && session.user && (session.user as DB_User).id) {
     const data = await fetch(`${process.env.BASE_URL}/api/verses`, {
       method: 'GET',
       headers: {
-        userId: userId,
+        userId: (session.user as DB_User).id,
       },
     })
       .then(async (data) => (await data.json()) as API_RESPONSE)
@@ -48,7 +52,7 @@ export async function fetchVerses(userId: string): Promise<Verse[]> {
       })
     return data.DATA
   } else {
-    return Cookies.fetchVerses()
+    return (await Cookies.fetchVerses()).DATA ?? []
   }
 }
 
@@ -71,7 +75,6 @@ export async function addVerse(verse: Verse): Promise<API_RESPONSE> {
       .catch((e) => {
         throw new Error(e)
       })
-    console.log(data)
     return data
   } else {
     return await Cookies.addVerse(verse)
@@ -119,6 +122,7 @@ export async function updateVerse(verse: Verse): Promise<API_RESPONSE> {
     })
       .then(async (data) => (await data.json()) as API_RESPONSE)
       .catch((e) => {
+        console.error(e)
         throw new Error(e)
       })
     return data
