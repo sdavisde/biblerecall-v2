@@ -40,8 +40,6 @@ export async function fetchVerses(): Promise<API_RESPONSE> {
 export async function addVerse(verse: Verse): Promise<API_RESPONSE> {
   'use server'
 
-  console.log('adding verse', verse)
-
   try {
     let versesCookie = getVersesCookie()
     if (!versesCookie) {
@@ -53,7 +51,6 @@ export async function addVerse(verse: Verse): Promise<API_RESPONSE> {
     const verses = [...versesCookie, newVerse]
 
     cookies().set('verses', JSON.stringify(verses))
-    console.log('just added new ', { ...verse, id: randomUUID() })
     return { DATA: newVerse, SUCCESS: true, RESPONSE: `Successfully added ${makeReference(verse)} in cookie` }
   } catch (e: any) {
     return { SUCCESS: false, RESPONSE: 'Something went wrong while adding verse in cookie' }
@@ -62,8 +59,6 @@ export async function addVerse(verse: Verse): Promise<API_RESPONSE> {
 
 export async function deleteVerse(id: string | undefined): Promise<API_RESPONSE> {
   'use server'
-
-  console.log('deleting verse', id)
 
   if (!id) {
     return { SUCCESS: false, RESPONSE: 'verse id is not defined' }
@@ -85,8 +80,6 @@ export async function deleteVerse(id: string | undefined): Promise<API_RESPONSE>
 
 export async function updateVerse(verse: Verse): Promise<API_RESPONSE> {
   'use server'
-
-  console.log('updating verse', verse)
 
   if (!verse.id) {
     return { SUCCESS: false, RESPONSE: 'Verse id not provided' }

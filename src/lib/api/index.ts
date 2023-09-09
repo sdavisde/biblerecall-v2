@@ -59,8 +59,6 @@ export async function fetchVerses(): Promise<Verse[]> {
 export async function addVerse(verse: Verse): Promise<API_RESPONSE> {
   'use server'
 
-  console.log('adding verse', verse)
-
   const session = await getServerSession(authOptions)
 
   if (session && session.user && (session.user as DB_User).id) {
@@ -84,8 +82,6 @@ export async function addVerse(verse: Verse): Promise<API_RESPONSE> {
 export async function deleteVerse(id: string | undefined): Promise<API_RESPONSE> {
   'use server'
 
-  console.log('deleting verse', id)
-
   const session = await getServerSession(authOptions)
 
   if (session && session.user && (session.user as DB_User).id) {
@@ -107,8 +103,6 @@ export async function deleteVerse(id: string | undefined): Promise<API_RESPONSE>
 
 export async function updateVerse(verse: Verse): Promise<API_RESPONSE> {
   'use server'
-
-  console.log('updating verse', verse)
 
   const session = await getServerSession(authOptions)
 

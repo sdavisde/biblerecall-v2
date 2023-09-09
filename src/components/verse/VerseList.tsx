@@ -7,7 +7,7 @@ import VerseBox from '@components/verse/VerseBox'
 const VerseList = () => {
   const [verses] = useVerses()
   const [sortFn] = useSort()
-  console.log(verses)
+
   return (
     <>
       {verses?.sort(sortFn).map((verse, i) => (

@@ -7,8 +7,6 @@ export async function GET(request: NextRequest) {
 
   const verse = createVerse(verseReference, '', version)
 
-  console.log(`verse being fetched: ${JSON.stringify(verse)}`)
-
   if (!verse) {
     return NextResponse.json({ error: 'Verse was not valid' })
   }

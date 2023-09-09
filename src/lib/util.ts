@@ -44,8 +44,6 @@ export function createVerse(verseReference: string, id: string, text?: string, v
   const chapter = first.slice(chapterIndex)
   const [start, end] = last.split('-')
 
-  console.log(book, chapter, start, end)
-
   if (verseReference.includes('-')) {
     if (!end || start > end) {
       return null
