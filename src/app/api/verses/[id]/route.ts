@@ -31,7 +31,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
   try {
     const snapshot = await getDoc(verseRef)
-    const verse = { ...snapshot.data() } as Verse
+    const verse = { ...snapshot.data(), id: snapshot.id } as Verse
     return NextResponse.json(
       { DATA: verse, SUCCESS: true, RESPONSE: 'Retrieved verse successfully' },
       { status: 200, statusText: 'OK' }

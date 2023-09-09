@@ -4,11 +4,10 @@ import { useContext } from 'react'
 import { API_RESPONSE, Verse } from '@lib/util'
 import { VersesContext } from '@components/providers/VersesProvider'
 import { addVerse, deleteVerse, updateVerse } from '@lib/api'
-import useDispatchToast from './use-dispatch-toast'
+import toast from 'react-hot-toast'
 
 export const useVerses = () => {
   const { verses, setVerses } = useContext(VersesContext)
-  const dispatchToast = useDispatchToast()
 
   const setNewVerses = async (verse: Verse, action: 'add' | 'update' | 'delete') => {
     let res: API_RESPONSE
@@ -17,8 +16,9 @@ export const useVerses = () => {
         res = await addVerse(verse)
         if (res.SUCCESS) {
           setVerses([verse, ...verses])
+          toast.success(res.RESPONSE)
         } else {
-          dispatchToast(res.RESPONSE)
+          toast.error(res.RESPONSE)
         }
         break
       case 'update':
@@ -26,15 +26,16 @@ export const useVerses = () => {
         if (res.SUCCESS) {
           setVerses([...verses.filter((v) => v.id !== verse.id), verse])
         } else {
-          dispatchToast(res.RESPONSE)
+          toast.error(res.RESPONSE)
         }
         break
       case 'delete':
+        console.log('here')
         res = await deleteVerse(verse.id)
         if (res.SUCCESS) {
           setVerses(verses.filter((v) => v.id !== verse.id))
         } else {
-          dispatchToast(res.RESPONSE)
+          toast.error(res.RESPONSE)
         }
         break
     }

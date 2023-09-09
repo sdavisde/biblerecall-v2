@@ -67,7 +67,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const collectionRef = collection(database, `Users/${userId}/verses`)
 
   try {
-    await addDoc(collectionRef, { ...verse, id: randomUUID() })
+    await addDoc(collectionRef, verse)
     return NextResponse.json({ SUCCESS: true, RESPONSE: 'Added verse successfully' }, { status: 200, statusText: 'OK' })
   } catch (e) {
     return NextResponse.json(
