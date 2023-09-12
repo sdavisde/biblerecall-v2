@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Api_Verse, createVerse } from '../../../lib/util'
+import { Api_Verse, createVerse } from '@lib/util'
 
 export async function GET(request: NextRequest) {
   const verseReference = request.nextUrl.searchParams.get('reference') ?? ''
   const version = request.nextUrl.searchParams.get('version') ?? 'ESV'
 
-  const verse = createVerse(verseReference, '', version)
+  const verse = createVerse(verseReference, { version })
 
   if (!verse) {
     return NextResponse.json({ error: 'Verse was not valid' })

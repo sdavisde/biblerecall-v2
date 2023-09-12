@@ -6,7 +6,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import CircularProgress from '@mui/material/CircularProgress'
 import Lightbox from '@components/common/Lightbox'
 import Darkbox from '@components/common/Darkbox'
-import { Verse, createVerse } from '@lib/util'
+import { Verse, createVerse, isValidReference } from '@lib/util'
 
 type UpdateVerseProps = {
   id: string
@@ -22,20 +22,19 @@ const UpdateVerse = (props: UpdateVerseProps) => {
   const [loading, setLoading] = useState(false)
 
   const submitNewVerse = async () => {
-    const verse = createVerse(reference, props.id, verseText, version)
+    const verse = createVerse(reference, { id: props.id, text: verseText, version })
 
-    if (verse && !loading && verseText !== '' && validateReference(reference)) {
+    if (verse && !loading && verseText !== '' && isValidReference(reference)) {
       props.onSubmit(verse)
     }
   }
 
-  const onVerseUpdate = async (reference: string) => {
-    setReference(reference)
+  const onVerseUpdate = async (inputValue: string) => {
+    setReference(inputValue)
 
-    const verse = validateReference(reference)
-    if (verse) {
+    if (isValidReference(inputValue)) {
       setLoading(true)
-      const { verseText } = await fetch(`/api/bible?reference=${reference}&version=${version}`).then((res) =>
+      const { verseText } = await fetch(`/api/bible?reference=${inputValue}&version=${version}`).then((res) =>
         res.json()
       )
       setVerseText(verseText)
@@ -43,14 +42,6 @@ const UpdateVerse = (props: UpdateVerseProps) => {
     } else {
       setVerseText('')
     }
-  }
-
-  const validateReference = (reference: string) => {
-    const verse = createVerse(reference, props.id)
-    if (verse && verse.book && verse.chapter && verse.start) {
-      return verse
-    }
-    return null
   }
 
   return (

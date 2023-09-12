@@ -17,18 +17,17 @@ export async function getVerse(id: string): Promise<Verse | null> {
   const session = await getServerSession(authOptions)
 
   if (session && session.user && (session.user as DB_User).id) {
-    const data = await fetch(`${process.env.BASE_URL}/api/verses/${id}`, {
+    const res = await fetch(`${process.env.BASE_URL}/api/verses/${id}`, {
       method: 'GET',
       headers: {
         userId: (session.user as DB_User).id,
       },
     })
-      .then(async (data) => (await data.json()) as Verse)
+      .then(async (data) => (await data.json()) as API_RESPONSE)
       .catch((e) => {
-        console.error(e)
         throw new Error(e)
       })
-    return data
+    return res.DATA
   } else {
     return Cookies.getVerse(id)
   }

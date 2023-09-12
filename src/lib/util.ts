@@ -30,19 +30,29 @@ export type Verse = {
   favorite?: boolean
 }
 
-/**
- * Parses a verse reference into its different attributes
- * @param verseReference verse in the format: Book C:V or 1 Book C:V-V2
- */
-export function createVerse(verseReference: string, id: string, text?: string, version?: string): Verse | null {
-  if (!verseReference.includes(' ') || !verseReference.includes(':')) {
-    return null
-  }
-  const [first, last] = verseReference.split(':')
+export function parseReference(reference: string) {
+  const [first, last] = reference.split(':')
   const chapterIndex = first.lastIndexOf(' ')
   const book = first.slice(0, chapterIndex)
   const chapter = first.slice(chapterIndex)
   const [start, end] = last.split('-')
+
+  return [book, chapter, start, end] as const
+}
+
+/**
+ * Parses a verse reference into its different attributes
+ * @param verseReference verse in the format: Book C:V or 1 Book C:V-V2
+ */
+export function createVerse(
+  verseReference: string,
+  overrides?: { id?: string; text?: string; version?: string }
+): Verse | null {
+  if (!verseReference.includes(' ') || !verseReference.includes(':')) {
+    return null
+  }
+
+  const [book, chapter, start, end] = parseReference(verseReference)
 
   if (verseReference.includes('-')) {
     if (!end || start > end) {
@@ -51,13 +61,13 @@ export function createVerse(verseReference: string, id: string, text?: string, v
   }
 
   return {
-    id,
+    id: overrides?.id ?? '',
     book: books.find((b) => b.name.toLowerCase() === book.toLowerCase()) ?? books[0],
     chapter: parseInt(chapter),
     start: parseInt(start),
     end: parseInt(end),
-    text: text ?? '',
-    version: version ?? '',
+    text: overrides?.text ?? '',
+    version: overrides?.version ?? '',
   }
 }
 
@@ -148,6 +158,26 @@ export function isValidVerse(verse: Verse): boolean {
 
   // verse end should either not exist or be >= start
   if (verse.end && verse.end < verse.start) {
+    return false
+  }
+
+  return true
+}
+
+export function isValidReference(reference: string): boolean {
+  if (!reference || !reference.includes(':')) {
+    return false
+  }
+
+  const [book, chapter, start, end] = parseReference(reference)
+
+  if (reference.includes('-')) {
+    if (!end || start > end) {
+      return false
+    }
+  }
+
+  if (!book || !chapter || !start) {
     return false
   }
 
