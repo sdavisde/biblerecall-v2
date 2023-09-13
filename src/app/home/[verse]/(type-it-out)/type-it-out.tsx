@@ -1,13 +1,23 @@
 'use client'
 
 import { Verse } from '@lib/util'
+import { useSearchParams } from 'next/navigation'
 import Lightbox from '@components/common/Lightbox'
 import Reference from '@components/verse/Reference'
 import { CircularProgress } from '@mui/material'
 import useHelpers from './helpers'
+import { useEffect, useRef } from 'react'
 
 export default function TypeItOut({ verse }: { verse: Verse }) {
-  const { displayedText, loading, inputRef, setGameMode, handleUserInput, triggerLoad } = useHelpers(verse)
+  const input = useRef<HTMLInputElement>(null)
+  const { displayedText, loading, difficultyTransition, handleUserInput, triggerLoad } = useHelpers(verse, input)
+  const searchParams = useSearchParams()
+
+  const difficulty = parseInt(searchParams.get('diff') ?? '0')
+
+  useEffect(() => {
+    difficultyTransition(difficulty)
+  }, [])
 
   return (
     <div className='w-full centered gap-4 flex-col'>
@@ -39,7 +49,7 @@ export default function TypeItOut({ verse }: { verse: Verse }) {
         placeholder='Answer Here!'
         onChange={(e) => handleUserInput(e)}
         className='bg-transparent bg-[length:16px_16px] border-b-darkGrey border-b-2 text-center focus:outline-none'
-        ref={inputRef}
+        ref={input}
         autoComplete='off'
         autoFocus
       />

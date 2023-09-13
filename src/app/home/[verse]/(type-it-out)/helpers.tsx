@@ -1,11 +1,11 @@
 'use client'
 
-import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
+import { ChangeEvent, KeyboardEvent, RefObject, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import $ from 'jquery'
 import { Verse } from '@lib/util'
 
-export default function useHelpers(verse: Verse) {
+export default function useHelpers(verse: Verse, inputRef: RefObject<HTMLInputElement>) {
   const [loading, setLoading] = useState(false)
   const [cursor, setCursor] = useState(0)
   const displayedText = verse ? verse.text?.split(' ') : []
@@ -15,11 +15,11 @@ export default function useHelpers(verse: Verse) {
     length: word.length,
     processed: false,
   }))
+  const [difficulty, setDifficulty] = useState(0)
   const [parity, setParity] = useState('odd')
   const [wordsCorrect, setWordsCorrect] = useState(0)
   const router = useRouter()
-  const input = useRef<HTMLInputElement>(null)
-  const LOADING_TIME = 4000
+  const LOADING_TIME = 2500
 
   /*
   1. Users load the page and see the verse greyed out depending on difficulty
@@ -40,7 +40,8 @@ export default function useHelpers(verse: Verse) {
     if (cursor < textRefs.length) {
       $(`.verse_words div`).removeClass('target')
 
-      if ($(`.verse_word:nth-child(${cursor + 1})`)) $(`.verse_word:nth-child(${cursor + 1})`).removeClass('hidden')
+      if ($(`.verse_word:nth-child(${cursor + 1})`))
+        $(`.verse_word:nth-child(${cursor + 1})`).removeClass('text-lightGrey')
 
       if ($(`.verse_word:nth-child(${cursor + 2})`)) $(`.verse_word:nth-child(${cursor + 2})`).addClass('target')
 
@@ -68,9 +69,10 @@ export default function useHelpers(verse: Verse) {
    */
   async function onStageComplete(correctPercent: number) {
     if (correctPercent >= 90) {
-      await router.push(`/home/${verse.id}/success`)
+      // todo add api call here for verse completions
+      router.push(`/home/${verse.id}/success?diff=${difficulty}`)
     } else {
-      await router.push(`/home/${verse.id}/failed`)
+      router.push(`/home/${verse.id}/failed?diff=${difficulty}`)
     }
   }
 
@@ -84,40 +86,35 @@ export default function useHelpers(verse: Verse) {
   /**
    * Sets styles on words based on difficulty
    */
-  const setGameMode = (difficulty: number, loadGif = true) => {
-    // trigger a 1 second load gif to switch between difficulties
-    if (loadGif) {
-      triggerLoad()
-    }
-
+  const difficultyTransition = (diff: number) => {
+    setDifficulty(diff)
     // reset position in displayed text
     setCursor(0)
-    input.current!.focus()
+    inputRef.current!.focus()
+    const target = $('.target')
     $('.verse_word').removeClass().addClass('verse_word pr-[3px]').delay(800)
+    target.addClass('target')
 
-    // if diff 1, already reset.
-    // if diff 2, add "background_font" class to every other displayText
-    if (difficulty == 2) {
-      // compare with previous difficulty
-      if (difficulty === 2) {
-        setParity(parity == 'odd' ? 'even' : 'odd')
-      }
-
+    // if diff 0, already reset.
+    // if diff 1, add "background_font" class to every other displayText
+    if (diff === 1) {
       // iterate through each word, and take 1200 / n seconds for each one.
       const delayTime = LOADING_TIME / displayedText.length
       $(`.verse_words div :nth-child(${parity})`).each((i, elem) => {
         setTimeout(() => {
-          $(elem).addClass('hidden')
+          $(elem).addClass('text-lightGrey')
         }, i * delayTime)
       })
+
+      setParity((prev) => (prev === 'odd' ? 'even' : 'odd'))
     }
 
-    // if diff 3, add "background_font" class to every displayText
-    else if (difficulty == 3) {
+    // if diff 2, add "background_font" class to every displayText
+    else if (diff === 2) {
       const delayTime = LOADING_TIME / displayedText.length
       $(`.verse_words div div`).each((i, elem) => {
         setTimeout(() => {
-          $(elem).addClass('hidden')
+          $(elem).addClass('text-lightGrey')
         }, i * delayTime)
       })
     }
@@ -136,8 +133,7 @@ export default function useHelpers(verse: Verse) {
   return {
     displayedText,
     loading,
-    inputRef: input,
-    setGameMode,
+    difficultyTransition,
     handleUserInput,
     triggerLoad,
   }
