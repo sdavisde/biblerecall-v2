@@ -32,5 +32,5 @@ export async function GET(request: NextRequest) {
       .map((v) => v.verse)
       .join(' ') ?? 'Verse text not found'
 
-  return NextResponse.json({ verseText })
+  return NextResponse.json({ verseText, verseReference })
 }

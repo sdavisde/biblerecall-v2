@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FormControl, Input, InputLabel, MenuItem, Select } from '@mui/material'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -20,27 +20,31 @@ const UpdateVerse = (props: UpdateVerseProps) => {
   const [verseText, setVerseText] = useState(props.text)
   const [version, setVersion] = useState(props.version)
   const [loading, setLoading] = useState(false)
+  const input = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    const updateVerseText = async () => {
+      if (isValidReference(reference)) {
+        setLoading(true)
+        const { verseText, verseReference } = await fetch(`/api/bible?reference=${reference}&version=${version}`).then(
+          (res) => res.json()
+        )
+        if (verseReference === input.current?.value) {
+          setVerseText(verseText)
+        }
+        setLoading(false)
+      } else {
+        setVerseText('')
+      }
+    }
+    updateVerseText()
+  }, [reference])
 
   const submitNewVerse = async () => {
     const verse = createVerse(reference, { id: props.id, text: verseText, version })
 
     if (verse && !loading && verseText !== '' && isValidReference(reference)) {
       props.onSubmit(verse)
-    }
-  }
-
-  const onVerseUpdate = async (inputValue: string) => {
-    setReference(inputValue)
-
-    if (isValidReference(inputValue)) {
-      setLoading(true)
-      const { verseText } = await fetch(`/api/bible?reference=${inputValue}&version=${version}`).then((res) =>
-        res.json()
-      )
-      setVerseText(verseText)
-      setLoading(false)
-    } else {
-      setVerseText('')
     }
   }
 
@@ -53,10 +57,11 @@ const UpdateVerse = (props: UpdateVerseProps) => {
           type='text'
           placeholder='Enter Verse Reference'
           value={reference}
-          onChange={(e) => onVerseUpdate(e.target.value)}
+          onChange={(e) => setReference(e.target.value)}
           classes={{
             input: 'text-center after:border-green text-base font-base',
           }}
+          inputRef={input}
         ></Input>
         <button
           type='submit'
@@ -81,7 +86,10 @@ const UpdateVerse = (props: UpdateVerseProps) => {
                 labelId='version-label'
                 id='version-select'
                 value={version}
-                onChange={(e) => setVersion(e.target.value)}
+                onChange={(e) => {
+                  setVersion(e.target.value)
+                  e.stopPropagation()
+                }}
                 className='bg-inherit text-black'
                 label='Version'
               >
