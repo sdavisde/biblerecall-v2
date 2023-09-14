@@ -45,6 +45,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
  * The body of the request given should be a Verse object, The id will be overwritten
  */
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  console.log(JSON.stringify(request))
   const userId = getUserId(request)
   const verse = await getVerse(request)
 
