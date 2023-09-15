@@ -5,7 +5,6 @@ import { Verse } from '@lib/util'
 import { DB_User, authOptions } from '@lib/auth'
 import { API_RESPONSE } from '@lib/util'
 import * as Cookies from './cookies'
-import { cookies } from 'next/headers'
 
 export async function getVerse(id: string): Promise<Verse | null> {
   'use server'
@@ -17,7 +16,7 @@ export async function getVerse(id: string): Promise<Verse | null> {
   const session = await getServerSession(authOptions)
 
   if (session && session.user && (session.user as DB_User).id) {
-    const res = await fetch(`${process.env.BASE_URL}/api/verses/${id}`, {
+    const res = await fetch(`${process.env.API_URL}/verses/${id}`, {
       method: 'GET',
       headers: {
         userId: (session.user as DB_User).id,
@@ -39,7 +38,7 @@ export async function fetchVerses(): Promise<Verse[]> {
   const session = await getServerSession(authOptions)
 
   if (session && session.user && (session.user as DB_User).id) {
-    const data = await fetch(`${process.env.BASE_URL}/api/verses`, {
+    const data = await fetch(`${process.env.API_URL}/verses`, {
       method: 'GET',
       headers: {
         userId: (session.user as DB_User).id,
@@ -61,7 +60,7 @@ export async function addVerse(verse: Verse): Promise<API_RESPONSE> {
   const session = await getServerSession(authOptions)
 
   if (session && session.user && (session.user as DB_User).id) {
-    const data = await fetch(`${process.env.BASE_URL}/api/verses/${verse.id}`, {
+    const data = await fetch(`${process.env.API_URL}/verses/${verse.id}`, {
       method: 'POST',
       headers: {
         userId: (session.user as DB_User).id,
@@ -84,7 +83,7 @@ export async function deleteVerse(id: string | undefined): Promise<API_RESPONSE>
   const session = await getServerSession(authOptions)
 
   if (session && session.user && (session.user as DB_User).id) {
-    const data = await fetch(`${process.env.BASE_URL}/api/verses/${id}`, {
+    const data = await fetch(`${process.env.API_URL}/verses/${id}`, {
       method: 'DELETE',
       headers: {
         userId: (session.user as DB_User).id,
@@ -106,7 +105,7 @@ export async function updateVerse(verse: Verse): Promise<API_RESPONSE> {
   const session = await getServerSession(authOptions)
 
   if (session && session.user && (session.user as DB_User).id) {
-    const data = await fetch(`${process.env.BASE_URL}/api/verses/${verse.id}`, {
+    const data = await fetch(`${process.env.API_URL}/verses/${verse.id}`, {
       method: 'PUT',
       headers: {
         userId: (session.user as DB_User).id,
