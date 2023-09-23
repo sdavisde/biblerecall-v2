@@ -16,7 +16,6 @@ export const GET = async (request: NextRequest) => {
 
   const versions = (await data.json()) as API_Version[]
 
-  console.log(versions)
   const sortingArr = ['ESV', 'NIV', 'NLT', 'KJV']
 
   versions.sort((a, b) => {

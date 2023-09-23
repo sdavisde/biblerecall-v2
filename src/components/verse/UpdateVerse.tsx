@@ -7,7 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Lightbox from '@components/common/Lightbox'
 import Darkbox from '@components/common/Darkbox'
 import { Verse, createVerse, isValidReference } from '@lib/util'
-import Versions from './Versions'
+import useVersions from 'hooks/use-versions'
 
 type UpdateVerseProps = {
   id: string
@@ -21,6 +21,7 @@ const UpdateVerse = (props: UpdateVerseProps) => {
   const [verseText, setVerseText] = useState(props.text)
   const [version, setVersion] = useState(props.version ?? 'ESV')
   const [loading, setLoading] = useState(false)
+  const versions = useVersions()
   const input = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -39,7 +40,7 @@ const UpdateVerse = (props: UpdateVerseProps) => {
       }
     }
     updateVerseText()
-  }, [reference])
+  }, [reference, version])
 
   const submitNewVerse = async () => {
     const verse = createVerse(reference, { id: props.id, text: verseText, version })
@@ -81,22 +82,25 @@ const UpdateVerse = (props: UpdateVerseProps) => {
           />
           {loading && <CircularProgress color='primary' />}
           <div className='w-1/5'>
-            <FormControl fullWidth>
-              <InputLabel id='version-label'>Version</InputLabel>
-              <Select
-                labelId='version-label'
-                id='version-select'
-                value={version}
-                onChange={(e) => {
-                  setVersion(e.target.value)
-                  e.stopPropagation()
-                }}
-                className='bg-inherit text-black'
-                label='Version'
+            <span onClick={(e) => e.stopPropagation()}>
+              <FormControl
+                sx={{ m: 1, minWidth: 120 }}
+                size='small'
               >
-                <Versions />
-              </Select>
-            </FormControl>
+                <InputLabel id='version-label'>Version</InputLabel>
+                <Select
+                  labelId='version-label'
+                  id='version-select'
+                  value={version}
+                  label='Version'
+                  onChange={(e) => setVersion(e.target.value)}
+                >
+                  {versions?.map((version) => (
+                    <MenuItem value={version.abbreviation}>{version.abbreviation}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </span>
           </div>
         </div>
       </Darkbox>

@@ -8,7 +8,7 @@ import { Verse } from '@lib/util'
 export default function useHelpers(verse: Verse, inputRef: RefObject<HTMLInputElement>) {
   const [loading, setLoading] = useState(false)
   const [cursor, setCursor] = useState(0)
-  const displayedText = verse ? verse.text?.split(' ') : []
+  const displayedText = verse ? verse.text?.replaceAll('"', '').split(' ') : []
   // Same in every game mode, used for coloring logic.
   const textRefs = displayedText.map((word) => ({
     word: word.toLowerCase(),

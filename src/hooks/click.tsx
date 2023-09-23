@@ -9,16 +9,17 @@ function useOutsideAlerter(ref: any, onOutsideClick: () => void) {
     /**
      * Alert if clicked on outside of element
      */
-    function handleClickOutside(event: any) {
-      if (ref.current && !ref.current.contains(event.target)) {
+    function handleClickOnPanel(event: any) {
+      const panel = document.getElementById('panel')
+      if (panel && event.target && panel === event.target) {
         onOutsideClick()
       }
     }
     // Bind the event listener
-    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('mousedown', handleClickOnPanel)
     return () => {
       // Unbind the event listener on clean up
-      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('mousedown', handleClickOnPanel)
     }
   }, [ref])
 }

@@ -5,7 +5,6 @@ import { API_RESPONSE, Verse, makeReference } from '@lib/util'
 import { VersesContext } from '@components/providers/VersesProvider'
 import { addVerse, deleteVerse, updateVerse } from '@lib/api'
 import toast from 'react-hot-toast'
-import Reference from '@components/verse/Reference'
 
 export const useVerses = () => {
   const { verses, setVerses } = useContext(VersesContext)
