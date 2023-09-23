@@ -96,7 +96,12 @@ const UpdateVerse = (props: UpdateVerseProps) => {
                   onChange={(e) => setVersion(e.target.value)}
                 >
                   {versions?.map((version) => (
-                    <MenuItem value={version.abbreviation}>{version.abbreviation}</MenuItem>
+                    <MenuItem
+                      key={version.abbreviation}
+                      value={version.abbreviation}
+                    >
+                      {version.abbreviation}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
