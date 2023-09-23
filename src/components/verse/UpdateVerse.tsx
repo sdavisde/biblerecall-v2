@@ -7,18 +7,19 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Lightbox from '@components/common/Lightbox'
 import Darkbox from '@components/common/Darkbox'
 import { Verse, createVerse, isValidReference } from '@lib/util'
+import Versions from './Versions'
 
 type UpdateVerseProps = {
   id: string
   reference: string
   text: string
-  version: string
+  version?: string
   onSubmit: (verse: Verse) => Promise<void>
 }
 const UpdateVerse = (props: UpdateVerseProps) => {
   const [reference, setReference] = useState(props.reference)
   const [verseText, setVerseText] = useState(props.text)
-  const [version, setVersion] = useState(props.version)
+  const [version, setVersion] = useState(props.version ?? 'ESV')
   const [loading, setLoading] = useState(false)
   const input = useRef<HTMLInputElement>(null)
 
@@ -93,7 +94,7 @@ const UpdateVerse = (props: UpdateVerseProps) => {
                 className='bg-inherit text-black'
                 label='Version'
               >
-                <MenuItem value='ESV'>ESV</MenuItem>
+                <Versions />
               </Select>
             </FormControl>
           </div>

@@ -27,7 +27,6 @@ const AddVerse = ({}: AddVerseProps) => {
               id=''
               reference=''
               text=''
-              version='ESV'
               onSubmit={submitNewVerse}
             />
           </OutsideAlerter>
