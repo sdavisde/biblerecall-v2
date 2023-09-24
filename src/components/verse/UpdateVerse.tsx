@@ -84,7 +84,7 @@ const UpdateVerse = (props: UpdateVerseProps) => {
           <div className='w-1/5'>
             <span onClick={(e) => e.stopPropagation()}>
               <FormControl
-                sx={{ m: 1, minWidth: 120 }}
+                sx={{ m: 1 }}
                 size='small'
               >
                 <InputLabel id='version-label'>Version</InputLabel>
