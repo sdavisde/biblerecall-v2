@@ -10,6 +10,7 @@ import FavoriteIcon from '@components/icons/FavoriteIcon'
 import UpdateVerse from './UpdateVerse'
 import { useVerses } from 'hooks/verses'
 import OutsideAlerter from 'hooks/click'
+import useOutsideClick from 'hooks/click'
 
 type VerseBoxProps = {
   verse: Verse
@@ -19,6 +20,7 @@ type VerseBoxProps = {
 const VerseBox = ({ verse, className }: VerseBoxProps) => {
   const [, dispatchVerses] = useVerses()
   const [update, setUpdate] = useState(false)
+  const { ref } = useOutsideClick(() => setUpdate(false))
 
   const onUpdate = async (newVerse: Verse) => {
     dispatchVerses(newVerse, 'update')
@@ -28,16 +30,17 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
   return (
     <>
       {update ? (
-        <div className='w-full'>
-          <OutsideAlerter onOutsideClick={() => setUpdate(false)}>
-            <UpdateVerse
-              reference={`${verse.book.name} ${verse.chapter}:${verse.start}${verse.end ? '-' + verse.end : ''}`}
-              id={verse.id}
-              text={verse.text}
-              version={verse.version}
-              onSubmit={onUpdate}
-            />
-          </OutsideAlerter>
+        <div
+          className='w-full'
+          ref={ref}
+        >
+          <UpdateVerse
+            reference={`${verse.book.name} ${verse.chapter}:${verse.start}${verse.end ? '-' + verse.end : ''}`}
+            id={verse.id}
+            text={verse.text}
+            version={verse.version}
+            onSubmit={onUpdate}
+          />
         </div>
       ) : (
         <div

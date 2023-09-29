@@ -1,13 +1,12 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { FormControl, Input, InputLabel, MenuItem, Select } from '@mui/material'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
-import CircularProgress from '@mui/material/CircularProgress'
 import Lightbox from '@components/common/Lightbox'
 import Darkbox from '@components/common/Darkbox'
 import { Verse, createVerse, isValidReference } from '@lib/util'
 import useVersions from 'hooks/use-versions'
+import LoadingDots from '@components/loading/LoadingDots'
 
 type UpdateVerseProps = {
   id: string
@@ -54,17 +53,15 @@ const UpdateVerse = (props: UpdateVerseProps) => {
     <form action={() => submitNewVerse()}>
       <Lightbox className='centered font'>
         <div className='w-[10%]' />
-        <Input
+        <input
           autoFocus
           type='text'
           placeholder='Enter Verse Reference'
           value={reference}
           onChange={(e) => setReference(e.target.value)}
-          classes={{
-            input: 'text-center after:border-green text-base font-base',
-          }}
-          inputRef={input}
-        ></Input>
+          className='text-center after:border-green text-base font-base'
+          ref={input}
+        ></input>
         <button
           type='submit'
           className='w-[10%]'
@@ -73,38 +70,32 @@ const UpdateVerse = (props: UpdateVerseProps) => {
         </button>
       </Lightbox>
       <Darkbox>
-        <div className='w-[95%] flex flex-row gap-2 justify-between bg-lightGrey text-darkGrey text-sm'>
+        <div className='w-[95%] flex flex-row gap-2 justify-between text-sm'>
           <textarea
             placeholder='Verse text will display here when you enter a reference'
             value={verseText}
             onChange={(e) => setVerseText(e.target.value)}
-            className='bg-inherit w-4/5 resize-none text-black text-sm'
+            className='bg-inherit w-4/5 resize-none text-black dark:text-white text-sm'
           />
-          {loading && <CircularProgress color='primary' />}
+          {loading && <LoadingDots />}
           <div className='w-1/5'>
             <span onClick={(e) => e.stopPropagation()}>
-              <FormControl
-                sx={{ m: 1 }}
-                size='small'
+              <label id='version-label'>Version</label>
+              <select
+                id='version-select'
+                value={version}
+                className='text-black dark:text-white'
+                onChange={(e) => setVersion(e.target.value)}
               >
-                <InputLabel id='version-label'>Version</InputLabel>
-                <Select
-                  labelId='version-label'
-                  id='version-select'
-                  value={version}
-                  label='Version'
-                  onChange={(e) => setVersion(e.target.value)}
-                >
-                  {versions?.map((version) => (
-                    <MenuItem
-                      key={version.abbreviation}
-                      value={version.abbreviation}
-                    >
-                      {version.abbreviation}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+                {versions?.map((version) => (
+                  <option
+                    key={version.abbreviation}
+                    value={version.abbreviation}
+                  >
+                    {version.abbreviation}
+                  </option>
+                ))}
+              </select>
             </span>
           </div>
         </div>

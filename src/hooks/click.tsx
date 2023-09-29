@@ -1,41 +1,20 @@
-import { useRef, useEffect } from 'react'
-import PropTypes from 'prop-types'
+import { useEffect, useRef } from 'react'
 
-/**
- * Hook that alerts clicks outside of the passed ref
- */
-function useOutsideAlerter(ref: any, onOutsideClick: () => void) {
+export default function useOutsideClick(onOutsideClick: () => void) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  const handleClickOutside = (event: any) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      onOutsideClick()
+    }
+  }
+
   useEffect(() => {
-    /**
-     * Alert if clicked on outside of element
-     */
-    function handleClickOnPanel(event: any) {
-      const panel = document.getElementById('panel')
-      if (panel && event.target && panel === event.target) {
-        onOutsideClick()
-      }
-    }
-    // Bind the event listener
-    document.addEventListener('mousedown', handleClickOnPanel)
+    document.addEventListener('click', handleClickOutside, true)
     return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener('mousedown', handleClickOnPanel)
+      document.removeEventListener('click', handleClickOutside, true)
     }
-  }, [ref])
+  }, [])
+
+  return { ref }
 }
-
-/**
- * Component that alerts if you click outside of it
- */
-function OutsideAlerter(props: { children: any; onOutsideClick: () => void }) {
-  const wrapperRef = useRef(null)
-  useOutsideAlerter(wrapperRef, props.onOutsideClick)
-
-  return <div ref={wrapperRef}>{props.children}</div>
-}
-
-OutsideAlerter.propTypes = {
-  children: PropTypes.element.isRequired,
-}
-
-export default OutsideAlerter

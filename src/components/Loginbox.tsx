@@ -15,7 +15,7 @@ const Loginbox = ({ loggedIn }: LoginboxProps) => {
 
   return (
     <Controlled shown={showBox && !loggedIn}>
-      <Darkbox>
+      <Darkbox className='rounded'>
         <div className='w-full relative centered'>
           <Image
             src='/icons/close.svg'
@@ -23,11 +23,12 @@ const Loginbox = ({ loggedIn }: LoginboxProps) => {
             width={12}
             height={12}
             style={{ color: '#bababa' }}
-            className='absolute right-2 top-0 hover:bg-black'
+            className='absolute right-2 top-0 hover:cursor-pointer'
             onClick={() => setShowBox((prev) => !prev)}
           />
           <p className='text-sm text-center w-[81%]'>
-            Verses will be saved automatically to your device. To view your verses on any device:
+            Verses will be saved automatically to your device. <br />
+            To view your verses on any device:
             <br />
             <button
               onClick={() =>

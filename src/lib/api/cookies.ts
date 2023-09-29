@@ -4,6 +4,7 @@ import { cookies } from 'next/headers'
 import { Verse, makeReference } from '@lib/util'
 import { randomUUID } from 'crypto'
 import { API_RESPONSE } from '@lib/util'
+import { Settings } from '@components/Settings/Provider'
 
 function getVersesCookie(): Verse[] | null {
   const value = cookies().get('verses')?.value
@@ -93,5 +94,24 @@ export async function updateVerse(verse: Verse): Promise<API_RESPONSE> {
     return { DATA: verse, SUCCESS: true, RESPONSE: 'Updated verse successfully in cookie' }
   } catch (e: any) {
     return { SUCCESS: false, RESPONSE: 'Something went wrong while updating verse in cookie' }
+  }
+}
+
+export async function getSettings(): Promise<API_RESPONSE> {
+  const value = cookies().get('settings')?.value
+
+  if (value) {
+    return { DATA: JSON.parse(value), SUCCESS: true, RESPONSE: 'Fetched settings successfully' }
+  } else {
+    return { DATA: null, SUCCESS: true, RESPONSE: 'Settings cookie not present' }
+  }
+}
+
+export async function setSettings(settings: Settings): Promise<API_RESPONSE> {
+  try {
+    cookies().set('settings', JSON.stringify(settings))
+    return { DATA: settings, SUCCESS: true, RESPONSE: 'Set settings cookie successfully' }
+  } catch (e) {
+    return { SUCCESS: false, RESPONSE: 'Something went wrong while setting settings cookie' }
   }
 }

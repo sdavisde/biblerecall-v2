@@ -4,9 +4,9 @@ import { Verse } from '@lib/util'
 import { useSearchParams } from 'next/navigation'
 import Lightbox from '@components/common/Lightbox'
 import Reference from '@components/verse/Reference'
-import { CircularProgress } from '@mui/material'
 import useHelpers from './helpers'
 import { useEffect, useRef } from 'react'
+import LoadingDots from '@components/loading/LoadingDots'
 
 export default function TypeItOut({ verse }: { verse: Verse }) {
   const input = useRef<HTMLInputElement>(null)
@@ -47,13 +47,13 @@ export default function TypeItOut({ verse }: { verse: Verse }) {
       </div>
       <input
         placeholder='Answer Here!'
-        onChange={(e) => handleUserInput(e)}
+        onChange={handleUserInput}
         className='bg-transparent bg-[length:16px_16px] border-b-darkGrey border-b-2 text-center focus:outline-none'
         ref={input}
         autoComplete='off'
         autoFocus
       />
-      {loading && <CircularProgress color='primary' />}
+      {loading && <LoadingDots />}
     </div>
   )
 }

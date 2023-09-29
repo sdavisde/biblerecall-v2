@@ -8,6 +8,7 @@ import { API_RESPONSE } from '@lib/util'
 import * as Cookies from './cookies'
 import { GET as getAllVerses, POST as postVerse } from '@app/api/verses/route'
 import { GET as getOneVerse, PUT as updateOneVerse, DELETE as deleteOneVerse } from '@app/api/verses/[id]/route'
+import { Settings } from '@components/Settings/Provider'
 
 export async function getVerse(id: string): Promise<Verse | null> {
   'use server'
@@ -144,5 +145,33 @@ export async function updateVerse(verse: Verse): Promise<API_RESPONSE> {
     return data
   } else {
     return await Cookies.updateVerse(verse)
+  }
+}
+
+export async function getSettings(): Promise<API_RESPONSE> {
+  'use server'
+
+  const session = await getServerSession(authOptions)
+
+  if (session && session.user && (session.user as DB_User).id) {
+    // const data = await getSettings
+    //todo get settings from database
+    return { SUCCESS: false, RESPONSE: 'Not implemented yet' }
+  } else {
+    return await Cookies.getSettings()
+  }
+}
+
+export async function setSettings(settings: Settings): Promise<API_RESPONSE> {
+  'use server'
+
+  const session = await getServerSession(authOptions)
+
+  if (session && session.user && (session.user as DB_User).id) {
+    // const data = await getSettings
+    //todo set settings in database
+    return { SUCCESS: false, RESPONSE: 'Not implemented yet' }
+  } else {
+    return await Cookies.setSettings(settings)
   }
 }

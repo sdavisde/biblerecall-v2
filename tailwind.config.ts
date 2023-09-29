@@ -20,6 +20,8 @@ module.exports = {
         darkGreen: '#5F775B',
         black: '#292728',
         mint: '#BEC9BC',
+        coal: '#525252',
+        darkerGrey: '#404040',
       },
       fontSize: {
         sm: ['14px', '17px'],

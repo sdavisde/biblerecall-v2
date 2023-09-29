@@ -8,12 +8,7 @@ type LottieProps = {
   autoplay?: boolean
   className?: string
 }
-export default function LottieImage({
-  data,
-  loop,
-  autoplay,
-  className,
-}: LottieProps) {
+export default function LottieImage({ data, loop, autoplay, className }: LottieProps) {
   const options = {
     loop: loop ?? true,
     autoplay: autoplay ?? true,
@@ -24,7 +19,7 @@ export default function LottieImage({
   }
 
   return (
-    <div className={className + ' relative'}>
+    <div className={className + ' relative dark:text-white'}>
       <Lottie
         options={options}
         height={51}

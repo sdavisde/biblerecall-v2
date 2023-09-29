@@ -6,11 +6,13 @@ import UpdateVerse from '@components/verse/UpdateVerse'
 import { Verse } from '@lib/util'
 import { useVerses } from 'hooks/verses'
 import OutsideAlerter from 'hooks/click'
+import useOutsideClick from 'hooks/click'
 
 type AddVerseProps = {}
 const AddVerse = ({}: AddVerseProps) => {
-  const [verses, dispatchVerses] = useVerses()
+  const [, dispatchVerses] = useVerses()
   const [addingVerse, setAddingVerse] = useState(false)
+  const { ref } = useOutsideClick(() => setAddingVerse(false))
 
   const submitNewVerse = async (verse: Verse) => {
     // non null assertion is okay because validateReference guarantees verse is defined
@@ -21,19 +23,20 @@ const AddVerse = ({}: AddVerseProps) => {
   return (
     <>
       {addingVerse ? (
-        <div className='w-full'>
-          <OutsideAlerter onOutsideClick={() => setAddingVerse(false)}>
-            <UpdateVerse
-              id=''
-              reference=''
-              text=''
-              onSubmit={submitNewVerse}
-            />
-          </OutsideAlerter>
+        <div
+          className='w-full'
+          ref={ref}
+        >
+          <UpdateVerse
+            id=''
+            reference=''
+            text=''
+            onSubmit={submitNewVerse}
+          />
         </div>
       ) : (
         <div
-          onClick={() => setAddingVerse((prev) => !prev)}
+          onClick={() => setAddingVerse(true)}
           className='w-full hover:cursor-pointer'
         >
           <Lightbox className='rounded'>
