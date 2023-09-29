@@ -10,7 +10,7 @@ import { useEffect, useRef } from 'react'
 
 export default function TypeItOut({ verse }: { verse: Verse }) {
   const input = useRef<HTMLInputElement>(null)
-  const { displayedText, loading, difficultyTransition, handleUserInput, triggerLoad } = useHelpers(verse, input)
+  const { displayedText, loading, difficultyTransition, handleUserInput } = useHelpers(verse, input)
   const searchParams = useSearchParams()
 
   const difficulty = parseInt(searchParams.get('diff') ?? '0')

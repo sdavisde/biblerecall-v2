@@ -18,8 +18,8 @@ export default function ProfileIcon(props: ProfileIconProps) {
     >
       <Image
         src={imageSrc}
-        width={40}
-        height={40}
+        width={30}
+        height={30}
         alt='Profile Pic'
         className='rounded-[25px] self-center mr-2'
       />
