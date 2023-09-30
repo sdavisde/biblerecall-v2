@@ -7,3 +7,7 @@ export function getUserId(request: NextRequest) {
 export async function getVerse(request: NextRequest) {
   return await request.json()
 }
+
+export async function getSettings(request: NextRequest) {
+  return await request.json()
+}

@@ -16,6 +16,7 @@ export const useSettings = () => {
     const res = await updateSettings(newSettings)
 
     if (res.SUCCESS) {
+      console.log('success')
       setSettings(newSettings)
     } else if (res.RESPONSE === SettingsReponse.NotLoggedIn) {
       setSettingsIntoLocalStorage(newSettings)

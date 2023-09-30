@@ -1,24 +1,25 @@
 'use client'
 
 import { Transition } from '@headlessui/react'
-import { Fragment, useEffect, useState } from 'react'
-import { Close, Tune } from '@mui/icons-material'
+import { Fragment, useState } from 'react'
+import { Close } from '@mui/icons-material'
 import Theme from './Theme'
 import Study from './Study'
-import { useSettings } from 'hooks/settings'
 import useOutsideClick from 'hooks/click'
+import SettingsIcon from '@components/icons/SettingsIcon'
 
 export default function Settings() {
   const [panelOpen, setPanelOpen] = useState(false)
   const { ref } = useOutsideClick(() => setPanelOpen(false))
-  const [settings] = useSettings()
 
   return (
     <>
-      <Tune
-        className='h-full w-8 hover:cursor-pointer'
-        onClick={() => setPanelOpen((prev) => !prev)}
-      />
+      <div className='centered py-1'>
+        <SettingsIcon
+          className='h-full w-10 centered hover:cursor-pointer'
+          onClick={() => setPanelOpen((prev) => !prev)}
+        />
+      </div>
       <Transition
         as={Fragment}
         show={panelOpen}

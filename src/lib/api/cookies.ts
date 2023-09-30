@@ -96,22 +96,3 @@ export async function updateVerse(verse: Verse): Promise<API_RESPONSE> {
     return { SUCCESS: false, RESPONSE: 'Something went wrong while updating verse in cookie' }
   }
 }
-
-export async function getSettings(): Promise<API_RESPONSE> {
-  const value = cookies().get('settings')?.value
-
-  if (value) {
-    return { DATA: JSON.parse(value), SUCCESS: true, RESPONSE: 'Fetched settings successfully' }
-  } else {
-    return { DATA: null, SUCCESS: true, RESPONSE: 'Settings cookie not present' }
-  }
-}
-
-export async function setSettings(settings: Settings): Promise<API_RESPONSE> {
-  try {
-    cookies().set('settings', JSON.stringify(settings))
-    return { DATA: settings, SUCCESS: true, RESPONSE: 'Set settings cookie successfully' }
-  } catch (e) {
-    return { SUCCESS: false, RESPONSE: 'Something went wrong while setting settings cookie' }
-  }
-}

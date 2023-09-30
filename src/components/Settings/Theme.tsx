@@ -31,7 +31,7 @@ export default function Theme() {
       <label className='text-md font-semibold flex flex-col mb-2'>Color Theme</label>
       <select
         value={colorTheme}
-        className='w-32 h-8 text-black dark:text-white dark:bg-coal rounded px-2 py-1'
+        className='w-32 h-8 text-black font-medium dark:text-white dark:bg-darkerGrey rounded px-2 py-1'
         onChange={(e) => {
           setColorTheme(e.target.value as Theme)
         }}

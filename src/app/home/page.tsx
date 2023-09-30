@@ -7,6 +7,7 @@ import { getServerSession } from 'next-auth/next'
 import { DB_User, authOptions } from '@lib/auth'
 import AddVerse from '@components/verse/AddVerse'
 import VerseList from '@components/verse/VerseList'
+import BookIcon from '@components/icons/BookIcon'
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
@@ -21,10 +22,7 @@ export default async function Home() {
           This app is in beta testing, verses and functionality may break until release
         </h1>
         <div className='w-full h-12 flex ml-6'>
-          <LottieImage
-            data={bookAnimation}
-            className='w-10 centered'
-          />
+          <BookIcon className='w-10 fill-white' />
           <h4 className='text-base centered ml-4'>My Verses</h4>
         </div>
         <hr className='w-full bg-darkGrey h-[2px]' />

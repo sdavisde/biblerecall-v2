@@ -10,7 +10,7 @@ type LottieProps = {
 }
 export default function LottieImage({ data, loop, autoplay, className }: LottieProps) {
   const options = {
-    loop: loop ?? true,
+    loop: loop ?? false,
     autoplay: autoplay ?? true,
     animationData: data,
     rendererSettings: {
@@ -24,6 +24,7 @@ export default function LottieImage({ data, loop, autoplay, className }: LottieP
         options={options}
         height={51}
         width={51}
+        speed={0.5}
       />
     </div>
   )

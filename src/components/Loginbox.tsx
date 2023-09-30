@@ -5,6 +5,8 @@ import { useState } from 'react'
 import Darkbox from '@components/common/Darkbox'
 import { signIn } from 'next-auth/react'
 import Controlled from './util/Controlled'
+import { useSettings } from 'hooks/settings'
+import CloseIcon from './icons/CloseIcon'
 
 type LoginboxProps = {
   loggedIn: boolean
@@ -12,18 +14,14 @@ type LoginboxProps = {
 
 const Loginbox = ({ loggedIn }: LoginboxProps) => {
   const [showBox, setShowBox] = useState(true)
+  const [settings] = useSettings()
 
   return (
     <Controlled shown={showBox && !loggedIn}>
       <Darkbox className='rounded'>
         <div className='w-full relative centered'>
-          <Image
-            src='/icons/close.svg'
-            alt='close'
-            width={12}
-            height={12}
-            style={{ color: '#bababa' }}
-            className='absolute right-2 top-0 hover:cursor-pointer'
+          <CloseIcon
+            className='w-3 h-3 absolute right-2 top-0 fill-black dark:fill-white hover:cursor-pointer'
             onClick={() => setShowBox((prev) => !prev)}
           />
           <p className='text-sm text-center w-[81%]'>

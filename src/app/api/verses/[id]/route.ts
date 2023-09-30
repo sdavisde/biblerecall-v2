@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { doc, getDoc, deleteDoc, updateDoc } from 'firebase/firestore'
 import { Verse } from '@lib/util'
 import { database } from '@lib/firebase'
-import { getUserId, getVerse } from '..'
+import { getUserId, getVerse } from '../..'
 
 /**
  * Endpoint for retrieving a users' saved verse

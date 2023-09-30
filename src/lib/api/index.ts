@@ -8,6 +8,7 @@ import { API_RESPONSE } from '@lib/util'
 import * as Cookies from './cookies'
 import { GET as getAllVerses, POST as postVerse } from '@app/api/verses/route'
 import { GET as getOneVerse, PUT as updateOneVerse, DELETE as deleteOneVerse } from '@app/api/verses/[id]/route'
+import { GET as fetchSettings, POST as updateSettings } from '@app/api/settings/route'
 import { Settings } from '@components/Settings/Provider'
 
 export async function getVerse(id: string): Promise<Verse | null> {
@@ -158,9 +159,20 @@ export async function getSettings(): Promise<API_RESPONSE> {
   const session = await getServerSession(authOptions)
 
   if (session && session.user && (session.user as DB_User).id) {
-    // const data = await getSettings
-    //todo get settings from database
-    return { SUCCESS: false, RESPONSE: 'Not implemented yet' }
+    const data = await fetchSettings(
+      new NextRequest(`${process.env.API_URL}/settings`, {
+        method: 'GET',
+        headers: {
+          userId: (session.user as DB_User).id,
+        },
+      })
+    )
+      .then(async (data) => (await data.json()) as API_RESPONSE)
+      .catch((e) => {
+        console.error(e)
+        throw new Error(e)
+      })
+    return data
   } else {
     return { DATA: null, SUCCESS: false, RESPONSE: SettingsReponse.NotLoggedIn }
   }
@@ -172,9 +184,21 @@ export async function setSettings(settings: Settings): Promise<API_RESPONSE> {
   const session = await getServerSession(authOptions)
 
   if (session && session.user && (session.user as DB_User).id) {
-    // const data = await getSettings
-    //todo set settings in database
-    return { SUCCESS: false, RESPONSE: 'Not implemented yet' }
+    const data = await updateSettings(
+      new NextRequest(`${process.env.API_URL}/settings`, {
+        method: 'POST',
+        headers: {
+          userId: (session.user as DB_User).id,
+        },
+        body: JSON.stringify(settings),
+      })
+    )
+      .then(async (data) => (await data.json()) as API_RESPONSE)
+      .catch((e) => {
+        console.error(e)
+        throw new Error(e)
+      })
+    return data
   } else {
     return { DATA: null, SUCCESS: false, RESPONSE: SettingsReponse.NotLoggedIn }
   }

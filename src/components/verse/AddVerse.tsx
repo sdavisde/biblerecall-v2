@@ -39,7 +39,7 @@ const AddVerse = ({}: AddVerseProps) => {
           onClick={() => setAddingVerse(true)}
           className='w-full hover:cursor-pointer'
         >
-          <Lightbox className='rounded'>
+          <Lightbox className='rounded dark:!bg-charcoal'>
             <h5 className='centered'>+ Add Verse</h5>
           </Lightbox>
         </div>
