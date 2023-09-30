@@ -78,25 +78,23 @@ const UpdateVerse = (props: UpdateVerseProps) => {
             className='bg-inherit w-4/5 resize-none text-black dark:text-white text-sm'
           />
           {loading && <LoadingDots />}
-          <div className='w-1/5'>
-            <span onClick={(e) => e.stopPropagation()}>
-              <label id='version-label'>Version</label>
-              <select
-                id='version-select'
-                value={version}
-                className='text-black dark:text-white'
-                onChange={(e) => setVersion(e.target.value)}
-              >
-                {versions?.map((version) => (
-                  <option
-                    key={version.abbreviation}
-                    value={version.abbreviation}
-                  >
-                    {version.abbreviation}
-                  </option>
-                ))}
-              </select>
-            </span>
+          <div className='w-1/5 flex flex-col'>
+            <label id='version-label'>Version</label>
+            <select
+              id='version-select'
+              value={version}
+              className='w-fit border-black border-2 dark:border-darkGrey rounded p-2 text-black dark:text-white dark:bg-darkerGrey'
+              onChange={(e) => setVersion(e.target.value)}
+            >
+              {versions?.map((version) => (
+                <option
+                  key={version.abbreviation}
+                  value={version.abbreviation}
+                >
+                  {version.abbreviation}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </Darkbox>

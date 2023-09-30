@@ -18,7 +18,7 @@ export default function Theme() {
     }
   }, [colorTheme])
 
-  // Update selected color theme when settings changes
+  // Separate hook used here to keep from setting theme until the server set is finished
   useEffect(() => {
     setThemeInDocument(settings?.theme)
   }, [settings?.theme])

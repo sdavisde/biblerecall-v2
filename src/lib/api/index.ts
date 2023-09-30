@@ -148,6 +148,10 @@ export async function updateVerse(verse: Verse): Promise<API_RESPONSE> {
   }
 }
 
+enum SettingsReponse {
+  NotLoggedIn = 'Not Logged In',
+}
+
 export async function getSettings(): Promise<API_RESPONSE> {
   'use server'
 
@@ -158,7 +162,7 @@ export async function getSettings(): Promise<API_RESPONSE> {
     //todo get settings from database
     return { SUCCESS: false, RESPONSE: 'Not implemented yet' }
   } else {
-    return await Cookies.getSettings()
+    return { DATA: null, SUCCESS: false, RESPONSE: SettingsReponse.NotLoggedIn }
   }
 }
 
@@ -172,6 +176,6 @@ export async function setSettings(settings: Settings): Promise<API_RESPONSE> {
     //todo set settings in database
     return { SUCCESS: false, RESPONSE: 'Not implemented yet' }
   } else {
-    return await Cookies.setSettings(settings)
+    return { DATA: null, SUCCESS: false, RESPONSE: SettingsReponse.NotLoggedIn }
   }
 }

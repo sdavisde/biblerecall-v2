@@ -13,10 +13,6 @@ export default function Settings() {
   const { ref } = useOutsideClick(() => setPanelOpen(false))
   const [settings] = useSettings()
 
-  useEffect(() => {
-    setThemeInDocument(settings?.theme)
-  }, [])
-
   return (
     <>
       <Tune
