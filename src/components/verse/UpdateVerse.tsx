@@ -59,7 +59,7 @@ const UpdateVerse = (props: UpdateVerseProps) => {
           placeholder='Enter Verse Reference'
           value={reference}
           onChange={(e) => setReference(e.target.value)}
-          className='text-center after:border-green text-base font-base'
+          className='text-center after:border-green text-base font-base border-b-[1px] dark:bg-transparent focus:outline-none'
           ref={input}
         ></input>
         <button
@@ -70,31 +70,39 @@ const UpdateVerse = (props: UpdateVerseProps) => {
         </button>
       </Lightbox>
       <Darkbox>
-        <div className='w-[95%] flex flex-row gap-2 justify-between text-sm'>
+        <div className='w-[95%] flex flex-row gap-2 justify-between text-sm relative'>
           <textarea
             placeholder='Verse text will display here when you enter a reference'
             value={verseText}
             onChange={(e) => setVerseText(e.target.value)}
-            className='bg-inherit w-4/5 resize-none text-black dark:text-white text-sm'
+            className='bg-inherit w-4/5 resize-none text-black dark:text-white text-sm focus:outline-none'
           />
-          {loading && <LoadingDots />}
-          <div className='w-1/5 flex flex-col'>
-            <label id='version-label'>Version</label>
-            <select
-              id='version-select'
-              value={version}
-              className='w-fit border-black border-2 dark:border-darkGrey rounded p-2 text-black dark:text-white dark:bg-darkerGrey'
-              onChange={(e) => setVersion(e.target.value)}
-            >
-              {versions?.map((version) => (
-                <option
-                  key={version.abbreviation}
-                  value={version.abbreviation}
+          {loading && (
+            <div className='absolute bottom-0'>
+              <LoadingDots />
+            </div>
+          )}
+          <div className='w-1/5 flex justify-end'>
+            <div className='flex flex-col'>
+              <label id='version-label'>Version</label>
+              <div className='myselect'>
+                <select
+                  id='version-select'
+                  value={version}
+                  className='w-fit border-black border-[1px] bg-transparent dark:border-darkGrey rounded p-2 text-black dark:text-white dark:bg-darkerGrey'
+                  onChange={(e) => setVersion(e.target.value)}
                 >
-                  {version.abbreviation}
-                </option>
-              ))}
-            </select>
+                  {versions?.map((version) => (
+                    <option
+                      key={version.abbreviation}
+                      value={version.abbreviation}
+                    >
+                      {version.abbreviation}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
           </div>
         </div>
       </Darkbox>
