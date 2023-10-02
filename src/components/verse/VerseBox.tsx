@@ -1,5 +1,6 @@
 'use client'
 
+import cn from 'clsx'
 import { useState } from 'react'
 import Lightbox from '@components/common/Lightbox'
 import Darkbox from '@components/common/Darkbox'
@@ -9,8 +10,9 @@ import PlayIcon from '@components/icons/PlayIcon'
 import FavoriteIcon from '@components/icons/FavoriteIcon'
 import UpdateVerse from './UpdateVerse'
 import { useVerses } from 'hooks/verses'
-import OutsideAlerter from 'hooks/click'
 import useOutsideClick from 'hooks/click'
+import { useSettings } from 'hooks/settings'
+import { Visibility } from '@components/Settings/Provider'
 
 type VerseBoxProps = {
   verse: Verse
@@ -19,6 +21,7 @@ type VerseBoxProps = {
 
 const VerseBox = ({ verse, className }: VerseBoxProps) => {
   const [, dispatchVerses] = useVerses()
+  const [settings] = useSettings()
   const [update, setUpdate] = useState(false)
   const { ref } = useOutsideClick(() => setUpdate(false))
 
@@ -47,7 +50,12 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
           className={className + ' cursor-pointer'}
           onClick={() => setUpdate(true)}
         >
-          <Lightbox className='rounded-tl rounded-tr flex justify-between items-center'>
+          <Lightbox
+            className={cn('rounded-tr flex justify-between items-center', {
+              'rounded-tl': settings?.visibility !== 'none',
+              rounded: settings?.visibility === 'none',
+            })}
+          >
             <div className='w-1/6 pl-3'>
               <DeleteIcon id={verse.id} />
             </div>
@@ -56,19 +64,39 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
               {verse.end ? `-${verse.end}` : ''}
             </h4>
             <div className='w-1/6 flex justify-end pr-3'>
+              {settings?.visibility === 'none' && (
+                <div className='scale-[1.5] mr-3'>
+                  <PlayIcon verse={verse} />
+                </div>
+              )}
               <FavoriteIcon verse={verse} />
             </div>
           </Lightbox>
-          <Darkbox className='rounded-bl rounded-br h-fit '>
-            <p className='text-sm m-4 w-[88%]'>{verse.text}</p>
-            <div className='w-[12%] centered scale-[1.5]'>
-              <PlayIcon verse={verse} />
-            </div>
+          <Darkbox className='rounded-bl rounded-br h-fit'>
+            <VerseText
+              text={verse.text}
+              visibility={settings?.visibility ?? 'full'}
+            />
+            {settings?.visibility !== 'none' && (
+              <div className='w-[12%] centered scale-[1.5]'>
+                <PlayIcon verse={verse} />
+              </div>
+            )}
           </Darkbox>
         </div>
       )}
     </>
   )
+}
+
+const VerseText = ({ text, visibility }: { text: string; visibility: Visibility }) => {
+  if (visibility === 'full') {
+    return <p className='text-sm m-4 w-[88%]'>{text}</p>
+  } else if (visibility === 'partial') {
+    return <p className='text-sm m-4 w-[88%]'>{text.split(' ').slice(0, 5).join(' ')}...</p>
+  } else {
+    return null
+  }
 }
 
 export default VerseBox

@@ -4,9 +4,9 @@ import { useSettings } from 'hooks/settings'
 import { useEffect, useRef, useState } from 'react'
 import { Visibility } from './Provider'
 
-export default function Study() {
+export default function Visibility() {
   const [settings, setSettings] = useSettings()
-  const [visibility, setVisibility] = useState<Visibility>('full')
+  const [visibility, setVisibility] = useState<Visibility>(settings?.visibility ?? 'full')
   const ref = useRef<HTMLFormElement>(null)
 
   // Update settings when visibility changes
@@ -28,9 +28,9 @@ export default function Study() {
         className='w-32 h-8 text-black font-medium dark:text-white dark:bg-darkerGrey rounded px-2'
         onChange={(e) => setVisibility(e.target.value as Visibility)}
       >
-        <option value={0}>Full</option>
-        <option value={1}>Partial</option>
-        <option value={2}>None</option>
+        <option value={'full'}>Full</option>
+        <option value={'partial'}>Partial</option>
+        <option value={'none'}>None</option>
       </select>
     </form>
   )

@@ -4,7 +4,7 @@ import { Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { Close } from '@mui/icons-material'
 import Theme from './Theme'
-import Study from './Study'
+import Visibility from './Visibility'
 import useOutsideClick from 'hooks/click'
 import SettingsIcon from '@components/icons/SettingsIcon'
 
@@ -44,7 +44,7 @@ export default function Settings() {
             </div>
             <hr className='w-full bg-darkGrey h-[2px]' />
             <Theme />
-            <Study />
+            <Visibility />
           </div>
         </div>
       </Transition>
