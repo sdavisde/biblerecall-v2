@@ -3,6 +3,7 @@
 import { getSettingsFromLocalStorage, setSettingsIntoLocalStorage } from 'hooks/settings'
 import { PropsWithChildren, createContext, useEffect, useState } from 'react'
 import { getSettingsScript } from './settings-script'
+import { setThemeInDocument } from './Settings'
 
 export type Theme = 'system' | 'light' | 'dark'
 export type Visibility = 'full' | 'partial' | 'none'
@@ -19,15 +20,6 @@ export type Settings = {
 type SettingsContext = {
   settings: Settings | null
   setSettings: (newSettings: Settings) => void
-}
-
-export const defaultSettings: Settings = {
-  theme: 'system',
-  visibility: 'full',
-  font: 'Urbanist',
-  defaultVersion: 'ESV',
-  verseDueDatesEnabled: false,
-  verseOfTheDayEnabled: false,
 }
 
 export const SettingsContext = createContext<SettingsContext>({
@@ -51,8 +43,15 @@ export const SettingsProvider = ({ settings, children }: PropsWithChildren<{ set
   // If settings is defined, then switch state and localstorage to match user's saved settings
   useEffect(() => {
     if (settings) {
+      console.log(`settings: ${JSON.stringify(settings)}}`)
       setSettingsState(settings)
       setSettingsIntoLocalStorage(settings)
+      setThemeInDocument(settings.theme)
+    } else {
+      const localStorageSettings = getSettingsFromLocalStorage()
+      console.log(`no settings found, using localStorageSettings or default: ${JSON.stringify(localStorageSettings)}}`)
+      setSettingsIntoLocalStorage(localStorageSettings)
+      setThemeInDocument(localStorageSettings.theme)
     }
   }, [settings])
 

@@ -3,7 +3,7 @@ import Settings from '@components/Settings/Settings'
 
 export default function Navbar() {
   return (
-    <div className='w-full h-10 bg-green flex justify-between'>
+    <nav className='w-full h-10 bg-green flex justify-between'>
       <div className='flex flex-row ml-4'>
         <h1 className='centered text-base font-light'>Bible Recall</h1>
       </div>
@@ -11,6 +11,6 @@ export default function Navbar() {
         <Profile />
         <Settings />
       </div>
-    </div>
+    </nav>
   )
 }

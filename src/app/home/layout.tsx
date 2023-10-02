@@ -12,16 +12,12 @@ export default async function HomeLayout({ children }: { children: React.ReactNo
   return (
     <SettingsProvider settings={settings}>
       <VersesProvider verses={verses}>
-        <meta
-          name='viewport'
-          content='width=device-width, initial-scale=1, maximum-scale=1'
-        ></meta>
-        <main className='w-full h-screen relative bg-lightGrey text-black dark:bg-black dark:text-white'>
-          <Toaster />
-          <Navbar />
-          <div className='w-full h-[88%] overflow-y-scroll'>{children}</div>
-          <Footer />
+        <Navbar />
+        <Toaster />
+        <main className='w-full min-h-[calc(100vh-5rem)] relative bg-lightGrey text-black dark:bg-black dark:text-white'>
+          {children}
         </main>
+        <Footer />
       </VersesProvider>
     </SettingsProvider>
   )

@@ -31,20 +31,18 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   const settings = snapshot.data() as Settings
 
   if (
-    !settings.theme ||
-    !settings.visibility ||
-    !settings.defaultVersion ||
-    !settings.font ||
-    !settings.verseDueDatesEnabled ||
-    !settings.verseOfTheDayEnabled
+    settings.theme === undefined ||
+    settings.visibility === undefined ||
+    settings.defaultVersion === undefined ||
+    settings.font === undefined ||
+    settings.verseDueDatesEnabled === undefined ||
+    settings.verseOfTheDayEnabled === undefined
   ) {
     return NextResponse.json(
       { DATA: null, SUCCESS: false, RESPONSE: 'Malformed settings, returning null' },
       { status: 404, statusText: 'Malformed settings, returning null' }
     )
   }
-
-  console.log(settings)
 
   return NextResponse.json(
     { DATA: settings, SUCCESS: true, RESPONSE: 'Retrieved settings successfully' },

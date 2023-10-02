@@ -30,13 +30,19 @@ export const useSettings = () => {
 }
 
 export const getSettingsFromLocalStorage = () => {
-  return {
-    theme: (localStorage.getItem('theme') as Theme) ?? 'system',
-    visibility: (localStorage.getItem('visibility') as Visibility) ?? 'full',
-    font: localStorage.getItem('font') ?? 'Urbanist',
-    defaultVersion: localStorage.getItem('defaultVersion') ?? 'ESV',
-    verseDueDatesEnabled: localStorage.getItem('verseDueDatesEnabled') === 'true',
-    verseOfTheDayEnabled: localStorage.getItem('verseOfTheDayEnabled') === 'true',
+  if (localStorage) {
+    return {
+      theme: (localStorage.getItem('theme') as Theme) ?? defaultSettings.theme,
+      visibility: (localStorage.getItem('visibility') as Visibility) ?? defaultSettings.visibility,
+      font: localStorage.getItem('font') ?? defaultSettings.font,
+      defaultVersion: localStorage.getItem('defaultVersion') ?? defaultSettings.defaultVersion,
+      verseDueDatesEnabled:
+        localStorage.getItem('verseDueDatesEnabled') === 'true' ?? defaultSettings.verseDueDatesEnabled,
+      verseOfTheDayEnabled:
+        localStorage.getItem('verseOfTheDayEnabled') === 'true' ?? defaultSettings.verseOfTheDayEnabled,
+    }
+  } else {
+    return defaultSettings
   }
 }
 
@@ -47,4 +53,13 @@ export const setSettingsIntoLocalStorage = (settings: Settings) => {
   localStorage.setItem('defaultVersion', settings.defaultVersion)
   localStorage.setItem('verseDueDatesEnabled', settings.verseDueDatesEnabled.toString())
   localStorage.setItem('verseOfTheDayEnabled', settings.verseOfTheDayEnabled.toString())
+}
+
+export const defaultSettings: Settings = {
+  theme: 'system',
+  visibility: 'full',
+  font: 'Urbanist',
+  defaultVersion: 'ESV',
+  verseDueDatesEnabled: false,
+  verseOfTheDayEnabled: false,
 }
