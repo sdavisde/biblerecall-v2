@@ -7,6 +7,7 @@ import Darkbox from '@components/common/Darkbox'
 import { Verse, createVerse, isValidReference } from '@lib/util'
 import useVersions from 'hooks/use-versions'
 import LoadingDots from '@components/loading/LoadingDots'
+import toast from 'react-hot-toast'
 
 type UpdateVerseProps = {
   id: string
@@ -44,7 +45,13 @@ const UpdateVerse = (props: UpdateVerseProps) => {
   const submitNewVerse = async () => {
     const verse = createVerse(reference, { id: props.id, text: verseText, version })
 
-    if (verse && !loading && verseText !== '' && isValidReference(reference)) {
+    if (!isValidReference(reference)) {
+      toast.error('Invalid reference format, please enter your verse like: John 3:16 or John 3:16-17')
+    } else if (!verse) {
+      toast.error('Error adding verse, check that the verse is using the correct format')
+    } else if (verseText === '') {
+      toast.error('Could not find verse, does this verse exist?')
+    } else if (!loading) {
       props.onSubmit(verse)
     }
   }
@@ -78,7 +85,7 @@ const UpdateVerse = (props: UpdateVerseProps) => {
             className='bg-inherit w-4/5 resize-none text-black dark:text-white text-sm focus:outline-none'
           />
           {loading && (
-            <div className='absolute bottom-0'>
+            <div className='absolute bottom-9 w-20'>
               <LoadingDots />
             </div>
           )}

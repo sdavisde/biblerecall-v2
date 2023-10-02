@@ -4,8 +4,9 @@ import StarBorderIcon from '@mui/icons-material/StarBorder'
 import MUIStarIcon from '@mui/icons-material/Star'
 import Hovered from '@components/util/Hovered'
 import { Verse } from '@lib/util'
-import { updateVerse } from '@lib/api'
 import { useVerses } from 'hooks/verses'
+import LoadingCircle from './LoadingCircle'
+import { useState } from 'react'
 
 type FavoriteIconProps = {
   verse: Verse
@@ -13,14 +14,21 @@ type FavoriteIconProps = {
 
 const FavoriteIcon = ({ verse }: FavoriteIconProps) => {
   const [verses, dispatchVerses] = useVerses()
+  const [loading, setLoading] = useState(false)
 
   const toggleFavorite = async () => {
     const newVerse = { ...verse, favorite: !(verse.favorite ?? false) }
-    dispatchVerses(newVerse, 'update')
+    setLoading(true)
+    await dispatchVerses(newVerse, 'update')
+    setLoading(false)
   }
 
   return (
-    <span onClick={(e) => e.stopPropagation()}>
+    <span
+      onClick={(e) => e.stopPropagation()}
+      className='flex flex-row'
+    >
+      {loading && <LoadingCircle className='w-12' />}
       <Hovered
         className='w-fit flex'
         DefaultComp={verse.favorite ? MUIStarIcon : StarBorderIcon}

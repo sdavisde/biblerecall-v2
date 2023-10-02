@@ -1,4 +1,8 @@
-export default function LoadingCircle() {
+type LoadingCircleProps = {
+  className?: string
+}
+
+export default function LoadingCircle({ className }: LoadingCircleProps) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -7,7 +11,7 @@ export default function LoadingCircle() {
       height='200px'
       viewBox='0 0 100 100'
       preserveAspectRatio='xMidYMid'
-      className='m-auto bg-transparent block shape-rendering-auto'
+      className={'m-auto bg-transparent block shape-rendering-auto ' + className}
     >
       <g transform='rotate(0 50 50)'>
         <rect

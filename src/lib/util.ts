@@ -35,7 +35,10 @@ export function parseReference(reference: string) {
   const chapterIndex = first.lastIndexOf(' ')
   const book = first.slice(0, chapterIndex)
   const chapter = first.slice(chapterIndex)
-  const [start, end] = last.split('-')
+  const [startString, endString] = last.split('-')
+
+  const start = startString ? parseInt(startString) : undefined
+  const end = endString ? parseInt(endString) : undefined
 
   return [book, chapter, start, end] as const
 }
@@ -54,6 +57,10 @@ export function createVerse(
 
   const [book, chapter, start, end] = parseReference(verseReference)
 
+  if (!start) {
+    return null
+  }
+
   if (verseReference.includes('-')) {
     if (!end || start > end) {
       return null
@@ -64,8 +71,8 @@ export function createVerse(
     id: overrides?.id ?? '',
     book: books.find((b) => b.name.toLowerCase() === book.toLowerCase()) ?? books[0],
     chapter: parseInt(chapter),
-    start: parseInt(start),
-    end: parseInt(end),
+    start,
+    end,
     text: overrides?.text ?? '',
     version: overrides?.version ?? '',
   }
@@ -168,11 +175,17 @@ export function isValidReference(reference: string): boolean {
   if (!reference || !reference.includes(':')) {
     return false
   }
+  console.log(reference)
 
   const [book, chapter, start, end] = parseReference(reference)
 
+  if (!start) {
+    return false
+  }
+
   if (reference.includes('-')) {
     if (!end || start > end) {
+      console.log(start, end)
       return false
     }
   }

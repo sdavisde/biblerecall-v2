@@ -14,7 +14,7 @@ export default async function HomeLayout({ children }: { children: React.ReactNo
       <VersesProvider verses={verses}>
         <Navbar />
         <Toaster />
-        <main className='w-full min-h-[calc(100vh-5rem)] relative bg-lightGrey text-black dark:bg-black dark:text-white'>
+        <main className='w-full min-h-[calc(100vh-5rem)] overflow-x-hidden relative bg-lightGrey text-black dark:bg-black dark:text-white'>
           {children}
         </main>
         <Footer />
