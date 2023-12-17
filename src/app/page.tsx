@@ -1,5 +1,9 @@
+import { Rock_Salt, Satisfy } from 'next/font/google'
 import Image from 'next/image'
 import Link from 'next/link'
+
+const satisfy = Satisfy({ weight: '400', subsets: ['latin'] })
+const rockSalt = Rock_Salt({ weight: '400', subsets: ['latin'] })
 
 export default function Landing() {
   return (
@@ -9,12 +13,12 @@ export default function Landing() {
         <div className='lg:absolute top-0 w-full h-screen flex flex-col lg:flex-row'>
           <div className='flex flex-col gap-4 justify-center items-center w-full'>
             <h2>Memorize</h2>
-            <h2 className='font-meditation'>Meditate</h2>
-            <h2 className='font-heartwarming'>Connect</h2>
+            <h2 className={satisfy.className}>Meditate</h2>
+            <h2 className={rockSalt.className + ' text-lg'}>Connect</h2>
             <h3 className='text-green'>With God&apos;s Word</h3>
             <p className='mx-12 text-center'>
-              Ephesians tells us that the sword of the Spirit is the word of
-              God. Are you ready for the spiritual battles in your life?
+              Ephesians tells us that the sword of the Spirit is the word of God. Are you ready for the spiritual
+              battles in your life?
             </p>
             <Link
               href='/home'
@@ -26,7 +30,7 @@ export default function Landing() {
           <div className='centered w-full h-full mt-4 relative overflow-hidden'>
             <Image
               className='z-2 absolute left-0 !max-w-[140%] md:!w-[140%]'
-              src='/book.svg'
+              src='/bible.svg'
               width={715}
               height={367}
               alt='Bible Image'

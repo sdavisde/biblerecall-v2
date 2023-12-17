@@ -20,8 +20,8 @@ export default function SuccessPage({ params, searchParams }: SuccessPageProps) 
   const finishedHardMode = difficulty && parseInt(difficulty as string) <= 2
 
   return (
-    <div className='w-full h-full centered flex-col gap-8'>
-      <h1 className={`font-base text-lg ${finishedHardMode ? 'text-xl text-darkGreen' : ''}`}>
+    <div className='w-full min-h-full centered flex-col gap-8'>
+      <h1 className={`font-base text-lg text-center ${finishedHardMode ? 'text-xl text-darkGreen' : ''}`}>
         Well done completing that verse!
       </h1>
       <div className='flex flex-col gap-4 text-center'>

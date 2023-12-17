@@ -11,7 +11,7 @@ export default function LoadingCircle({ className }: LoadingCircleProps) {
       height='200px'
       viewBox='0 0 100 100'
       preserveAspectRatio='xMidYMid'
-      className={'m-auto bg-transparent block shape-rendering-auto ' + className}
+      className={'bg-transparent block shape-rendering-auto ' + className}
     >
       <g transform='rotate(0 50 50)'>
         <rect

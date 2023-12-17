@@ -28,12 +28,12 @@ const FavoriteIcon = ({ verse }: FavoriteIconProps) => {
       onClick={(e) => e.stopPropagation()}
       className='flex flex-row'
     >
-      {loading && <LoadingCircle className='w-12' />}
+      {loading && <LoadingCircle className='w-7 h-7' />}
       <Hovered
-        className='w-fit flex'
+        className='w-fit'
         DefaultComp={verse.favorite ? MUIStarIcon : StarBorderIcon}
         HoveredComp={verse.favorite ? StarBorderIcon : MUIStarIcon}
-        onClick={() => toggleFavorite()}
+        onClick={toggleFavorite}
         onTouchEnd={toggleFavorite}
         override={verse.favorite}
         type='primary'

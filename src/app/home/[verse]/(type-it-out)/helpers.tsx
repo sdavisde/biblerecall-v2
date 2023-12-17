@@ -41,7 +41,7 @@ export default function useHelpers(verse: Verse, inputRef: RefObject<HTMLInputEl
       $(`.verse_words div`).removeClass('target')
 
       if ($(`.verse_word:nth-child(${cursor + 1})`))
-        $(`.verse_word:nth-child(${cursor + 1})`).removeClass('text-lightGrey')
+        $(`.verse_word:nth-child(${cursor + 1})`).removeClass('text-transparent')
 
       if ($(`.verse_word:nth-child(${cursor + 2})`)) $(`.verse_word:nth-child(${cursor + 2})`).addClass('target')
 
@@ -72,7 +72,7 @@ export default function useHelpers(verse: Verse, inputRef: RefObject<HTMLInputEl
       // todo add api call here for verse completions
       router.push(`/home/${verse.id}/success?diff=${difficulty}`)
     } else {
-      router.push(`/home/${verse.id}/failed?diff=${difficulty}`)
+      router.push(`/home/${verse.id}/failed?diff=${difficulty}&percent=${correctPercent}`)
     }
   }
 
@@ -81,6 +81,8 @@ export default function useHelpers(verse: Verse, inputRef: RefObject<HTMLInputEl
    */
   function reset() {
     setWordsCorrect(0)
+    setCursor(0)
+    inputRef.current!.focus()
   }
 
   /**
@@ -102,7 +104,7 @@ export default function useHelpers(verse: Verse, inputRef: RefObject<HTMLInputEl
       const delayTime = LOADING_TIME / displayedText.length
       $(`.verse_words div :nth-child(${parity})`).each((i, elem) => {
         setTimeout(() => {
-          $(elem).addClass('text-lightGrey')
+          $(elem).addClass('text-transparent')
         }, i * delayTime)
       })
 
@@ -114,7 +116,7 @@ export default function useHelpers(verse: Verse, inputRef: RefObject<HTMLInputEl
       const delayTime = LOADING_TIME / displayedText.length
       $(`.verse_words div div`).each((i, elem) => {
         setTimeout(() => {
-          $(elem).addClass('text-lightGrey')
+          $(elem).addClass('text-transparent')
         }, i * delayTime)
       })
     }

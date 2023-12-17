@@ -14,11 +14,16 @@ type FailedPageProps = {
 export default function FailedPage({ params, searchParams }: FailedPageProps) {
   const verse = params.verse
   const difficulty = searchParams?.diff
+  const percentCorrect = searchParams?.percent
 
   return (
     <div className='w-full h-full centered flex-col gap-8'>
       <h1 className='text-center text-xl font-light'>
-        Oops! <br /> <p className='text-md'>Looks like you just missed the cut. Try again?</p>
+        Oops! <br />{' '}
+        <p className='text-md'>
+          {percentCorrect && <>You got {percentCorrect}% of that verse correct.</>}
+          <br /> Achieve 90% accuracy or higher to move onto the next level.
+        </p>
       </h1>
       <div className='flex flex-col gap-4 text-center'>
         <Button>

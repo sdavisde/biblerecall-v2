@@ -36,7 +36,7 @@ const DeleteIcon = ({ id }: DeleteIconProps) => {
         onTouchEnd={onDelete}
         type='warning'
       />
-      {loading && <LoadingCircle className='w-12 h-7' />}
+      {loading && <LoadingCircle className='w-7 h-7' />}
     </span>
   )
 }
