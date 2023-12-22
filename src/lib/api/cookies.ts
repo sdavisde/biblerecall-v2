@@ -4,7 +4,6 @@ import { cookies } from 'next/headers'
 import { Verse, makeReference } from '@lib/util'
 import { randomUUID } from 'crypto'
 import { API_RESPONSE } from '@lib/util'
-import { Settings } from '@components/Settings/Provider'
 
 function getVersesCookie(): Verse[] | null {
   const value = cookies().get('verses')?.value

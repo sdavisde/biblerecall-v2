@@ -13,7 +13,10 @@
       ],
       "@lib/*": [
         "lib/*"
-      ]
+      ],
+      "@configuration/*": [
+        "configuration/*"
+      ],
     },
     "lib": [
       "dom",

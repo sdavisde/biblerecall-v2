@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getSettings, getUserId } from '@app/api'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { database } from '@lib/firebase'
-import { Settings } from '@components/Settings/Provider'
+import { Settings } from '@configuration/settings'
 
 /**
  * Endpoint for retrieving all of a users' settings

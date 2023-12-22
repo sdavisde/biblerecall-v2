@@ -9,7 +9,7 @@ import * as Cookies from './cookies'
 import { GET as getAllVerses, POST as postVerse } from '@app/api/verses/route'
 import { GET as getOneVerse, PUT as updateOneVerse, DELETE as deleteOneVerse } from '@app/api/verses/[id]/route'
 import { GET as fetchSettings, POST as updateSettings } from '@app/api/settings/route'
-import { Settings } from '@components/Settings/Provider'
+import { Settings } from '@configuration/settings'
 
 export async function getVerse(id: string): Promise<Verse | null> {
   'use server'
@@ -153,7 +153,7 @@ enum SettingsReponse {
   NotLoggedIn = 'Not Logged In',
 }
 
-export async function getSettings(): Promise<API_RESPONSE> {
+export async function getAuthenticatedSettings(): Promise<API_RESPONSE> {
   'use server'
 
   const session = await getServerSession(authOptions)
@@ -178,7 +178,7 @@ export async function getSettings(): Promise<API_RESPONSE> {
   }
 }
 
-export async function setSettings(settings: Settings): Promise<API_RESPONSE> {
+export async function setAuthenticatedSettings(settings: Settings): Promise<API_RESPONSE> {
   'use server'
 
   const session = await getServerSession(authOptions)

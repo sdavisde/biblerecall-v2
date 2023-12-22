@@ -1,16 +1,16 @@
 import Navbar from '@components/common/Navbar'
 import Footer from '@components/common/Footer'
 import VersesProvider from '@components/providers/VersesProvider'
-import { fetchVerses, getSettings } from '@lib/api'
+import { fetchVerses, getAuthenticatedSettings } from '@lib/api'
 import { Toaster } from 'react-hot-toast'
 import { SettingsProvider } from '@components/Settings/Provider'
 
 export default async function HomeLayout({ children }: { children: React.ReactNode }) {
   const verses = await fetchVerses()
-  const { DATA: settings } = await getSettings()
+  const { DATA: authenticatedUserSettings } = await getAuthenticatedSettings()
 
   return (
-    <SettingsProvider settings={settings}>
+    <SettingsProvider authUserSettings={authenticatedUserSettings}>
       <VersesProvider verses={verses}>
         <Navbar />
         <Toaster />

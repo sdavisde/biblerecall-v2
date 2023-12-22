@@ -1,7 +1,5 @@
 export const dynamic = 'auto'
 
-import LottieImage from '@components/icons/Lottie'
-import bookAnimation from '@assets/lottie/lordicon_book.json'
 import Loginbox from '@components/Loginbox'
 import { getServerSession } from 'next-auth/next'
 import { DB_User, authOptions } from '@lib/auth'

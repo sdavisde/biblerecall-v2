@@ -5,8 +5,17 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        meditation: ['Meditation'],
-        heartwarming: ['HeartWarming'],
+        satisfy: ['var(--satisfy)'],
+        rockSalt: ['var(--rock-salt)'],
+        urbanist: ['var(--urbanist)'],
+        openDyslexic: ['var(--open-dyslexic)'],
+      },
+      fontSize: {
+        sm: ['14px', '17px'],
+        md: ['16px', '20px'],
+        base: ['20px', '24px'],
+        lg: ['24px', '28px'],
+        xl: ['34px', '43px'],
       },
       colors: {
         lightGrey: '#F2F2F2',
@@ -20,15 +29,7 @@ module.exports = {
         darkGreen: '#5F775B',
         black: '#292728',
         mint: '#BEC9BC',
-
         darkerGrey: '#404040',
-      },
-      fontSize: {
-        sm: ['14px', '17px'],
-        md: ['16px', '20px'],
-        base: ['20px', '24px'],
-        lg: ['24px', '28px'],
-        xl: ['34px', '43px'],
       },
       borderRadius: {
         DEFAULT: '5px',

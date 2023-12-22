@@ -12,7 +12,7 @@ import UpdateVerse from './UpdateVerse'
 import { useVerses } from 'hooks/verses'
 import useOutsideClick from 'hooks/click'
 import { useSettings } from 'hooks/settings'
-import { Visibility } from '@components/Settings/Provider'
+import { Visibility } from '@configuration/settings'
 
 type VerseBoxProps = {
   verse: Verse
@@ -75,7 +75,7 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
           <Darkbox className='rounded-bl rounded-br h-fit'>
             <VerseText
               text={verse.text}
-              visibility={settings?.visibility ?? 'full'}
+              visibility={settings?.visibility ?? Visibility.FULL}
             />
             {settings?.visibility !== 'none' && (
               <div className='w-[12%] centered scale-[1.5]'>

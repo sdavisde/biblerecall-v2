@@ -3,10 +3,11 @@
 import { Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { Close } from '@mui/icons-material'
-import Theme from './Theme'
-import Visibility from './Visibility'
+import Theme from './SettingSelectors/Theme'
+import Visibility from './SettingSelectors/Visibility'
 import useOutsideClick from 'hooks/click'
 import SettingsIcon from '@components/icons/SettingsIcon'
+import Font from './SettingSelectors/Font'
 
 export default function Settings() {
   const [panelOpen, setPanelOpen] = useState(false)
@@ -16,7 +17,7 @@ export default function Settings() {
     <>
       <div className='centered py-1'>
         <SettingsIcon
-          className='h-full w-10 centered hover:cursor-pointer'
+          className='h-full w-10 centered cursor-pointer'
           onClick={() => setPanelOpen((prev) => !prev)}
         />
       </div>
@@ -45,6 +46,15 @@ export default function Settings() {
             <hr className='w-full bg-darkGrey h-[2px]' />
             <Theme />
             <Visibility />
+            <Font />
+            <hr className='w-full bg-darkGrey h-[2px] mb-3' />
+            {/* Render a section to allow people to leave feedback and log out */}
+            <p className='text-sm'>
+              This app was made to help everyone memorize scripture. I would love to hear your feedback on what would
+              help you!
+              <br />
+              <p className='underline cursor-pointer'>Leave Feedback</p>
+            </p>
           </div>
         </div>
       </Transition>

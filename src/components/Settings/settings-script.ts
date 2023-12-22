@@ -1,4 +1,4 @@
-export const getSettingsScript = () => {
+export const getThemeSettingScript = () => {
   return `
     const theme = localStorage.theme
     
