@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSettings } from 'hooks/settings'
 import { setThemeInDocument } from '../Settings'
 import { Theme } from '@configuration/settings'

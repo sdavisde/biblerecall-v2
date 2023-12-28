@@ -51,7 +51,12 @@ export default function Settings() {
               This app was made to help everyone memorize scripture. I would love to hear your feedback on what would
               help you!
               <br />
-              <p className='underline cursor-pointer'>Leave Feedback</p>
+              <a
+                className='underline cursor-pointer'
+                href='https://forms.gle/9sSaHCQJnMYAMw1w6'
+              >
+                Leave Feedback
+              </a>
             </p>
           </div>
         </div>

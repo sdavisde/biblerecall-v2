@@ -5,7 +5,6 @@ import { capitalize } from 'util/string'
 import DropDownArrow from '@components/icons/DropDownArrow'
 import { useState } from 'react'
 import cn from 'clsx'
-import { Transition } from '@headlessui/react'
 
 type SettingSlotProps = {
   label: string
