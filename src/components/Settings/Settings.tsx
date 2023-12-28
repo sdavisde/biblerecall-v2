@@ -10,7 +10,7 @@ import SettingsIcon from '@components/icons/SettingsIcon'
 import Font from './SettingSelectors/Font'
 
 export default function Settings() {
-  const [panelOpen, setPanelOpen] = useState(true)
+  const [panelOpen, setPanelOpen] = useState(false)
   const { ref } = useOutsideClick(() => setPanelOpen(false))
 
   return (
