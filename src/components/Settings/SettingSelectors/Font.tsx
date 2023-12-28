@@ -4,7 +4,7 @@ import { useSettings } from 'hooks/settings'
 import { useEffect, useRef, useState } from 'react'
 import { Font } from '@configuration/settings'
 import { capitalize } from 'util/string'
-import { selectorClasses } from '.'
+import { SettingSlot } from '../SettingSlot'
 
 export default function FontSelect() {
   const [settings, setSettings] = useSettings()
@@ -18,27 +18,19 @@ export default function FontSelect() {
     }
   }, [font])
 
+  const updateFont = (fontValue: string) => {
+    setFont(fontValue as Font)
+  }
+
   return (
-    <form
-      className={selectorClasses.form}
-      ref={ref}
-    >
-      <label className={selectorClasses.label}>Font</label>
-      <select
-        id='font-select'
-        value={font}
-        className={selectorClasses.select}
-        onChange={(e) => setFont(e.target.value as Font)}
-      >
-        {(Object.keys(Font) as Array<keyof typeof Font>).map((key) => (
-          <option
-            key={key}
-            value={Font[key]}
-          >
-            {capitalize(Font[key])}
-          </option>
-        ))}
-      </select>
-    </form>
+    <SettingSlot
+      label='Font'
+      options={(Object.keys(Font) as Array<keyof typeof Font>).map((key) => ({
+        label: capitalize(Font[key]),
+        value: Font[key],
+      }))}
+      selectedValue={font}
+      setter={updateFont}
+    />
   )
 }

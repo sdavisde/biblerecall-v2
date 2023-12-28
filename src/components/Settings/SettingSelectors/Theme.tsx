@@ -5,12 +5,11 @@ import { useSettings } from 'hooks/settings'
 import { setThemeInDocument } from '../Settings'
 import { Theme } from '@configuration/settings'
 import { capitalize } from 'util/string'
-import { selectorClasses } from '.'
+import { SettingSlot } from '../SettingSlot'
 
 export default function ThemeSelect() {
   const [settings, setSettings] = useSettings()
   const [colorTheme, setColorTheme] = useState<Theme>(settings?.theme ?? Theme.SYSTEM)
-  const ref = useRef<HTMLFormElement>(null)
 
   // Update settings when color theme changes
   useEffect(() => {
@@ -24,28 +23,19 @@ export default function ThemeSelect() {
     setThemeInDocument(settings?.theme)
   }, [settings?.theme])
 
+  const updateColorTheme = (themeValue: string) => {
+    setColorTheme(themeValue as Theme)
+  }
+
   return (
-    <form
-      className={selectorClasses.form}
-      ref={ref}
-    >
-      <label className={selectorClasses.label}>Color Theme</label>
-      <select
-        value={colorTheme}
-        className={selectorClasses.select}
-        onChange={(e) => {
-          setColorTheme(e.target.value as Theme)
-        }}
-      >
-        {(Object.keys(Theme) as Array<keyof typeof Theme>).map((key) => (
-          <option
-            key={key}
-            value={Theme[key]}
-          >
-            {capitalize(Theme[key])}
-          </option>
-        ))}
-      </select>
-    </form>
+    <SettingSlot
+      label='Color Theme'
+      options={(Object.keys(Theme) as Array<keyof typeof Theme>).map((key) => ({
+        label: capitalize(Theme[key]),
+        value: Theme[key],
+      }))}
+      selectedValue={colorTheme}
+      setter={updateColorTheme}
+    />
   )
 }

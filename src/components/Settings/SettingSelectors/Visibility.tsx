@@ -4,7 +4,7 @@ import { useSettings } from 'hooks/settings'
 import { useEffect, useRef, useState } from 'react'
 import { Visibility } from '@configuration/settings'
 import { capitalize } from 'util/string'
-import { selectorClasses } from '.'
+import { SettingSlot } from '../SettingSlot'
 
 export default function VisibilitySelect() {
   const [settings, setSettings] = useSettings()
@@ -18,27 +18,19 @@ export default function VisibilitySelect() {
     }
   }, [visibility])
 
+  const updateVisibility = (visibilityValue: string) => {
+    setVisibility(visibilityValue as Visibility)
+  }
+
   return (
-    <form
-      className={selectorClasses.form}
-      ref={ref}
-    >
-      <label className={selectorClasses.label}>Verse Visibility</label>
-      <select
-        id='study-mode-select'
-        value={visibility}
-        className={selectorClasses.select}
-        onChange={(e) => setVisibility(e.target.value as Visibility)}
-      >
-        {(Object.keys(Visibility) as Array<keyof typeof Visibility>).map((key) => (
-          <option
-            key={key}
-            value={Visibility[key]}
-          >
-            {capitalize(Visibility[key])}
-          </option>
-        ))}
-      </select>
-    </form>
+    <SettingSlot
+      label='Visibility'
+      options={(Object.keys(Visibility) as Array<keyof typeof Visibility>).map((key) => ({
+        label: capitalize(Visibility[key]),
+        value: Visibility[key],
+      }))}
+      selectedValue={visibility}
+      setter={updateVisibility}
+    />
   )
 }

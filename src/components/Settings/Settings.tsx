@@ -10,7 +10,7 @@ import SettingsIcon from '@components/icons/SettingsIcon'
 import Font from './SettingSelectors/Font'
 
 export default function Settings() {
-  const [panelOpen, setPanelOpen] = useState(false)
+  const [panelOpen, setPanelOpen] = useState(true)
   const { ref } = useOutsideClick(() => setPanelOpen(false))
 
   return (
@@ -35,21 +35,19 @@ export default function Settings() {
           className='w-[300px] h-[calc(100vh-2.5rem)] absolute z-10 right-0 top-10 shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] bg-lightGrey text-black dark:bg-black dark:text-white'
           ref={ref}
         >
-          <div className='w-full p-4 flex flex-col'>
-            <div className='flex justify-between pb-4'>
+          <div className='w-full flex flex-col divide-y divide:black dark:divide-white'>
+            <div className='flex justify-between p-4'>
               <h1 className='text-lg font-bold'>Settings</h1>
               <Close
                 className='scale-150 centered hover:cursor-pointer'
                 onClick={() => setPanelOpen(false)}
               />
             </div>
-            <hr className='w-full bg-darkGrey h-[2px]' />
             <Theme />
             <Visibility />
             <Font />
-            <hr className='w-full bg-darkGrey h-[2px] mb-3' />
             {/* Render a section to allow people to leave feedback and log out */}
-            <p className='text-sm'>
+            <p className='text-sm centered text-center flex-col gap-2 p-2'>
               This app was made to help everyone memorize scripture. I would love to hear your feedback on what would
               help you!
               <br />

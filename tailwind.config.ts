@@ -28,6 +28,7 @@ module.exports = {
         green: '#81957f',
         darkGreen: '#5F775B',
         black: '#292728',
+        blackHover: '#201e1f',
         mint: '#BEC9BC',
         darkerGrey: '#404040',
       },
