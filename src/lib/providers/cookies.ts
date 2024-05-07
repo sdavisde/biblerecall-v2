@@ -5,17 +5,17 @@ import { Result } from '@util/result'
 import { ErrorCode } from '@util/error'
 import { Lodash } from '@util/lodash'
 
-export namespace Cookies {
-  function getVersesCookie(): Verse[] | null {
-    const value = cookies().get('verses')?.value
+function getVersesCookie(): Verse[] | null {
+  const value = cookies().get('verses')?.value
 
-    if (value) {
-      return JSON.parse(value)
-    } else {
-      return null
-    }
+  if (value) {
+    return JSON.parse(value)
+  } else {
+    return null
   }
+}
 
+export namespace Cookies {
   export async function getVerse(id: string): Promise<Result<Verse>> {
     'use server'
 
