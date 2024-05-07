@@ -1,4 +1,4 @@
-import { Verse } from '@lib/util'
+import { Verse } from 'types/verse'
 
 type ReferenceProps = {
   verse: Verse

@@ -1,42 +1,45 @@
 'use client'
 
 import { useContext } from 'react'
-import { API_RESPONSE, Verse, makeReference } from '@lib/util'
 import { VersesContext } from '@components/providers/VersesProvider'
-import { addVerse, deleteVerse, updateVerse } from '@lib/api'
 import toast from 'react-hot-toast'
+import { apiClient } from '@lib/trpc/client'
+import { Verse } from 'types/verse'
+import { Verses } from '@util/bible'
 
 export const useVerses = () => {
   const { verses, setVerses } = useContext(VersesContext)
+  const addMutation = apiClient.verse.add.useMutation()
+  const updateMutation = apiClient.verse.update.useMutation()
+  const deleteMutation = apiClient.verse.delete.useMutation()
 
   const setNewVerses = async (verse: Verse, action: 'add' | 'update' | 'delete') => {
-    let res: API_RESPONSE
     switch (action) {
       case 'add':
-        res = await addVerse(verse)
-        if (res.SUCCESS) {
-          setVerses([res.DATA, ...verses])
-          toast.success(`Added ${makeReference(verse)}`)
+        const addResult = await addMutation.mutateAsync(verse)
+        if (addResult.hasValue) {
+          setVerses([addResult.value, ...verses])
+          toast.success(`Added ${Verses.makeReference(verse)}`)
         } else {
-          toast.error(res.RESPONSE)
+          toast.error(addResult.error.message)
         }
         break
       case 'update':
-        res = await updateVerse(verse)
-        if (res.SUCCESS) {
-          setVerses([...verses.filter((v) => v.id !== verse.id), res.DATA])
+        const updateResult = await updateMutation.mutateAsync(verse)
+        if (updateResult.hasValue) {
+          setVerses([...verses.filter((v) => v.id !== verse.id), verse])
           toast.success('Updated verse')
         } else {
-          toast.error(res.RESPONSE)
+          toast.error(updateResult.error.message)
         }
         break
       case 'delete':
-        res = await deleteVerse(verse.id)
-        if (res.SUCCESS) {
+        const deleteResult = await deleteMutation.mutateAsync(verse.id)
+        if (deleteResult.hasValue) {
           setVerses(verses.filter((v) => v.id !== verse.id))
-          toast.success(res.RESPONSE)
+          toast.success(`Removed ${Verses.makeReference(verse)}`)
         } else {
-          toast.error(res.RESPONSE)
+          toast.error(deleteResult.error.message)
         }
         break
     }

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useSettings } from 'hooks/settings'
-import { setThemeInDocument } from '../Settings'
+import { setThemeInDocument } from 'components/Settings/Settings'
 import { Theme } from '@configuration/settings'
 import { capitalize } from 'util/string'
 import { SettingSlot } from '../SettingSlot'

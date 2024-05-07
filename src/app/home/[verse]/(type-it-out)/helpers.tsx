@@ -1,9 +1,9 @@
 'use client'
 
-import { ChangeEvent, KeyboardEvent, RefObject, useRef, useState } from 'react'
+import { ChangeEvent, RefObject, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import $ from 'jquery'
-import { Verse } from '@lib/util'
+import { Verse } from 'types/verse'
 
 export default function useHelpers(verse: Verse, inputRef: RefObject<HTMLInputElement>) {
   const [loading, setLoading] = useState(false)

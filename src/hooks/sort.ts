@@ -1,7 +1,7 @@
 'use client'
 
-import { Verse } from '@lib/util'
 import { useState } from 'react'
+import { Verse } from 'types/verse'
 
 /**
  * If return value is positive, b switches with a.

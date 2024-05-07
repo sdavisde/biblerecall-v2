@@ -1,17 +1,17 @@
 import Navbar from '@components/common/Navbar'
 import Footer from '@components/common/Footer'
 import VersesProvider from '@components/providers/VersesProvider'
-import { fetchVerses, getAuthenticatedSettings } from '@lib/api'
 import { Toaster } from 'react-hot-toast'
 import { SettingsProvider } from '@components/Settings/Provider'
+import { trpcServer } from '@lib/trpc/server'
 
 export default async function HomeLayout({ children }: { children: React.ReactNode }) {
-  const verses = await fetchVerses()
-  const { DATA: authenticatedUserSettings } = await getAuthenticatedSettings()
+  const versesResult = await trpcServer.verse.allByUser()
+  const settingsResult = await trpcServer.settings.get()
 
   return (
-    <SettingsProvider authUserSettings={authenticatedUserSettings}>
-      <VersesProvider verses={verses}>
+    <SettingsProvider authUserSettings={settingsResult.hasValue ? settingsResult.value : null}>
+      <VersesProvider verses={versesResult.hasValue ? versesResult.value : null}>
         <Navbar />
         <Toaster />
         <main className='w-full min-h-[calc(100vh-5rem)] overflow-x-hidden relative bg-lightGrey text-black dark:bg-black dark:text-white'>

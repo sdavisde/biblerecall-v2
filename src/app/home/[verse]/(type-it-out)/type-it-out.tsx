@@ -1,12 +1,12 @@
 'use client'
 
-import { Verse } from '@lib/util'
 import { useSearchParams } from 'next/navigation'
 import Lightbox from '@components/common/Lightbox'
 import Reference from '@components/verse/Reference'
 import useHelpers from './helpers'
 import { useEffect, useRef } from 'react'
 import LoadingDots from '@components/loading/LoadingDots'
+import { Verse } from 'types/verse'
 
 export default function TypeItOut({ verse }: { verse: Verse }) {
   const input = useRef<HTMLInputElement>(null)

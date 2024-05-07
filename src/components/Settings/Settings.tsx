@@ -8,6 +8,7 @@ import Visibility from './SettingSelectors/Visibility'
 import useOutsideClick from 'hooks/click'
 import SettingsIcon from '@components/icons/SettingsIcon'
 import Font from './SettingSelectors/Font'
+import { Lodash } from '@util/lodash'
 
 export default function Settings() {
   const [panelOpen, setPanelOpen] = useState(false)
@@ -66,7 +67,7 @@ export default function Settings() {
 }
 
 export const setThemeInDocument = (theme: string | undefined) => {
-  if (!theme) {
+  if (!theme || Lodash.isNil(document)) {
     return
   }
 

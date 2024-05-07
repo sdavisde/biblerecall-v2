@@ -1,13 +1,15 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import Lightbox from '@components/common/Lightbox'
 import Darkbox from '@components/common/Darkbox'
-import { Verse, createVerse, isValidReference } from '@lib/util'
-import useVersions from 'hooks/use-versions'
 import LoadingDots from '@components/loading/LoadingDots'
 import toast from 'react-hot-toast'
+import { Verse } from 'types/verse'
+import { Verses } from '@util/bible'
+import { apiClient } from '@lib/trpc/client'
+import { Lodash } from '@util/lodash'
 
 type UpdateVerseProps = {
   id: string
@@ -18,41 +20,23 @@ type UpdateVerseProps = {
 }
 const UpdateVerse = (props: UpdateVerseProps) => {
   const [reference, setReference] = useState(props.reference)
-  const [verseText, setVerseText] = useState(props.text)
   const [version, setVersion] = useState(props.version ?? 'ESV')
-  const [loading, setLoading] = useState(false)
-  const versions = useVersions()
+  const versions = apiClient.bible.getVersions.useQuery()
+  const verseText = apiClient.bible.getVerse.useQuery({ reference, version })
   const input = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    const updateVerseText = async () => {
-      if (isValidReference(reference)) {
-        setLoading(true)
-        const { verseText, verseReference } = await fetch(`/api/bible?reference=${reference}&version=${version}`).then(
-          (res) => res.json()
-        )
-        if (verseReference === input.current?.value) {
-          setVerseText(verseText)
-        }
-        setLoading(false)
-      } else {
-        setVerseText('')
-      }
-    }
-    updateVerseText()
-  }, [reference, version])
-
   const submitNewVerse = async () => {
-    const verse = createVerse(reference, { id: props.id, text: verseText, version })
+    const text = verseText.data?.hasValue ? verseText.data.value.verseText : ''
+    const verse = Verses.createVerse(reference, { id: props.id, text: text, version })
 
-    if (!isValidReference(reference)) {
+    if (!Verses.isValidReference(reference)) {
       toast.error('Invalid reference format, please enter your verse like: John 3:16 or John 3:16-17')
     } else if (!verse) {
       toast.error('Error adding verse, check that the verse is using the correct format')
-    } else if (verseText === '') {
+    } else if (Lodash.isEmpty(text)) {
       toast.error('Could not find verse, does this verse exist?')
-    } else if (!loading) {
-      props.onSubmit(verse)
+    } else if (!verseText.isLoading && !verseText.isFetching) {
+      await props.onSubmit(verse)
     }
   }
 
@@ -80,11 +64,11 @@ const UpdateVerse = (props: UpdateVerseProps) => {
         <div className='w-[95%] flex flex-row gap-2 justify-between text-sm relative'>
           <textarea
             placeholder='Verse text will display here when you enter a reference'
-            value={verseText}
-            onChange={(e) => setVerseText(e.target.value)}
+            value={!verseText.isLoading && verseText.data?.hasValue ? verseText.data.value.verseText : props.text}
+            onChange={(e) => setReference(e.target.value)}
             className='bg-inherit w-4/5 resize-none text-black dark:text-white text-sm focus:outline-none'
           />
-          {loading && (
+          {verseText.isLoading && (
             <div className='absolute bottom-9 w-20'>
               <LoadingDots />
             </div>
@@ -99,14 +83,15 @@ const UpdateVerse = (props: UpdateVerseProps) => {
                   className='w-fit border-black border-[1px] bg-transparent dark:border-darkGrey rounded p-2 text-black dark:text-white dark:bg-darkerGrey'
                   onChange={(e) => setVersion(e.target.value)}
                 >
-                  {versions?.map((version) => (
-                    <option
-                      key={version.abbreviation}
-                      value={version.abbreviation}
-                    >
-                      {version.abbreviation}
-                    </option>
-                  ))}
+                  {versions.data?.hasValue &&
+                    versions.data.value?.map((version) => (
+                      <option
+                        key={version.abbreviation}
+                        value={version.abbreviation}
+                      >
+                        {version.abbreviation}
+                      </option>
+                    ))}
                 </select>
               </div>
             </div>

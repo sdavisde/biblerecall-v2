@@ -3,10 +3,9 @@
 import { useState } from 'react'
 import Lightbox from '@components/common/Lightbox'
 import UpdateVerse from '@components/verse/UpdateVerse'
-import { Verse } from '@lib/util'
 import { useVerses } from 'hooks/verses'
-import OutsideAlerter from 'hooks/click'
 import useOutsideClick from 'hooks/click'
+import { Verse } from 'types/verse'
 
 type AddVerseProps = {}
 const AddVerse = ({}: AddVerseProps) => {
@@ -16,7 +15,7 @@ const AddVerse = ({}: AddVerseProps) => {
 
   const submitNewVerse = async (verse: Verse) => {
     // non null assertion is okay because validateReference guarantees verse is defined
-    dispatchVerses(verse, 'add')
+    await dispatchVerses(verse, 'add')
     setAddingVerse(false)
   }
 

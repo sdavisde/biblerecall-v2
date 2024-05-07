@@ -1,7 +1,6 @@
 'use client'
 
 import { PropsWithChildren, createContext, useEffect, useState } from 'react'
-import { getThemeSettingScript } from './settings-script'
 import { setThemeInDocument } from './Settings'
 import { DEFAULT_SETTINGS, Settings } from '@configuration/settings'
 import { getSettingsFromLocalStorage, setSettingsIntoLocalStorage } from '@lib/local-storage'
@@ -21,7 +20,10 @@ export const SettingsContext = createContext<SettingsContext>({
  * Settings are initialized as null. When local storage is read, they are overwritten and saved into state.
  * If the user is logged in, then another update happens to set state and local storage to match user saved settings.
  */
-export const SettingsProvider = ({ authUserSettings, children }: PropsWithChildren<{ authUserSettings: Settings }>) => {
+export const SettingsProvider = ({
+  authUserSettings,
+  children,
+}: PropsWithChildren<{ authUserSettings: Settings | null }>) => {
   const [settingsState, setSettingsState] = useState<Settings | null>(null)
 
   useEffect(() => {
@@ -48,7 +50,19 @@ export const SettingsProvider = ({ authUserSettings, children }: PropsWithChildr
       {/* This script is responsible for blocking page load until theme has been set, preventing flickering */}
       <Script
         id='settings-script'
-        dangerouslySetInnerHTML={{ __html: getThemeSettingScript() }}
+        dangerouslySetInnerHTML={{
+          __html: `
+        const theme = localStorage.theme
+        
+        if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          if (!document.documentElement.classList.contains('dark')) {
+            document.documentElement.classList.add('dark')
+          }
+        } else {
+          document.documentElement.classList.remove('dark')
+        }
+      `,
+        }}
         defer
       ></Script>
       <SettingsContext.Provider

@@ -1,12 +1,12 @@
 export const dynamic = 'auto'
 
 import TypeItOut from './(type-it-out)/type-it-out'
-import { getVerse } from '@lib/api'
 import HouseIcon from '@mui/icons-material/House'
 import BookIcon from '@components/icons/BookIcon'
+import { trpcServer } from '@lib/trpc/server'
 
 export default async function GamePage({ params }: { params: { verse: string } }) {
-  const verse = await getVerse(params.verse)
+  const verseResult = await trpcServer.verse.byId(params.verse)
 
   return (
     <div className='w-full min-h-[94%] flex flex-col items-center'>
@@ -21,7 +21,7 @@ export default async function GamePage({ params }: { params: { verse: string } }
           </div>
         </div>
         <hr className='w-full bg-darkGrey h-[2px]' />
-        {verse ? <TypeItOut verse={verse} /> : <>verse not found</>}
+        {verseResult.hasValue ? <TypeItOut verse={verseResult.value} /> : <>verse not found</>}
       </div>
     </div>
   )

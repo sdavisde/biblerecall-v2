@@ -3,6 +3,7 @@ import './globals.css'
 import { Urbanist, Rock_Salt, Satisfy } from 'next/font/google'
 import localFont from 'next/font/local'
 import { Analytics } from '@vercel/analytics/react'
+import { TRPCReactProvider } from '@lib/trpc/client'
 
 const urbanist = Urbanist({
   subsets: ['latin'],
@@ -67,7 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`bg-lightGrey dark:bg-black text-black dark:text-white ${urbanist.variable} ${openDyslexic.variable} ${satisfy.variable} ${rockSalt.variable} font-satisfy font-rockSalt font-openDyslexic font-urbanist`}
       suppressHydrationWarning
     >
-      {children}
+      <TRPCReactProvider>{children}</TRPCReactProvider>
       <Analytics />
     </html>
   )

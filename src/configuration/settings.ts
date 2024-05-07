@@ -1,3 +1,5 @@
+import { z } from 'zod'
+
 export enum Theme {
   SYSTEM = 'system',
   LIGHT = 'light',
@@ -28,10 +30,18 @@ export type Settings = {
   theme: Theme
   visibility: Visibility
   font: Font
-  defaultVersion: string
+  defaultVersion: Version
   verseOfTheDayEnabled: boolean
   verseDueDatesEnabled: boolean
 }
+export const settingsSchema = z.object({
+  theme: z.nativeEnum(Theme),
+  visibility: z.nativeEnum(Visibility),
+  font: z.nativeEnum(Font),
+  defaultVersion: z.nativeEnum(Version),
+  verseOfTheDayEnabled: z.boolean(),
+  verseDueDatesEnabled: z.boolean(),
+})
 
 export const DEFAULT_SETTINGS: Settings = {
   theme: Theme.SYSTEM,

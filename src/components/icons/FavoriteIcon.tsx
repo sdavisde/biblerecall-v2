@@ -3,10 +3,10 @@
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import MUIStarIcon from '@mui/icons-material/Star'
 import Hovered from '@components/util/Hovered'
-import { Verse } from '@lib/util'
 import { useVerses } from 'hooks/verses'
 import LoadingCircle from './LoadingCircle'
 import { useState } from 'react'
+import { Verse } from 'types/verse'
 
 type FavoriteIconProps = {
   verse: Verse

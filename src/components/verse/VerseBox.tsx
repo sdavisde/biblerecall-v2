@@ -4,7 +4,6 @@ import cn from 'clsx'
 import { useState } from 'react'
 import Lightbox from '@components/common/Lightbox'
 import Darkbox from '@components/common/Darkbox'
-import { Verse } from '@lib/util'
 import DeleteIcon from '@components/icons/DeleteIcon'
 import PlayIcon from '@components/icons/PlayIcon'
 import FavoriteIcon from '@components/icons/FavoriteIcon'
@@ -13,6 +12,7 @@ import { useVerses } from 'hooks/verses'
 import useOutsideClick from 'hooks/click'
 import { useSettings } from 'hooks/settings'
 import { Visibility } from '@configuration/settings'
+import { Verse } from 'types/verse'
 
 type VerseBoxProps = {
   verse: Verse

@@ -1,7 +1,7 @@
 'use client'
 
-import { Verse } from '@lib/util'
 import { createContext, useState } from 'react'
+import { Verse } from 'types/verse'
 
 type verseContext = {
   verses: Verse[]
@@ -17,9 +17,9 @@ export default function VersesProvider({
   verses,
 }: {
   children: React.ReactNode
-  verses: Verse[]
+  verses: Verse[] | null
 }): React.ReactNode {
-  const [verseState, setVerseState] = useState<Verse[]>(verses)
+  const [verseState, setVerseState] = useState<Verse[]>(verses ?? [])
 
   const updateVerseState = (newVerses: Verse[]) => {
     setVerseState(newVerses)

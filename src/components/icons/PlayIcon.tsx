@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import PlayArrowIcon from '@mui/icons-material/PlayArrowRounded'
 import Hovered from '@components/util/Hovered'
-import { Verse } from '@lib/util'
+import { Verse } from 'types/verse'
 
 type PlayIconProps = {
   verse: Verse
