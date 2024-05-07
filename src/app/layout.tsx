@@ -4,6 +4,7 @@ import { Urbanist, Rock_Salt, Satisfy } from 'next/font/google'
 import localFont from 'next/font/local'
 import { Analytics } from '@vercel/analytics/react'
 import { TRPCReactProvider } from '@lib/trpc/client'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const urbanist = Urbanist({
   subsets: ['latin'],
@@ -70,6 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <TRPCReactProvider>{children}</TRPCReactProvider>
       <Analytics />
+      <SpeedInsights />
     </html>
   )
 }
