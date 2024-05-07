@@ -29,6 +29,8 @@ const UpdateVerse = (props: UpdateVerseProps) => {
     const text = verseText.data?.hasValue ? verseText.data.value.verseText : ''
     const verse = Verses.createVerse(reference, { id: props.id, text: text, version })
 
+    console.log(verse, verseText)
+
     if (!Verses.isValidReference(reference)) {
       toast.error('Invalid reference format, please enter your verse like: John 3:16 or John 3:16-17')
     } else if (!verse) {
@@ -41,7 +43,7 @@ const UpdateVerse = (props: UpdateVerseProps) => {
   }
 
   return (
-    <form action={() => submitNewVerse()}>
+    <form onSubmit={submitNewVerse}>
       <Lightbox className='centered font'>
         <div className='w-[10%]' />
         <input

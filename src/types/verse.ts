@@ -1,30 +1,35 @@
 import { z } from 'zod'
 
+export enum Testament {
+  OLD = 'old',
+  NEW = 'new',
+}
+
 export type Verse = {
   id: string
   book: {
     id: number
     name: string
-    testament?: string
+    testament: Testament | null
   }
   chapter: number
   start: number
-  end?: number
+  end: number | null
   text: string
   version: string
-  favorite?: boolean
+  favorite: boolean
 }
 export const verseSchema = z.object({
   id: z.string(),
   book: z.object({
     id: z.number(),
     name: z.string(),
-    testament: z.string().optional(),
+    testament: z.nativeEnum(Testament).nullable(),
   }),
   chapter: z.number(),
   start: z.number(),
-  end: z.number().optional(),
+  end: z.number().nullable(),
   text: z.string(),
   version: z.string(),
-  favorite: z.boolean().optional(),
+  favorite: z.boolean(),
 })
