@@ -1,104 +1,57 @@
-import { Testament, Verse } from 'types/verse'
+import { Testament, Verse, VerseMetadata, VerseReference, VerseReferenceString } from 'types/verse'
+import { Result } from '@util/result'
 
 export namespace Verses {
-  export function isValidVerse(verse: Verse): boolean {
-    // verse must have a book and chapter
-    if (!verse || !verse.book?.name || !verse.chapter) {
-      return false
-    }
-
-    // start must exist and be valid
-    if (!verse.start || verse.start <= 0) {
-      return false
-    }
-
-    // verse end should either not exist or be >= start
-    if (verse.end && verse.end < verse.start) {
-      return false
-    }
-
-    return true
-  }
-
-  export function isValidReference(reference: string): boolean {
-    if (!reference || !reference.includes(':')) {
-      return false
-    }
-
-    const [book, chapter, start, end] = parseReference(reference)
-
-    if (!start) {
-      return false
-    }
-
-    if (reference.includes('-')) {
-      if (!end || start > end) {
-        return false
-      }
-    }
-
-    if (!book || !chapter || !start) {
-      return false
-    }
-
-    return true
-  }
-
-  export function makeReference(verse: Verse): string | null {
-    if (!isValidVerse) {
-      return null
-    }
-
-    return `${verse.book.name} ${verse.chapter}:${verse.start}${verse.end ? '-' + verse.end : ''}`
-  }
-
-  export function parseReference(reference: string) {
+  /**
+   * Parses a VerseReferenceString into a VerseReference
+   * @param reference Should be a string of type VerseReferenceString but easier to not type assert here
+   */
+  export function parseReference(reference: string): Result<VerseReference> {
     const [first, last] = reference.split(':')
     const chapterIndex = first.lastIndexOf(' ')
     const book = first.slice(0, chapterIndex)
     const chapter = first.slice(chapterIndex)
-    const [startString, endString] = last.split('-')
+    const [start, end] = last.split('-')
 
-    const start = startString ? parseInt(startString) : undefined
-    const end = endString ? parseInt(endString) : undefined
+    if (last.includes('-')) {
+      if (!end || start > end) {
+        return Result.failure({ code: `invalid reference: ${reference}` })
+      }
+    }
 
-    return [book, chapter, start, end] as const
+    return Result.success({
+      book: Bible.books.find((b) => b.name.toLowerCase() === book.toLowerCase()) ?? Bible.books[0],
+      chapter: parseInt(chapter),
+      start: parseInt(start),
+      end: parseInt(end),
+    })
   }
 
   /**
    * Parses a verse reference into its different attributes
-   * @param verseReference verse in the format: Book C:V or 1 Book C:V-V2
+   * @param reference verse in the format: Book C:V or 1 Book C:V-V2
    */
-  export function createVerse(
-    verseReference: string,
-    overrides?: { id?: string; text?: string; version?: string }
-  ): Verse | null {
-    if (!verseReference.includes(' ') || !verseReference.includes(':')) {
-      return null
+  export function createVerse(reference: string, metadata?: Partial<VerseMetadata>): Result<Verse> {
+    if (!reference.includes(' ') || !reference.includes(':')) {
+      return Result.failure({ code: `Attempted to create verse with malformed reference: ${reference}` })
     }
 
-    const [book, chapter, start, end] = parseReference(verseReference)
-
-    if (!start) {
-      return null
+    const referenceResult = parseReference(reference)
+    if (!referenceResult.hasValue) {
+      return referenceResult
     }
 
-    if (verseReference.includes('-')) {
-      if (!end || start > end) {
-        return null
-      }
-    }
+    return Result.success({
+      id: metadata?.id ?? '',
+      ...referenceResult.value,
+      text: metadata?.text ?? '',
+      version: metadata?.version ?? '',
+      favorite: metadata?.favorite ?? false,
+    })
+  }
 
-    return {
-      id: overrides?.id ?? '',
-      book: Bible.books.find((b) => b.name.toLowerCase() === book.toLowerCase()) ?? Bible.books[0],
-      chapter: parseInt(chapter),
-      start,
-      end: end ?? null,
-      text: overrides?.text ?? '',
-      version: overrides?.version ?? '',
-      favorite: false,
-    }
+  export function stringifyReference(verse: VerseReference): VerseReferenceString {
+    return `${verse.book.name} ${verse.chapter}:${verse.start}${verse.end ? '-' + verse.end : ''}`
   }
 }
 
@@ -170,5 +123,5 @@ export namespace Bible {
     { id: 64, name: '3 John', testament: Testament.NEW },
     { id: 65, name: 'Jude', testament: Testament.NEW },
     { id: 66, name: 'Revelation', testament: Testament.NEW },
-  ]
+  ] as const
 }

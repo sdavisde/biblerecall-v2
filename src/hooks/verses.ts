@@ -19,7 +19,7 @@ export const useVerses = () => {
         const addResult = await addMutation.mutateAsync(verse)
         if (addResult.hasValue) {
           setVerses([addResult.value, ...verses])
-          toast.success(`Added ${Verses.makeReference(verse)}`)
+          toast.success(`Added ${Verses.stringifyReference(verse)}`)
         } else {
           toast.error(addResult.error.message)
         }
@@ -37,7 +37,7 @@ export const useVerses = () => {
         const deleteResult = await deleteMutation.mutateAsync(verse.id)
         if (deleteResult.hasValue) {
           setVerses(verses.filter((v) => v.id !== verse.id))
-          toast.success(`Removed ${Verses.makeReference(verse)}`)
+          toast.success(`Removed ${Verses.stringifyReference(verse)}`)
         } else {
           toast.error(deleteResult.error.message)
         }

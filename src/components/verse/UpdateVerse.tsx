@@ -29,16 +29,15 @@ const UpdateVerse = (props: UpdateVerseProps) => {
     const text = verseText.data?.hasValue ? verseText.data.value.verseText : ''
     const verse = Verses.createVerse(reference, { id: props.id, text: text, version })
 
-    console.log(verse, verseText)
-
-    if (!Verses.isValidReference(reference)) {
+    if (!verse.hasValue) {
+      console.error(verse.error)
       toast.error('Invalid reference format, please enter your verse like: John 3:16 or John 3:16-17')
     } else if (!verse) {
       toast.error('Error adding verse, check that the verse is using the correct format')
     } else if (Lodash.isEmpty(text)) {
       toast.error('Could not find verse, does this verse exist?')
     } else if (!verseText.isLoading && !verseText.isFetching) {
-      await props.onSubmit(verse)
+      await props.onSubmit(verse.value)
     }
   }
 

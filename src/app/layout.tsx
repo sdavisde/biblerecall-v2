@@ -69,7 +69,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`bg-lightGrey dark:bg-black text-black dark:text-white ${urbanist.variable} ${openDyslexic.variable} ${satisfy.variable} ${rockSalt.variable} font-satisfy font-rockSalt font-openDyslexic font-urbanist`}
       suppressHydrationWarning
     >
-      <TRPCReactProvider>{children}</TRPCReactProvider>
+      <TRPCReactProvider>
+        <body>{children}</body>
+      </TRPCReactProvider>
       <Analytics />
       <SpeedInsights />
     </html>

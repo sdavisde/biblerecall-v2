@@ -1,3 +1,4 @@
+import { Bible } from '@util/bible'
 import { z } from 'zod'
 
 export enum Testament {
@@ -5,20 +6,38 @@ export enum Testament {
   NEW = 'new',
 }
 
-export type Verse = {
+/**
+ * Full details for a verse in bible recall's system
+ */
+export type Verse = VerseReference & VerseMetadata
+
+/**
+ * Metadata related to a verse, used for display purposes
+ */
+export type VerseMetadata = {
   id: string
-  book: {
-    id: number
-    name: string
-    testament: Testament | null
-  }
-  chapter: number
-  start: number
-  end: number | null
   text: string
   version: string
   favorite: boolean
 }
+
+/**
+ * Details of a reference for a verse (the location inside the bible this verse resides)
+ */
+export type VerseReference = {
+  book: {
+    id: number
+    name: string
+    testament: Testament
+  }
+  chapter: number
+  start: number
+  end: number | null
+}
+
+export type BookNames = (typeof Bible.books)[number]['name']
+export type VerseReferenceString = `${string} ${number}:${number}` | `${string} ${number}:${number}${string}`
+
 export const verseSchema = z.object({
   id: z.string(),
   book: z.object({

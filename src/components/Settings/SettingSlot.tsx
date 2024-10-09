@@ -17,7 +17,7 @@ export const SettingSlot = ({ label, options, selectedValue, setter }: SettingSl
   const [open, setOpen] = useState(false)
 
   return (
-    <form
+    <button
       className='cursor-pointer'
       onClick={() => setOpen((prev) => !prev)}
     >
@@ -44,7 +44,7 @@ export const SettingSlot = ({ label, options, selectedValue, setter }: SettingSl
           />
         ))}
       </div>
-    </form>
+    </button>
   )
 }
 
