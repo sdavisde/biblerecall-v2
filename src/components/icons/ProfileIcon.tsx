@@ -1,7 +1,7 @@
 'use client'
 
+import { logout } from '@lib/firebase'
 import Image from 'next/image'
-import { signOut } from 'next-auth/react'
 
 interface ProfileIconProps extends React.HTMLAttributes<HTMLDivElement> {
   imageSrc: string
@@ -13,7 +13,7 @@ export default function ProfileIcon(props: ProfileIconProps) {
   return (
     <div
       className='centered cursor-pointer'
-      onClick={() => signOut()}
+      onClick={logout}
       {...rest}
     >
       <Image

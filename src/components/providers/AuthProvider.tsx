@@ -1,13 +1,27 @@
 'use client'
+import { createContext, useContext, useEffect } from 'react'
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth } from '@lib/firebase'
+import Cookies from 'js-cookie'
 
-import { SessionProvider } from 'next-auth/react'
+const AuthContext = createContext<string | null>(null)
 
-export default function Provider({
-  children,
-  session,
-}: {
-  children: React.ReactNode
-  session: any
-}): React.ReactNode {
-  return <SessionProvider session={session}>{children}</SessionProvider>
+export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        Cookies.set('userId', user.uid)
+      } else {
+        Cookies.remove('userId')
+      }
+    })
+
+    return () => unsubscribe()
+  }, [])
+
+  return <AuthContext.Provider value={Cookies.get('userId') ?? null}>{children}</AuthContext.Provider>
+}
+
+export const useUserId = () => {
+  return useContext(AuthContext)
 }

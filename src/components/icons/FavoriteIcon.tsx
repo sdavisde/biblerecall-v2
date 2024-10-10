@@ -3,7 +3,7 @@
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import MUIStarIcon from '@mui/icons-material/Star'
 import Hovered from '@components/util/Hovered'
-import { useVerses } from 'hooks/verses'
+import { useVerses } from 'hooks/use-verses'
 import LoadingCircle from './LoadingCircle'
 import { useState } from 'react'
 import { Verse } from 'types/verse'

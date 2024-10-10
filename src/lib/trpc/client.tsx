@@ -5,7 +5,7 @@ import { loggerLink, unstable_httpBatchStreamLink } from '@trpc/client'
 import { createTRPCReact } from '@trpc/react-query'
 import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server'
 import { useState } from 'react'
-import { type AppRouter } from 'server'
+import { AppRouter } from 'server'
 
 const createQueryClient = () => new QueryClient()
 
@@ -19,7 +19,7 @@ const getQueryClient = () => {
   return (clientQueryClientSingleton ??= createQueryClient())
 }
 
-export const apiClient = createTRPCReact<AppRouter>()
+export const api = createTRPCReact<AppRouter>()
 
 /**
  * Inference helper for inputs.
@@ -39,7 +39,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
   const queryClient = getQueryClient()
 
   const [trpcClient] = useState(() =>
-    apiClient.createClient({
+    api.createClient({
       links: [
         loggerLink({
           enabled: (op) =>
@@ -59,12 +59,12 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <apiClient.Provider
+      <api.Provider
         client={trpcClient}
         queryClient={queryClient}
       >
         {props.children}
-      </apiClient.Provider>
+      </api.Provider>
     </QueryClientProvider>
   )
 }

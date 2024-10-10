@@ -1,20 +1,29 @@
 'use client'
 
-import Image from 'next/image'
 import { useState } from 'react'
 import Darkbox from '@components/common/Darkbox'
-import { signIn } from 'next-auth/react'
 import Controlled from './util/Controlled'
-import { useSettings } from 'hooks/settings'
 import CloseIcon from './icons/CloseIcon'
+import { signInWithGoogle } from '@lib/firebase'
+import { useUserId } from './providers/AuthProvider'
+import { Lodash } from '@util/lodash'
 
-type LoginboxProps = {
-  loggedIn: boolean
-}
+type LoginboxProps = {}
 
-const Loginbox = ({ loggedIn }: LoginboxProps) => {
+const Loginbox = ({}: LoginboxProps) => {
   const [showBox, setShowBox] = useState(true)
-  const [settings] = useSettings()
+  const userId = useUserId()
+  const loggedIn = !Lodash.isEmpty(userId)
+
+  const handleGoogleLogin = async () => {
+    try {
+      const response = await signInWithGoogle()
+      console.log(response)
+      // Redirect or handle post-login actions here
+    } catch (error) {
+      console.error('Google login failed:', error)
+    }
+  }
 
   return (
     <Controlled shown={showBox && !loggedIn}>
@@ -29,11 +38,7 @@ const Loginbox = ({ loggedIn }: LoginboxProps) => {
             To view your verses on any device:
             <br />
             <button
-              onClick={() =>
-                signIn('google', {
-                  callbackUrl: `${window.location.origin}/home`,
-                })
-              }
+              onClick={handleGoogleLogin}
               className='underline'
             >
               Log In Here

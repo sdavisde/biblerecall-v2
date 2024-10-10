@@ -5,12 +5,12 @@ import { Settings } from '@configuration/settings'
 import toast from 'react-hot-toast'
 import { setSettingsIntoLocalStorage } from '@lib/local-storage'
 import { SettingsContext } from '@components/Settings/Provider'
-import { apiClient } from '@lib/trpc/client'
+import { api } from '@lib/trpc/client'
 import { ErrorCode } from '@util/error'
 
 export const useSettings = () => {
   const { settings, setSettings } = useContext(SettingsContext)
-  const settingsMutation = apiClient.settings.set.useMutation()
+  const settingsMutation = api.settings.set.useMutation()
 
   const setNewSettings = async (newSettings: Settings) => {
     const res = await settingsMutation.mutateAsync(newSettings)

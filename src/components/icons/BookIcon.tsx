@@ -1,6 +1,6 @@
 'use client'
 
-import { useSettings } from 'hooks/settings'
+import { useSettings } from 'hooks/use-settings'
 import LottieImage from './Lottie'
 import whiteBook from './book/white.json'
 import blackBook from './book/black.json'

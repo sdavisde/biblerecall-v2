@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import Lightbox from '@components/common/Lightbox'
 import UpdateVerse from '@components/verse/UpdateVerse'
-import { useVerses } from 'hooks/verses'
-import useOutsideClick from 'hooks/click'
+import { useVerses } from 'hooks/use-verses'
+import useOutsideClick from 'hooks/use-outside-click'
 import { Verse } from 'types/verse'
 
 type AddVerseProps = {}

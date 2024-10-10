@@ -1,6 +1,6 @@
 'use client'
 
-import { useSettings } from 'hooks/settings'
+import { useSettings } from 'hooks/use-settings'
 import { useEffect, useState } from 'react'
 import { Font } from '@configuration/settings'
 import { capitalize } from 'util/string'

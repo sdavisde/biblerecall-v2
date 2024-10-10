@@ -2,7 +2,7 @@
 
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import { Delete } from '@mui/icons-material'
-import { useVerses } from 'hooks/verses'
+import { useVerses } from 'hooks/use-verses'
 import Hovered from '@components/util/Hovered'
 import { useState } from 'react'
 import LoadingCircle from './LoadingCircle'

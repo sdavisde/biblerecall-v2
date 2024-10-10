@@ -1,11 +1,10 @@
-import { getServerSession } from 'next-auth'
 import ProfileIcon from '@components/icons/ProfileIcon'
+import { auth } from '@lib/firebase'
+import { Lodash } from '@util/lodash'
 
 export default async function Profile() {
-  const session = await getServerSession()
-
-  if (session?.user?.image) {
-    return <ProfileIcon imageSrc={session?.user.image} />
+  if (!Lodash.isNil(auth.currentUser?.photoURL)) {
+    return <ProfileIcon imageSrc={auth.currentUser!.photoURL} />
   } else {
     // if status is unathenticated, we don't want to show a loading text
     return <></>

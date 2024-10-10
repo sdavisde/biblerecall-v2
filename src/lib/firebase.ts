@@ -25,14 +25,14 @@ const signInWithGoogle = async () => {
     const user = res.user
     const q = query(collection(database, 'Users'), where('uid', '==', user.uid))
     const docs = await getDocs(q)
-    // if (docs.docs.length === 0) {
+    console.log(res, user, q, docs)
     await setDoc(doc(database, 'Users', user.uid), {
       uid: user.uid,
       name: user.displayName,
-      authProvider: 'google',
       email: user.email,
+      photoURL: user.photoURL,
+      authProvider: 'google',
     })
-    // }
   } catch (err: any) {
     console.error(err)
     alert(err.message)

@@ -43,7 +43,7 @@ export const verseSchema = z.object({
   book: z.object({
     id: z.number(),
     name: z.string(),
-    testament: z.nativeEnum(Testament).nullable(),
+    testament: z.nativeEnum(Testament),
   }),
   chapter: z.number(),
   start: z.number(),

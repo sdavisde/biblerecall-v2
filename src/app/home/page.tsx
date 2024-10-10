@@ -1,15 +1,11 @@
 export const dynamic = 'auto'
 
 import Loginbox from '@components/Loginbox'
-import { getServerSession } from 'next-auth/next'
-import { DB_User, authOptions } from '@lib/auth'
 import AddVerse from '@components/verse/AddVerse'
 import VerseList from '@components/verse/VerseList'
 import BookIcon from '@components/icons/BookIcon'
 
 export default async function Home() {
-  const session = await getServerSession(authOptions)
-
   return (
     <div
       id='panel'
@@ -24,7 +20,7 @@ export default async function Home() {
           <h4 className='text-base centered ml-4'>My Verses</h4>
         </div>
         <hr className='w-full bg-darkGrey h-[2px]' />
-        <Loginbox loggedIn={session !== null && (session.user as DB_User)?.id !== null} />
+        <Loginbox />
         <AddVerse />
         <VerseList />
       </div>

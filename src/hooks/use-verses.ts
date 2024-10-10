@@ -3,15 +3,15 @@
 import { useContext } from 'react'
 import { VersesContext } from '@components/providers/VersesProvider'
 import toast from 'react-hot-toast'
-import { apiClient } from '@lib/trpc/client'
+import { api } from '@lib/trpc/client'
 import { Verse } from 'types/verse'
 import { Verses } from '@util/bible'
 
 export const useVerses = () => {
   const { verses, setVerses } = useContext(VersesContext)
-  const addMutation = apiClient.verse.add.useMutation()
-  const updateMutation = apiClient.verse.update.useMutation()
-  const deleteMutation = apiClient.verse.delete.useMutation()
+  const addMutation = api.verse.add.useMutation()
+  const updateMutation = api.verse.update.useMutation()
+  const deleteMutation = api.verse.delete.useMutation()
 
   const setNewVerses = async (verse: Verse, action: 'add' | 'update' | 'delete') => {
     switch (action) {

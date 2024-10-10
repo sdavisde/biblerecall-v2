@@ -2,8 +2,8 @@ import { publicProcedure, router } from 'server/trpc'
 import { z } from 'zod'
 import { Cookies } from '@lib/providers/cookies'
 import { Database } from '@lib/providers/database'
-import { RequestType } from 'server/context'
 import { verseSchema } from 'types/verse'
+import { RequestType } from 'server/context'
 
 /**
  * Verses API Routes
@@ -35,6 +35,7 @@ export const versesRouter = router({
   }),
   add: publicProcedure.input(verseSchema).mutation(async ({ input: verse, ctx }) => {
     const { type, userId } = ctx
+    console.log('adding verse by ', type, userId)
 
     switch (type) {
       case RequestType.Cookie:

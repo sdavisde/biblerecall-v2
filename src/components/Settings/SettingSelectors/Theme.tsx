@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useSettings } from 'hooks/settings'
+import { useSettings } from 'hooks/use-settings'
 import { setThemeInDocument } from 'components/Settings/Settings'
 import { Theme } from '@configuration/settings'
 import { capitalize } from 'util/string'

@@ -8,7 +8,7 @@ import LoadingDots from '@components/loading/LoadingDots'
 import toast from 'react-hot-toast'
 import { Verse } from 'types/verse'
 import { Verses } from '@util/bible'
-import { apiClient } from '@lib/trpc/client'
+import { api } from '@lib/trpc/client'
 import { Lodash } from '@util/lodash'
 
 type UpdateVerseProps = {
@@ -21,8 +21,8 @@ type UpdateVerseProps = {
 const UpdateVerse = (props: UpdateVerseProps) => {
   const [reference, setReference] = useState(props.reference)
   const [version, setVersion] = useState(props.version ?? 'ESV')
-  const versions = apiClient.bible.getVersions.useQuery()
-  const verseText = apiClient.bible.getVerse.useQuery({ reference, version })
+  const versions = api.bible.getVersions.useQuery()
+  const verseText = api.bible.getVerse.useQuery({ reference, version })
   const input = useRef<HTMLInputElement>(null)
 
   const submitNewVerse = async () => {
