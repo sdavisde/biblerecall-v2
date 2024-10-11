@@ -14,54 +14,53 @@ import { RequestType } from 'server/context'
 
 export const versesRouter = router({
   byId: publicProcedure.input(z.string()).query(async ({ input: verseId, ctx }) => {
-    const { type, userId } = ctx
+    const { type, user } = ctx
 
     switch (type) {
       case RequestType.Cookie:
         return await Cookies.getVerse(verseId)
       case RequestType.Database:
-        return await Database.getVerse({ userId, verseId })
+        return await Database.getVerse({ userId: user.uid, verseId })
     }
   }),
   allByUser: publicProcedure.query(async ({ ctx }) => {
-    const { type, userId } = ctx
+    const { type, user } = ctx
 
     switch (type) {
       case RequestType.Cookie:
         return await Cookies.fetchVerses()
       case RequestType.Database:
-        return await Database.getVerses({ userId })
+        return await Database.getVerses({ userId: user.uid })
     }
   }),
   add: publicProcedure.input(verseSchema).mutation(async ({ input: verse, ctx }) => {
-    const { type, userId } = ctx
-    console.log('adding verse by ', type, userId)
+    const { type, user } = ctx
 
     switch (type) {
       case RequestType.Cookie:
         return await Cookies.addVerse(verse)
       case RequestType.Database:
-        return await Database.addVerse({ userId, verse })
+        return await Database.addVerse({ userId: user.uid, verse })
     }
   }),
   delete: publicProcedure.input(z.string()).mutation(async ({ input: verseId, ctx }) => {
-    const { type, userId } = ctx
+    const { type, user } = ctx
 
     switch (type) {
       case RequestType.Cookie:
         return await Cookies.deleteVerse(verseId)
       case RequestType.Database:
-        return await Database.deleteVerse({ userId, verseId })
+        return await Database.deleteVerse({ userId: user.uid, verseId })
     }
   }),
   update: publicProcedure.input(verseSchema).mutation(async ({ input: verse, ctx }) => {
-    const { type, userId } = ctx
+    const { type, user } = ctx
 
     switch (type) {
       case RequestType.Cookie:
         return await Cookies.updateVerse(verse)
       case RequestType.Database:
-        return await Database.updateVerse({ userId, verse })
+        return await Database.updateVerse({ userId: user.uid, verse })
     }
   }),
 })

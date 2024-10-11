@@ -5,28 +5,30 @@ import Darkbox from '@components/common/Darkbox'
 import Controlled from './util/Controlled'
 import CloseIcon from './icons/CloseIcon'
 import { signInWithGoogle } from '@lib/firebase'
-import { useUserId } from './providers/AuthProvider'
-import { Lodash } from '@util/lodash'
+import { useRouter } from 'next/navigation'
 
 type LoginboxProps = {}
 
 const Loginbox = ({}: LoginboxProps) => {
   const [showBox, setShowBox] = useState(true)
-  const userId = useUserId()
-  const loggedIn = !Lodash.isEmpty(userId)
+  const router = useRouter()
 
   const handleGoogleLogin = async () => {
     try {
       const response = await signInWithGoogle()
-      console.log(response)
-      // Redirect or handle post-login actions here
+      if (!response) {
+        throw new Error('google signin failed')
+      }
+
+      // todo: this isn't actually refreshing the data on the page
+      router.push('/home')
     } catch (error) {
       console.error('Google login failed:', error)
     }
   }
 
   return (
-    <Controlled shown={showBox && !loggedIn}>
+    <Controlled shown={showBox}>
       <Darkbox className='rounded'>
         <div className='w-full relative centered'>
           <CloseIcon

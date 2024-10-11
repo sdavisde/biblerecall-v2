@@ -1,20 +1,11 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
-import { getFirestore, query, getDocs, collection, doc, where, setDoc } from 'firebase/firestore'
+import { getFirestore, doc, setDoc } from 'firebase/firestore'
 import { GoogleAuthProvider, getAuth, signInWithPopup, signOut } from 'firebase/auth'
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyAeo7eyiNmmMinLiwgLDXqLUoolWVeT5Wg',
-  authDomain: 'biblerecall-48cea.firebaseapp.com',
-  projectId: 'biblerecall-48cea',
-  storageBucket: 'biblerecall-48cea.appspot.com',
-  messagingSenderId: '807175798071',
-  // appId: process.env.FIREBASE_APP_ID,
-  // measurementId: process.env.FIREBASE_MEASUREMENT,
-}
+import { clientConfig } from 'firebase-config'
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig)
+const app = initializeApp(clientConfig)
 const auth = getAuth(app)
 const database = getFirestore(app)
 const googleProvider = new GoogleAuthProvider()
@@ -23,9 +14,6 @@ const signInWithGoogle = async () => {
   try {
     const res = await signInWithPopup(auth, googleProvider)
     const user = res.user
-    const q = query(collection(database, 'Users'), where('uid', '==', user.uid))
-    const docs = await getDocs(q)
-    console.log(res, user, q, docs)
     await setDoc(doc(database, 'Users', user.uid), {
       uid: user.uid,
       name: user.displayName,
@@ -33,14 +21,26 @@ const signInWithGoogle = async () => {
       photoURL: user.photoURL,
       authProvider: 'google',
     })
+
+    // After signing in the user, tell the backend that the user is logged in
+    const idToken = await user.getIdToken()
+    await fetch('/api/login', {
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+      },
+    })
+
+    return user
   } catch (err: any) {
     console.error(err)
     alert(err.message)
+    return null
   }
 }
 
-const logout = () => {
+const logout = async () => {
   signOut(auth)
+  return await fetch('/api/logout')
 }
 
 export { auth, database, signInWithGoogle, logout }

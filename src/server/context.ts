@@ -1,7 +1,9 @@
-import { auth } from '@lib/firebase'
-import { Lodash } from '@util/lodash'
+'import server-only'
+
+import { clientConfig, serverConfig } from 'firebase-config'
+import { getTokens } from 'next-firebase-auth-edge'
+import { DecodedIdToken } from 'next-firebase-auth-edge/lib/auth/token-verifier'
 import { cookies } from 'next/headers'
-import { NextRequest } from 'next/server'
 
 export enum RequestType {
   Cookie = 'cookie',
@@ -10,12 +12,14 @@ export enum RequestType {
 
 type CookieRequestContext = {
   type: RequestType.Cookie
-  userId: null
+  user: null
 }
+
+export type User = DecodedIdToken
 
 type DBRequestContext = {
   type: RequestType.Database
-  userId: string
+  user: User
 }
 
 export type ApiContext = DBRequestContext | CookieRequestContext
@@ -33,19 +37,23 @@ export type ApiContext = DBRequestContext | CookieRequestContext
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opt: { headers: Headers }): Promise<ApiContext> => {
-  // console.log('create trpc context', opt)
-  const userId = cookies().get('userId')
-  // const session = await getServerSession(authOptions)
+  const tokens = await getTokens(cookies(), {
+    apiKey: clientConfig.apiKey,
+    cookieName: serverConfig.cookieName,
+    cookieSignatureKeys: serverConfig.cookieSignatureKeys,
+    serviceAccount: serverConfig.serviceAccount,
+  })
 
-  if (Lodash.isNil(userId)) {
+  if (tokens) {
+    const { decodedToken } = tokens
     return {
-      type: RequestType.Cookie,
-      userId: null,
+      type: RequestType.Database,
+      user: decodedToken,
     }
   }
 
   return {
-    type: RequestType.Database,
-    userId: userId.value,
+    type: RequestType.Cookie,
+    user: null,
   }
 }

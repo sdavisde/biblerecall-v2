@@ -6,21 +6,20 @@ import { useVerses } from 'hooks/use-verses'
 import Hovered from '@components/util/Hovered'
 import { useState } from 'react'
 import LoadingCircle from './LoadingCircle'
+import { Verse } from 'types/verse'
 
 type DeleteIconProps = {
-  id: string | undefined
+  verse: Verse
 }
 
-const DeleteIcon = ({ id }: DeleteIconProps) => {
+const DeleteIcon = ({ verse }: DeleteIconProps) => {
   const [, dispatchVerses] = useVerses()
   const [loading, setLoading] = useState(false)
 
   const onDelete = async () => {
-    if (id) {
-      setLoading(true)
-      await dispatchVerses({ id } as any, 'delete')
-      setLoading(false)
-    }
+    setLoading(true)
+    await dispatchVerses(verse, 'delete')
+    setLoading(false)
   }
 
   return (

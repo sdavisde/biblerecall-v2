@@ -4,8 +4,11 @@ import Loginbox from '@components/Loginbox'
 import AddVerse from '@components/verse/AddVerse'
 import VerseList from '@components/verse/VerseList'
 import BookIcon from '@components/icons/BookIcon'
+import { api } from '@lib/trpc/server'
 
 export default async function Home() {
+  const user = await api.user.get()
+
   return (
     <div
       id='panel'
@@ -20,7 +23,7 @@ export default async function Home() {
           <h4 className='text-base centered ml-4'>My Verses</h4>
         </div>
         <hr className='w-full bg-darkGrey h-[2px]' />
-        <Loginbox />
+        {!user.hasValue && <Loginbox />}
         <AddVerse />
         <VerseList />
       </div>

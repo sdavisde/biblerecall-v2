@@ -57,7 +57,7 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
             })}
           >
             <div className='w-1/6 pl-3'>
-              <DeleteIcon id={verse.id} />
+              <DeleteIcon verse={verse} />
             </div>
             <h4 className='w-4/6 centered'>
               {verse.book.name} {verse.chapter}:{verse.start}
