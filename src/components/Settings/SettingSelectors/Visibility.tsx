@@ -3,12 +3,12 @@
 import { useSettings } from 'hooks/use-settings'
 import { useEffect, useState } from 'react'
 import { Visibility } from '@configuration/settings'
-import { capitalize } from 'util/string'
 import { SettingSlot } from '../SettingSlot'
+import { FaEyeLowVision } from 'react-icons/fa6'
 
-export default function VisibilitySelect() {
+export function VisibilitySelect() {
   const [settings, setSettings] = useSettings()
-  const [visibility, setVisibility] = useState<Visibility>(settings?.visibility ?? Visibility.FULL)
+  const [visibility, setVisibility] = useState<Visibility>(settings?.visibility ?? Visibility.Full)
 
   // Update settings when visibility changes
   useEffect(() => {
@@ -17,19 +17,16 @@ export default function VisibilitySelect() {
     }
   }, [visibility])
 
-  const updateVisibility = (visibilityValue: string) => {
-    setVisibility(visibilityValue as Visibility)
-  }
-
   return (
     <SettingSlot
-      label='Visibility'
-      options={(Object.keys(Visibility) as Array<keyof typeof Visibility>).map((key) => ({
-        label: capitalize(Visibility[key]),
-        value: Visibility[key],
+      options={Object.entries(Visibility).map(([label, value]) => ({
+        label,
+        value,
       }))}
       selectedValue={visibility}
-      setter={updateVisibility}
-    />
+      setter={setVisibility}
+    >
+      <FaEyeLowVision />
+    </SettingSlot>
   )
 }

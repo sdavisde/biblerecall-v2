@@ -1,7 +1,7 @@
 'use client'
 
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import { Delete } from '@mui/icons-material'
+import { MdDelete } from 'react-icons/md'
+import { IoIosClose } from 'react-icons/io'
 import { useVerses } from 'hooks/use-verses'
 import Hovered from '@components/util/Hovered'
 import { useState } from 'react'
@@ -29,8 +29,8 @@ const DeleteIcon = ({ verse }: DeleteIconProps) => {
     >
       <Hovered
         className='w-fit'
-        DefaultComp={DeleteOutlineIcon}
-        HoveredComp={Delete}
+        DefaultComp={IoIosClose}
+        HoveredComp={MdDelete}
         onClick={onDelete}
         onTouchEnd={onDelete}
         type='warning'

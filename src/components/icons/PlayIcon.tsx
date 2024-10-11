@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import PlayArrowIcon from '@mui/icons-material/PlayArrowRounded'
+import { IoIosPlay } from 'react-icons/io'
 import Hovered from '@components/util/Hovered'
 import { Verse } from 'types/verse'
 
@@ -16,8 +16,8 @@ const PlayIcon = ({ verse }: PlayIconProps) => {
       >
         <Hovered
           className='w-fit flex'
-          DefaultComp={PlayArrowIcon}
-          HoveredComp={PlayArrowIcon}
+          DefaultComp={IoIosPlay}
+          HoveredComp={IoIosPlay}
         />
       </Link>
     </span>

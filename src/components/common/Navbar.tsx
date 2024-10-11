@@ -1,7 +1,7 @@
 import Profile from '@components/Profile'
 import Settings from '@components/Settings/Settings'
 
-export default function Navbar() {
+export default async function Navbar() {
   return (
     <nav className='w-full h-10 bg-green flex justify-between'>
       <div className='flex flex-row ml-4'>

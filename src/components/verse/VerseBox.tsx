@@ -75,7 +75,7 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
           <Darkbox className='rounded-bl rounded-br h-fit'>
             <VerseText
               text={verse.text}
-              visibility={settings?.visibility ?? Visibility.FULL}
+              visibility={settings?.visibility ?? Visibility.Full}
             />
             {settings?.visibility !== 'none' && (
               <div className='w-[12%] centered scale-[1.5]'>

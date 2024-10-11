@@ -1,6 +1,6 @@
-import ForwardIcon from '@mui/icons-material/Forward'
-import ReplayIcon from '@mui/icons-material/Replay'
-import HouseIcon from '@mui/icons-material/House'
+import { IoIosArrowForward } from 'react-icons/io'
+import { MdOutlineReplay } from 'react-icons/md'
+import { BsFillHouseFill } from 'react-icons/bs'
 import Link from 'next/link'
 import { ParsedUrlQuery } from 'querystring'
 import Button from '@components/common/button'
@@ -31,7 +31,7 @@ export default function SuccessPage({ params, searchParams }: SuccessPageProps) 
               href={`/home/${verse}?diff=${nextDifficulty}`}
               className='w-40 h-12 centered cursor-pointer mx-2'
             >
-              <h3 className='w-32 text-center'>Continue</h3> <ForwardIcon className='w-12 scale-150' />
+              <h3 className='w-32 text-center'>Continue</h3> <IoIosArrowForward className='w-12 scale-150' />
             </Link>
           </Button>
         )}
@@ -40,7 +40,7 @@ export default function SuccessPage({ params, searchParams }: SuccessPageProps) 
             href={`/home/${verse}?diff=${difficulty}`}
             className='w-40 h-12 centered cursor-pointer mx-2'
           >
-            <h3 className='w-32 text-center'>Retry</h3> <ReplayIcon className='w-12 scale-150' />
+            <h3 className='w-32 text-center'>Retry</h3> <MdOutlineReplay className='w-12 scale-150' />
           </Link>
         </Button>
         <Button>
@@ -48,7 +48,7 @@ export default function SuccessPage({ params, searchParams }: SuccessPageProps) 
             href={`/home`}
             className='w-40 h-12 centered cursor-pointer mx-2'
           >
-            <h3 className='w-32 text-center'>Home</h3> <HouseIcon className='w-12 scale-150' />
+            <h3 className='w-32 text-center'>Home</h3> <BsFillHouseFill className='w-12 scale-150' />
           </Link>
         </Button>
       </div>

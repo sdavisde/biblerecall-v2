@@ -1,7 +1,7 @@
 'use client'
 
-import StarBorderIcon from '@mui/icons-material/StarBorder'
-import MUIStarIcon from '@mui/icons-material/Star'
+import { IoIosStar } from 'react-icons/io'
+import { IoIosStarOutline } from 'react-icons/io'
 import Hovered from '@components/util/Hovered'
 import { useVerses } from 'hooks/use-verses'
 import LoadingCircle from './LoadingCircle'
@@ -31,8 +31,8 @@ const FavoriteIcon = ({ verse }: FavoriteIconProps) => {
       {loading && <LoadingCircle className='w-7 h-7' />}
       <Hovered
         className='w-fit'
-        DefaultComp={verse.favorite ? MUIStarIcon : StarBorderIcon}
-        HoveredComp={verse.favorite ? StarBorderIcon : MUIStarIcon}
+        DefaultComp={verse.favorite ? IoIosStar : IoIosStarOutline}
+        HoveredComp={verse.favorite ? IoIosStarOutline : IoIosStar}
         onClick={toggleFavorite}
         onTouchEnd={toggleFavorite}
         override={verse.favorite}

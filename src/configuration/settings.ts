@@ -1,18 +1,18 @@
 import { z } from 'zod'
 
 export enum Theme {
-  SYSTEM = 'system',
-  LIGHT = 'light',
-  DARK = 'dark',
+  System = 'system',
+  Light = 'light',
+  Dark = 'dark',
 }
 export enum Visibility {
-  FULL = 'full',
-  PARTIAL = 'partial',
-  NONE = 'none',
+  Full = 'full',
+  Partial = 'partial',
+  None = 'none',
 }
 export enum Font {
-  URBANIST = 'urbanist',
-  OPEN_DYSLEXIC = 'openDyslexic',
+  Urbanist = 'urbanist',
+  OpenDyslexic = 'openDyslexic',
 }
 export enum Version {
   ESV = 'ESV',
@@ -44,9 +44,9 @@ export const settingsSchema = z.object({
 })
 
 export const DEFAULT_SETTINGS: Settings = {
-  theme: Theme.SYSTEM,
-  visibility: Visibility.FULL,
-  font: Font.URBANIST,
+  theme: Theme.System,
+  visibility: Visibility.Full,
+  font: Font.Urbanist,
   defaultVersion: Version.ESV,
   verseDueDatesEnabled: false,
   verseOfTheDayEnabled: false,

@@ -4,38 +4,37 @@ import { useEffect, useState } from 'react'
 import { useSettings } from 'hooks/use-settings'
 import { setThemeInDocument } from 'components/Settings/Settings'
 import { Theme } from '@configuration/settings'
-import { capitalize } from 'util/string'
-import { SettingSlot } from '../SettingSlot'
+import { SettingSlot } from '@components/Settings/SettingSlot'
+import { LuMoonStar } from 'react-icons/lu'
+import { LuSunMoon } from 'react-icons/lu'
 
-export default function ThemeSelect() {
+export function ThemeSelect() {
   const [settings, setSettings] = useSettings()
-  const [colorTheme, setColorTheme] = useState<Theme>(settings?.theme ?? Theme.SYSTEM)
+  const [colorTheme, setColorTheme] = useState<Theme>(settings?.theme ?? Theme.System)
 
-  // Update settings when color theme changes
+  // Update user preferences when color theme changes
   useEffect(() => {
-    if (settings && colorTheme !== settings?.theme) {
-      setSettings({ ...settings, theme: colorTheme })
+    const updateSettings = async () => {
+      if (settings && colorTheme !== settings?.theme) {
+        await setSettings({ ...settings, theme: colorTheme })
+        // Async func used here to keep from changing the UI on the site until the settings are set on the server (db or cookies)
+        setThemeInDocument(settings?.theme)
+      }
     }
+
+    updateSettings()
   }, [colorTheme])
-
-  // Separate hook used here to keep from setting theme until the server set is finished
-  useEffect(() => {
-    setThemeInDocument(settings?.theme)
-  }, [settings?.theme])
-
-  const updateColorTheme = (themeValue: string) => {
-    setColorTheme(themeValue as Theme)
-  }
 
   return (
     <SettingSlot
-      label='Color Theme'
-      options={(Object.keys(Theme) as Array<keyof typeof Theme>).map((key) => ({
-        label: capitalize(Theme[key]),
-        value: Theme[key],
+      options={Object.entries(Theme).map(([label, value]) => ({
+        label,
+        value,
       }))}
       selectedValue={colorTheme}
-      setter={updateColorTheme}
-    />
+      setter={setColorTheme}
+    >
+      {colorTheme === Theme.System || colorTheme === Theme.Dark ? <LuMoonStar /> : <LuSunMoon />}
+    </SettingSlot>
   )
 }

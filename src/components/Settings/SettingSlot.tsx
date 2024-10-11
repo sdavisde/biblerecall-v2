@@ -1,67 +1,42 @@
 'use client'
 
 import { SelectorOption } from '.'
-import { capitalize } from 'util/string'
-import DropDownArrow from '@components/icons/DropDownArrow'
-import { useState } from 'react'
-import cn from 'clsx'
+import { PropsWithChildren } from 'react'
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@components/ui/dropdown-menu'
 
-type SettingSlotProps = {
-  label: string
-  options: Array<SelectorOption>
-  selectedValue: string
-  setter: (value: string) => void
+type SettingSlotProps<Value extends string> = PropsWithChildren & {
+  options: Array<SelectorOption<Value>>
+  selectedValue: Value
+  setter: (value: Value) => void
 }
 
-export const SettingSlot = ({ label, options, selectedValue, setter }: SettingSlotProps) => {
-  const [open, setOpen] = useState(false)
-
+export function SettingSlot<Value extends string = string>({
+  children,
+  options,
+  selectedValue,
+  setter,
+}: SettingSlotProps<Value>) {
   return (
-    <button
-      className='cursor-pointer'
-      onClick={() => setOpen((prev) => !prev)}
-    >
-      <div className='label h-16 p-4 centered justify-between z-0'>
-        <label className='text-md font-semibold'>{label}</label>
-        <div className='flex gap-3'>
-          {capitalize(selectedValue)}
-          <DropDownArrow className='w-4 fill-black dark:fill-white' />
-        </div>
-      </div>
-      <div
-        className={cn(
-          'max-h-0 overflow-hidden transition-[max-height] duration-300 ease-in-out divide-y divide-gray-200',
-          {
-            'max-h-screen': open,
-          }
-        )}
-      >
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className='h-full aspect-square flex items-center justify-center'>{children}</button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className='w-56'>
         {options.map((option) => (
-          <SettingsSlotOption
+          <DropdownMenuCheckboxItem
             key={option.value}
-            setter={setter}
-            {...option}
-          />
+            checked={selectedValue === option.value}
+            onCheckedChange={(checked) => setter(option.value)}
+          >
+            {option.label}
+          </DropdownMenuCheckboxItem>
         ))}
-      </div>
-    </button>
-  )
-}
-
-type SettingsSlotOptionProps = {
-  label: string
-  value: string
-  setter: (value: string) => void
-}
-const SettingsSlotOption = ({ label, value, setter }: SettingsSlotOptionProps) => {
-  return (
-    <option
-      key={value}
-      value={value}
-      className='p-4 pl-8 text-md font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-blackHover cursor-pointer'
-      onClick={(e) => setter(e.currentTarget.value)}
-    >
-      {label}
-    </option>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
