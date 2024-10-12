@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Darkbox from '@components/common/Darkbox'
 import Controlled from './util/Controlled'
-import CloseIcon from './icons/CloseIcon'
+import { X } from 'lucide-react'
 import { signInWithGoogle } from '@lib/firebase'
 
 type LoginboxProps = {}
@@ -28,10 +28,7 @@ const Loginbox = ({}: LoginboxProps) => {
     <Controlled shown={showBox}>
       <Darkbox className='rounded'>
         <div className='w-full relative centered'>
-          <CloseIcon
-            className='w-3 h-3 absolute right-2 top-0 fill-black dark:fill-white hover:cursor-pointer'
-            onClick={() => setShowBox((prev) => !prev)}
-          />
+          <X onClick={() => setShowBox((prev) => !prev)} />
           <p className='text-sm text-center w-[81%]'>
             Verses will be saved automatically to your device. <br />
             To view your verses on any device:

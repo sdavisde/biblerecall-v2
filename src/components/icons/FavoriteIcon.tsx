@@ -1,8 +1,7 @@
 'use client'
 
-import { IoIosStar } from 'react-icons/io'
-import { IoIosStarOutline } from 'react-icons/io'
-import Hovered from '@components/util/Hovered'
+import { Heart } from 'lucide-react'
+import { Hovered } from '@components/util/Hovered'
 import { useVerses } from 'hooks/use-verses'
 import LoadingCircle from './LoadingCircle'
 import { useState } from 'react'
@@ -30,13 +29,12 @@ const FavoriteIcon = ({ verse }: FavoriteIconProps) => {
     >
       {loading && <LoadingCircle className='w-7 h-7' />}
       <Hovered
-        className='w-fit'
-        DefaultComp={verse.favorite ? IoIosStar : IoIosStarOutline}
-        HoveredComp={verse.favorite ? IoIosStarOutline : IoIosStar}
+        DefaultComp={Heart}
+        HoveredComp={Heart}
         onClick={toggleFavorite}
         onTouchEnd={toggleFavorite}
-        override={verse.favorite}
-        type='primary'
+        defaultProps={verse.favorite ? { color: 'red', fill: 'red' } : {}}
+        hoveredProps={{ color: '#ff000080', fill: '#ff000080' }}
       />
     </span>
   )

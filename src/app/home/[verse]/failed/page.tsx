@@ -1,6 +1,6 @@
 import Button from '@components/common/button'
-import { MdOutlineReplay } from 'react-icons/md'
-import { BsFillHouseFill } from 'react-icons/bs'
+import { RotateCcw } from 'lucide-react'
+import { House } from 'lucide-react'
 import Link from 'next/link'
 import { ParsedUrlQuery } from 'querystring'
 
@@ -31,7 +31,7 @@ export default function FailedPage({ params, searchParams }: FailedPageProps) {
             href={`/home/${verse}?diff=${difficulty}`}
             className='w-40 h-12 centered cursor-pointer mx-2'
           >
-            <h3 className='w-32 text-center'>Retry</h3> <MdOutlineReplay className='w-12 scale-150' />
+            <h3 className='w-32 text-center'>Retry</h3> <RotateCcw className='w-12 scale-150' />
           </Link>
         </Button>
         <Button>
@@ -39,7 +39,7 @@ export default function FailedPage({ params, searchParams }: FailedPageProps) {
             href={`/home`}
             className='w-40 h-12 centered cursor-pointer mx-2'
           >
-            <h3 className='w-32 text-center'>Home</h3> <BsFillHouseFill className='w-12 scale-150' />
+            <h3 className='w-32 text-center'>Home</h3> <House className='w-12 scale-150' />
           </Link>
         </Button>
       </div>

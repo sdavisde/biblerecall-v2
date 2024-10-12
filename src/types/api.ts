@@ -1,6 +1,6 @@
 import { DecodedIdToken } from 'next-firebase-auth-edge/lib/auth/token-verifier'
 
-export type User = DecodedIdToken
+export type SignedInUser = DecodedIdToken
 
 export enum RequestType {
   Cookie = 'cookie',
@@ -14,7 +14,7 @@ export type CookieRequestContext = {
 
 export type DBRequestContext = {
   type: RequestType.Database
-  user: User
+  user: SignedInUser
 }
 
 export type ApiContext = DBRequestContext | CookieRequestContext

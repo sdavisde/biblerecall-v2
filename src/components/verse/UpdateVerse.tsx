@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { IoIosArrowForward } from 'react-icons/io'
+import { ArrowRight } from 'lucide-react'
 import Lightbox from '@components/common/Lightbox'
 import Darkbox from '@components/common/Darkbox'
 import LoadingDots from '@components/loading/LoadingDots'
@@ -58,7 +58,7 @@ const UpdateVerse = (props: UpdateVerseProps) => {
           type='submit'
           className='w-[10%]'
         >
-          <IoIosArrowForward />
+          <ArrowRight />
         </button>
       </Lightbox>
       <Darkbox>

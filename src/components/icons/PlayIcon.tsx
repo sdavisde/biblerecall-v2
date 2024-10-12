@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { IoIosPlay } from 'react-icons/io'
-import Hovered from '@components/util/Hovered'
+import { Play } from 'lucide-react'
+import { Hovered } from '@components/util/Hovered'
 import { Verse } from 'types/verse'
 
 type PlayIconProps = {
@@ -16,8 +16,7 @@ const PlayIcon = ({ verse }: PlayIconProps) => {
       >
         <Hovered
           className='w-fit flex'
-          DefaultComp={IoIosPlay}
-          HoveredComp={IoIosPlay}
+          DefaultComp={Play}
         />
       </Link>
     </span>

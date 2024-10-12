@@ -1,9 +1,8 @@
 'use client'
 
-import { MdDelete } from 'react-icons/md'
-import { IoIosClose } from 'react-icons/io'
+import { Trash } from 'lucide-react'
 import { useVerses } from 'hooks/use-verses'
-import Hovered from '@components/util/Hovered'
+import { Hovered } from '@components/util/Hovered'
 import { useState } from 'react'
 import LoadingCircle from './LoadingCircle'
 import { Verse } from 'types/verse'
@@ -17,9 +16,11 @@ const DeleteIcon = ({ verse }: DeleteIconProps) => {
   const [loading, setLoading] = useState(false)
 
   const onDelete = async () => {
-    setLoading(true)
-    await dispatchVerses(verse, 'delete')
-    setLoading(false)
+    if (!loading) {
+      setLoading(true)
+      await dispatchVerses(verse, 'delete')
+      setLoading(false)
+    }
   }
 
   return (
@@ -29,11 +30,11 @@ const DeleteIcon = ({ verse }: DeleteIconProps) => {
     >
       <Hovered
         className='w-fit'
-        DefaultComp={IoIosClose}
-        HoveredComp={MdDelete}
+        DefaultComp={Trash}
+        HoveredComp={Trash}
         onClick={onDelete}
         onTouchEnd={onDelete}
-        type='warning'
+        hoveredProps={{ color: '#4a4a4ab2', fill: '#4a4a4ab2' }}
       />
       {loading && <LoadingCircle className='w-7 h-7' />}
     </span>

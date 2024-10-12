@@ -4,7 +4,7 @@ import { useSettings } from 'hooks/use-settings'
 import { useEffect, useState } from 'react'
 import { Visibility } from '@configuration/settings'
 import { SettingSlot } from '../SettingSlot'
-import { FaEyeLowVision } from 'react-icons/fa6'
+import { EyeOff } from 'lucide-react'
 
 export function VisibilitySelect() {
   const [settings, setSettings] = useSettings()
@@ -26,7 +26,7 @@ export function VisibilitySelect() {
       selectedValue={visibility}
       setter={setVisibility}
     >
-      <FaEyeLowVision size={24} />
+      <EyeOff size={24} />
     </SettingSlot>
   )
 }

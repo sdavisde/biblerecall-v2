@@ -1,24 +1,27 @@
 'use client'
 
+import { Lodash } from '@util/lodash'
+import { LucideProps, LucideIcon } from 'lucide-react'
 import { useState } from 'react'
-import { IconType } from 'react-icons'
 
-interface HoveredProps extends React.HTMLAttributes<HTMLDivElement> {
-  DefaultComp: IconType
-  HoveredComp: IconType
-  type?: 'primary' | 'warning'
-  override?: boolean
+type HoveredProps = React.HTMLAttributes<HTMLDivElement> & {
+  DefaultComp: LucideIcon
+  HoveredComp?: LucideIcon
+  defaultProps?: LucideProps
+  hoveredProps?: LucideProps
 }
 
-export default function Hovered({ HoveredComp, DefaultComp, type, override, ...props }: HoveredProps) {
+export function Hovered({ HoveredComp, DefaultComp, defaultProps, hoveredProps, ...props }: HoveredProps) {
   const [isHovered, setIsHovered] = useState(false)
+  const Component = Lodash.defaults(isHovered ? HoveredComp : DefaultComp, DefaultComp)
+
   return (
-    <div
+    <span
       onMouseOver={() => setIsHovered(true)}
       onMouseOut={() => setIsHovered(false)}
       {...props}
     >
-      {isHovered ? <HoveredComp color={type ?? 'primary'} /> : <DefaultComp color={override ? type : 'inherit'} />}
-    </div>
+      <Component {...(isHovered ? hoveredProps : defaultProps)} />
+    </span>
   )
 }

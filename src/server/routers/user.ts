@@ -1,4 +1,4 @@
-import { User } from 'types/api'
+import { SignedInUser } from 'types/api'
 import { publicProcedure, router } from 'server/trpc'
 
 /**
@@ -8,7 +8,7 @@ import { publicProcedure, router } from 'server/trpc'
  */
 
 export const userRouter = router({
-  get: publicProcedure.query(async ({ ctx }): Promise<User | null> => {
+  get: publicProcedure.query(async ({ ctx }): Promise<SignedInUser | null> => {
     const { user } = ctx
     return user
   }),

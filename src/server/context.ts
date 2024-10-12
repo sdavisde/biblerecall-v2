@@ -3,7 +3,7 @@
 import { clientConfig, serverConfig } from 'firebase-config'
 import { getTokens } from 'next-firebase-auth-edge'
 import { cookies } from 'next/headers'
-import { ApiContext, RequestType, User } from 'types/api'
+import { ApiContext, RequestType, SignedInUser } from 'types/api'
 
 /**
  * 1. CONTEXT

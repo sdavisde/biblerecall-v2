@@ -5,8 +5,8 @@ import { useSettings } from 'hooks/use-settings'
 import { setThemeInDocument } from 'components/Settings/Settings'
 import { Theme } from '@configuration/settings'
 import { SettingSlot } from '@components/Settings/SettingSlot'
-import { LuMoonStar } from 'react-icons/lu'
-import { LuSunMoon } from 'react-icons/lu'
+import { Moon } from 'lucide-react'
+import { Sun } from 'lucide-react'
 
 export function ThemeSelect() {
   const [settings, setSettings] = useSettings()
@@ -34,7 +34,7 @@ export function ThemeSelect() {
       selectedValue={colorTheme}
       setter={setColorTheme}
     >
-      {colorTheme === Theme.System || colorTheme === Theme.Dark ? <LuMoonStar size={24} /> : <LuSunMoon size={24} />}
+      {colorTheme === Theme.System || colorTheme === Theme.Dark ? <Moon size={24} /> : <Sun size={24} />}
     </SettingSlot>
   )
 }

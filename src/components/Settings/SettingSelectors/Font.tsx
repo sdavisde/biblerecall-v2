@@ -4,7 +4,7 @@ import { useSettings } from 'hooks/use-settings'
 import { useEffect, useState } from 'react'
 import { Font } from '@configuration/settings'
 import { SettingSlot } from '../SettingSlot'
-import { AiOutlineFontSize } from 'react-icons/ai'
+import { ALargeSmall } from 'lucide-react'
 
 export function FontSelect() {
   const [settings, setSettings] = useSettings()
@@ -26,7 +26,7 @@ export function FontSelect() {
       selectedValue={font}
       setter={setFont}
     >
-      <AiOutlineFontSize size={24} />
+      <ALargeSmall size={24} />
     </SettingSlot>
   )
 }
