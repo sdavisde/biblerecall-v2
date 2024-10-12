@@ -12,7 +12,7 @@ export default async function Settings() {
       <div className='w-full max-w-4xl flex flex-col justify-start'>
         {!user ? (
           <div className='centered flex-col'>
-            <h3 className='py-4'>Hmm, doesn't look like you are logged in. Please login to save settings</h3>
+            <h3 className='py-4'>Hmm, doesn&apos;t look like you are logged in. Please login to save settings</h3>
             {/* <span className='max-w-xs'> */}
             <GoogleLogin />
             {/* </span> */}
