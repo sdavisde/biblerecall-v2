@@ -1,5 +1,5 @@
-import Profile from '@components/Profile'
-import Settings from '@components/Settings/Settings'
+import { Profile } from '@components/Profile'
+import { Settings } from '@components/Settings/Settings'
 
 export default async function Navbar() {
   return (

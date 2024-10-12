@@ -4,9 +4,9 @@ import { ThemeSelect } from './SettingSelectors/Theme'
 import { VisibilitySelect } from './SettingSelectors/Visibility'
 import { FontSelect } from './SettingSelectors/Font'
 
-export default function Settings({}) {
+export function Settings() {
   return (
-    <div className='flex'>
+    <div className='flex gap-2 ms-2'>
       <FontSelect />
       <VisibilitySelect />
       <ThemeSelect />

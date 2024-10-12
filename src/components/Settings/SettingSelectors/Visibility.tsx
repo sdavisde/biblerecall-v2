@@ -26,7 +26,7 @@ export function VisibilitySelect() {
       selectedValue={visibility}
       setter={setVisibility}
     >
-      <FaEyeLowVision />
+      <FaEyeLowVision size={24} />
     </SettingSlot>
   )
 }

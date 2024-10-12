@@ -34,7 +34,7 @@ export function ThemeSelect() {
       selectedValue={colorTheme}
       setter={setColorTheme}
     >
-      {colorTheme === Theme.System || colorTheme === Theme.Dark ? <LuMoonStar /> : <LuSunMoon />}
+      {colorTheme === Theme.System || colorTheme === Theme.Dark ? <LuMoonStar size={24} /> : <LuSunMoon size={24} />}
     </SettingSlot>
   )
 }

@@ -5,13 +5,11 @@ import Darkbox from '@components/common/Darkbox'
 import Controlled from './util/Controlled'
 import CloseIcon from './icons/CloseIcon'
 import { signInWithGoogle } from '@lib/firebase'
-import { useRouter } from 'next/navigation'
 
 type LoginboxProps = {}
 
 const Loginbox = ({}: LoginboxProps) => {
   const [showBox, setShowBox] = useState(true)
-  const router = useRouter()
 
   const handleGoogleLogin = async () => {
     try {
@@ -20,8 +18,7 @@ const Loginbox = ({}: LoginboxProps) => {
         throw new Error('google signin failed')
       }
 
-      // todo: this isn't actually refreshing the data on the page
-      router.push('/home')
+      location.reload()
     } catch (error) {
       console.error('Google login failed:', error)
     }

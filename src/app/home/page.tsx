@@ -23,7 +23,7 @@ export default async function Home() {
           <h4 className='text-base centered ml-4'>My Verses</h4>
         </div>
         <hr className='w-full bg-darkGrey h-[2px]' />
-        {!user.hasValue && <Loginbox />}
+        {!user && <Loginbox />}
         <AddVerse />
         <VerseList />
       </div>

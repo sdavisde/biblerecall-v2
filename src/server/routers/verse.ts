@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { Cookies } from '@lib/providers/cookies'
 import { Database } from '@lib/providers/database'
 import { verseSchema } from 'types/verse'
-import { RequestType } from 'server/context'
+import { RequestType } from 'types/api'
 
 /**
  * Verses API Routes

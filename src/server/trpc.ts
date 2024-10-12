@@ -1,5 +1,5 @@
 import { initTRPC } from '@trpc/server'
-import { ApiContext } from './context'
+import { ApiContext } from 'types/api'
 
 /**
  * Initialization of tRPC backend

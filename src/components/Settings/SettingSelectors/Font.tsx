@@ -26,7 +26,7 @@ export function FontSelect() {
       selectedValue={font}
       setter={setFont}
     >
-      <AiOutlineFontSize />
+      <AiOutlineFontSize size={24} />
     </SettingSlot>
   )
 }

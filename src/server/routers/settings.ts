@@ -4,7 +4,7 @@ import { ErrorCode } from '@util/error'
 import { Lodash } from '@util/lodash'
 import { Result } from '@util/result'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
-import { RequestType } from 'server/context'
+import { RequestType } from 'types/api'
 import { publicProcedure, router } from 'server/trpc'
 
 /**

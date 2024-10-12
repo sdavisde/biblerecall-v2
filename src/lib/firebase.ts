@@ -39,8 +39,11 @@ const signInWithGoogle = async () => {
 }
 
 const logout = async () => {
-  signOut(auth)
-  return await fetch('/api/logout')
+  const signedOutPromise = signOut(auth)
+  const serverLogoutPromise = fetch('/api/logout')
+  await Promise.all([signedOutPromise, serverLogoutPromise])
+
+  location.reload()
 }
 
 export { auth, database, signInWithGoogle, logout }

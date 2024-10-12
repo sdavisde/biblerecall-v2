@@ -2,27 +2,8 @@
 
 import { clientConfig, serverConfig } from 'firebase-config'
 import { getTokens } from 'next-firebase-auth-edge'
-import { DecodedIdToken } from 'next-firebase-auth-edge/lib/auth/token-verifier'
 import { cookies } from 'next/headers'
-
-export enum RequestType {
-  Cookie = 'cookie',
-  Database = 'db',
-}
-
-type CookieRequestContext = {
-  type: RequestType.Cookie
-  user: null
-}
-
-export type User = DecodedIdToken
-
-type DBRequestContext = {
-  type: RequestType.Database
-  user: User
-}
-
-export type ApiContext = DBRequestContext | CookieRequestContext
+import { ApiContext, RequestType, User } from 'types/api'
 
 /**
  * 1. CONTEXT
