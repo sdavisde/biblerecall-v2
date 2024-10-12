@@ -1,5 +1,4 @@
 import { Profile } from '@components/Profile'
-import { Settings } from '@components/Settings/Settings'
 import { ThemeSelect } from '@components/Settings/SettingSelectors/Theme'
 import { VisibilitySelect } from '@components/Settings/SettingSelectors/Visibility'
 import { FontSelect } from '@components/Settings/SettingSelectors/Font'

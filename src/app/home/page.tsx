@@ -18,9 +18,9 @@ export default async function Home() {
         {/* <h1 className='flag relative w-[80%] h-12 text-md centered drop-shadow bg-red scale-90 text-center px-4 mb-4'>
           This app is in beta testing, verses and functionality may break until release
         </h1> */}
-        <div className='w-full h-12 flex ml-6'>
+        <div className='w-full flex items-center ml-6'>
           <BookIcon className='w-10 fill-white' />
-          <h1 className='text-base centered ml-4'>My Verses</h1>
+          <h1 className='ml-4'>My Verses</h1>
         </div>
         <hr className='w-full bg-darkGrey h-[2px]' />
         {!user && <Loginbox />}

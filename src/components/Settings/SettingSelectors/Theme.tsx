@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { useSettings } from 'hooks/use-settings'
-import { setThemeInDocument } from 'components/Settings/Settings'
 import { Theme } from '@configuration/settings'
 import { SettingSlot } from '@components/Settings/SettingSlot'
 import { Moon } from 'lucide-react'
 import { Sun } from 'lucide-react'
+import { setThemeInDocument } from '@components/Settings'
 
 export function ThemeSelect() {
   const [settings, setSettings] = useSettings()

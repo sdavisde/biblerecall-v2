@@ -1,10 +1,10 @@
 'use client'
 
 import { PropsWithChildren, createContext, useEffect, useState } from 'react'
-import { setThemeInDocument } from './Settings'
 import { DEFAULT_SETTINGS, Settings } from '@configuration/settings'
 import { getSettingsFromLocalStorage, setSettingsIntoLocalStorage } from '@lib/local-storage'
 import Script from 'next/script'
+import { setThemeInDocument } from '@components/Settings'
 
 type SettingsContext = {
   settings: Settings | null

@@ -63,12 +63,8 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
               {verse.book.name} {verse.chapter}:{verse.start}
               {verse.end ? `-${verse.end}` : ''}
             </h4>
-            <div className='w-1/6 flex justify-end pr-3'>
-              {settings?.visibility === 'none' && (
-                <div className='scale-[1.5] mr-3'>
-                  <PlayIcon verse={verse} />
-                </div>
-              )}
+            <div className='w-1/6 flex justify-end gap-2 pr-3'>
+              {settings?.visibility === 'none' && <PlayIcon verse={verse} />}
               <FavoriteIcon verse={verse} />
             </div>
           </Lightbox>
@@ -77,11 +73,7 @@ const VerseBox = ({ verse, className }: VerseBoxProps) => {
               text={verse.text}
               visibility={settings?.visibility ?? Visibility.Full}
             />
-            {settings?.visibility !== 'none' && (
-              <div className='w-[12%] centered scale-[1.5]'>
-                <PlayIcon verse={verse} />
-              </div>
-            )}
+            {settings?.visibility !== 'none' && <PlayIcon verse={verse} />}
           </Darkbox>
         </div>
       )}

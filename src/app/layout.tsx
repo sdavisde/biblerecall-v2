@@ -5,6 +5,11 @@ import localFont from 'next/font/local'
 import { Analytics } from '@vercel/analytics/react'
 import { TRPCReactProvider } from '@lib/trpc/client'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import VersesProvider from '@components/providers/VersesProvider'
+import { SettingsProvider } from '@components/Settings/Provider'
+import { api } from '@lib/trpc/server'
+import { GoogleOAuthProvider } from '@react-oauth/google'
+import { clientConfig } from 'firebase-config'
 
 const urbanist = Urbanist({
   subsets: ['latin'],
@@ -62,7 +67,10 @@ export const metadata: Metadata = {
   description: "Memorize, Meditate, Connect with God's Word",
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const versesResult = await api.verse.allByUser()
+  const settingsResult = await api.settings.get()
+
   return (
     <html
       lang='en'
@@ -70,7 +78,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <TRPCReactProvider>
-        <body>{children}</body>
+        <GoogleOAuthProvider clientId={clientConfig.googleClientId}>
+          <SettingsProvider authUserSettings={settingsResult.hasValue ? settingsResult.value : null}>
+            <VersesProvider verses={versesResult.hasValue ? versesResult.value : null}>
+              <body>{children}</body>
+            </VersesProvider>
+          </SettingsProvider>
+        </GoogleOAuthProvider>
       </TRPCReactProvider>
       <Analytics />
       <SpeedInsights />
