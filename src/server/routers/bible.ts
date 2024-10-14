@@ -35,38 +35,38 @@ export type KeplinVersion = {
 export const bibleRouter = router({
   getVerse: publicProcedure
     .input(z.object({ reference: z.string(), version: z.string() }))
-    .query(async ({ ctx, input }) => {
+    .query<Result<any>>(async ({ ctx, input }) => {
       const { reference, version } = input
 
-      const verseResult = Verses.createVerse(reference)
+      // const verseResult = Verses.createVerse(reference)
 
-      if (!verseResult.hasValue) {
-        return verseResult
-      }
+      // if (!verseResult.hasValue) {
+      //   return verseResult
+      // }
 
-      const verse = verseResult.value
-      // Fetch is cached via the framework so this only refetches when url changes
-      const url = `https://bible-go-api.rkeplin.com/v1/books/${verse.book.id}/chapters/${verse.chapter}?translation=${version}`
-      const data = await fetch(url)
+      // const verse = verseResult.value
+      // // Fetch is cached via the framework so this only refetches when url changes
+      // const url = `https://bible-go-api.rkeplin.com/v1/books/${verse.book.id}/chapters/${verse.chapter}?translation=${version}`
+      // const data = await fetch(url)
 
-      if (Lodash.isNil(data)) {
-        return Result.failure({ code: ErrorCode.FAILED_TO_FETCH, message: 'Failed to fetch' })
-      }
+      // if (Lodash.isNil(data)) {
+      return Result.failure({ code: ErrorCode.FAILED_TO_FETCH, message: 'Failed to fetch' })
+      // }
 
-      const fetchedVerses = (await data.json()) as KeplinVerse[]
+      // const fetchedVerses = (await data.json()) as KeplinVerse[]
 
-      const startIndex = fetchedVerses.findIndex((v) => v.verseId === verse.start)
-      const end = fetchedVerses.findIndex((v) => v.verseId === verse.end)
+      // const startIndex = fetchedVerses.findIndex((v) => v.verseId === verse.start)
+      // const end = fetchedVerses.findIndex((v) => v.verseId === verse.end)
 
-      const endIndex = end >= 0 ? end : startIndex
+      // const endIndex = end >= 0 ? end : startIndex
 
-      const verseText =
-        fetchedVerses
-          .slice(startIndex, endIndex + 1)
-          .map((v) => v.verse)
-          .join(' ') ?? 'Verse text not found'
+      // const verseText =
+      //   fetchedVerses
+      //     .slice(startIndex, endIndex + 1)
+      //     .map((v) => v.verse)
+      //     .join(' ') ?? 'Verse text not found'
 
-      return Result.success({ verseText, verseReference: reference })
+      // return Result.success({ verseText, verseReference: reference })
     }),
   getVersions: publicProcedure.query(async () => {
     const data = await fetch('https://bible-go-api.rkeplin.com/v1/translations', {})

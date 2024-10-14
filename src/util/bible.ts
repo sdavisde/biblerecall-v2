@@ -1660,4 +1660,4 @@ export const BIBLE_BOOKS_SKELETON: Array<BookSkeleton> = [
       '22': 21,
     },
   },
-] as const
+]
