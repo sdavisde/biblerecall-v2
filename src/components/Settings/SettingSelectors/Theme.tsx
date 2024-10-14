@@ -16,9 +16,11 @@ export function ThemeSelect() {
   useEffect(() => {
     const updateSettings = async () => {
       if (settings && colorTheme !== settings?.theme) {
-        await setSettings({ ...settings, theme: colorTheme })
         // Async func used here to keep from changing the UI on the site until the settings are set on the server (db or cookies)
-        setThemeInDocument(settings?.theme)
+        const newSettings = await setSettings({ ...settings, theme: colorTheme })
+        if (newSettings) {
+          setThemeInDocument(newSettings?.theme)
+        }
       }
     }
 

@@ -1,3 +1,5 @@
+// 'use client'
+
 import { Theme } from '@configuration/settings'
 import { Lodash } from '@util/lodash'
 
@@ -10,6 +12,7 @@ export type SelectorOption<Value extends string = string> = {
  * Setting a new theme value into the document
  */
 export const setThemeInDocument = (theme: Theme) => {
+  console.log(`setting ${theme} into document`)
   if (!theme || Lodash.isNil(document)) {
     return
   }

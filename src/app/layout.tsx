@@ -5,7 +5,6 @@ import localFont from 'next/font/local'
 import { Analytics } from '@vercel/analytics/react'
 import { TRPCReactProvider } from '@lib/trpc/client'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import VersesProvider from '@components/providers/VersesProvider'
 import { SettingsProvider } from '@components/Settings/Provider'
 import { api } from '@lib/trpc/server'
 import { GoogleOAuthProvider } from '@react-oauth/google'
@@ -68,7 +67,6 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const versesResult = await api.verse.allByUser()
   const settingsResult = await api.settings.get()
 
   return (
@@ -80,9 +78,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <TRPCReactProvider>
         <GoogleOAuthProvider clientId={clientConfig.googleClientId}>
           <SettingsProvider authUserSettings={settingsResult.hasValue ? settingsResult.value : null}>
-            <VersesProvider verses={versesResult.hasValue ? versesResult.value : null}>
-              <body>{children}</body>
-            </VersesProvider>
+            {/* IMPORTANT: This body tag gets swapped out in `SettingsProvider`, but needs to be here so the server doesn't throw hydration errors */}
+            <body>{children}</body>
           </SettingsProvider>
         </GoogleOAuthProvider>
       </TRPCReactProvider>

@@ -48,8 +48,9 @@ export const SettingsProvider = ({
   return (
     <>
       {/* This script is responsible for blocking page load until theme has been set, preventing flickering */}
-      <Script
+      {/* <Script
         id='settings-script'
+        defer
         dangerouslySetInnerHTML={{
           __html: `
         const theme = localStorage.theme
@@ -63,8 +64,7 @@ export const SettingsProvider = ({
         }
       `,
         }}
-        defer
-      ></Script>
+      /> */}
       <SettingsContext.Provider
         value={{
           settings: settingsState,
@@ -73,7 +73,9 @@ export const SettingsProvider = ({
       >
         {/* This component must be wrapping all of the application except for the HTML tags
             settingsState should always be defined */}
-        <body className={`font-${settingsState?.font}`}>{children}</body>
+        <body className={`font-${settingsState?.font} bg-lightGrey dark:bg-black text-black dark:text-white`}>
+          {children}
+        </body>
       </SettingsContext.Provider>
     </>
   )

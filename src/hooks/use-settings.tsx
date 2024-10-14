@@ -16,11 +16,14 @@ export const useSettings = () => {
     const res = await settingsMutation.mutateAsync(newSettings)
     if (res.hasValue) {
       setSettings(res.value)
+      return newSettings
     } else if (res.error.code === ErrorCode.NOT_LOGGED_IN) {
       setSettingsIntoLocalStorage(newSettings)
       setSettings(newSettings)
+      return newSettings
     } else {
       toast.error('Error saving settings. Please reload the page and try again.')
+      return null
     }
   }
 
