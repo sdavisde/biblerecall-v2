@@ -1,9 +1,10 @@
-import { Verses } from '@util/bible'
+import { Verses } from '@util/verses'
 import { ErrorCode } from '@util/error'
 import { Lodash } from '@util/lodash'
 import { Result } from '@util/result'
 import { publicProcedure, router } from 'server/trpc'
 import { z } from 'zod'
+import { BIBLE_BOOKS_SKELETON } from '@util/bible'
 
 export type KeplinVerse = {
   id: number
@@ -90,5 +91,8 @@ export const bibleRouter = router({
     })
 
     return Result.success(versions)
+  }),
+  getSkeleton: publicProcedure.query(async () => {
+    return Object.fromEntries(BIBLE_BOOKS_SKELETON.map((book) => [book.name, book]))
   }),
 })

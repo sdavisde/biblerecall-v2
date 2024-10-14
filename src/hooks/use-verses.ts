@@ -5,7 +5,7 @@ import { VersesContext } from '@components/providers/VersesProvider'
 import toast from 'react-hot-toast'
 import { api } from '@lib/trpc/client'
 import { Verse } from 'types/verse'
-import { Verses } from '@util/bible'
+import { Verses } from '@util/verses'
 
 export const useVerses = () => {
   const { verses, setVerses } = useContext(VersesContext)
@@ -23,7 +23,7 @@ export const useVerses = () => {
         } else {
           toast.error(addResult.error.message)
         }
-        break
+        return addResult
       case 'update':
         const updateResult = await updateMutation.mutateAsync(verse)
         if (updateResult.hasValue) {
@@ -32,7 +32,7 @@ export const useVerses = () => {
         } else {
           toast.error(updateResult.error.message)
         }
-        break
+        return updateResult
       case 'delete':
         const deleteResult = await deleteMutation.mutateAsync(verse.id)
         if (deleteResult.hasValue) {
@@ -41,7 +41,7 @@ export const useVerses = () => {
         } else {
           toast.error(deleteResult.error.message)
         }
-        break
+        return deleteResult
     }
   }
 

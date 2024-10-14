@@ -77,21 +77,23 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       className={`bg-lightGrey dark:bg-black text-black dark:text-white ${urbanist.variable} ${openDyslexic.variable} ${satisfy.variable} ${rockSalt.variable} font-satisfy font-rockSalt font-openDyslexic font-urbanist`}
       suppressHydrationWarning
     >
-      <ThemeProvider
-        defaultTheme={settingsResult.hasValue ? settingsResult.value?.theme : undefined}
-        attribute='class'
-      >
-        <TRPCReactProvider>
-          <GoogleOAuthProvider clientId={clientConfig.googleClientId}>
-            <SettingsProvider authUserSettings={settingsResult.hasValue ? settingsResult.value : null}>
-              {/* IMPORTANT: This body tag gets swapped out in `SettingsProvider`, but needs to be here so the server doesn't throw hydration errors */}
-              <body suppressHydrationWarning>{children}</body>
-            </SettingsProvider>
-          </GoogleOAuthProvider>
-        </TRPCReactProvider>
-        <Analytics />
-        <SpeedInsights />
-      </ThemeProvider>
+      {/* IMPORTANT: This body tag gets swapped out in `SettingsProvider`, but needs to be here so the server doesn't throw hydration errors */}
+      <body suppressHydrationWarning>
+        <ThemeProvider
+          defaultTheme={settingsResult.hasValue ? settingsResult.value?.theme : undefined}
+          attribute='class'
+        >
+          <TRPCReactProvider>
+            <GoogleOAuthProvider clientId={clientConfig.googleClientId}>
+              <SettingsProvider authUserSettings={settingsResult.hasValue ? settingsResult.value : null}>
+                {children}
+              </SettingsProvider>
+            </GoogleOAuthProvider>
+          </TRPCReactProvider>
+          <Analytics />
+          <SpeedInsights />
+        </ThemeProvider>
+      </body>
     </html>
   )
 }

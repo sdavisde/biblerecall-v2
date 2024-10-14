@@ -1,49 +1,29 @@
 'use client'
 
-import { useState } from 'react'
-import Lightbox from '@components/common/Lightbox'
-import UpdateVerse from '@components/verse/UpdateVerse'
 import { useVerses } from 'hooks/use-verses'
-import useOutsideClick from 'hooks/use-outside-click'
 import { Verse } from 'types/verse'
+import { VerseSelect } from './VerseSelect'
+import { Button } from '@components/ui/button'
 
 type AddVerseProps = {}
 const AddVerse = ({}: AddVerseProps) => {
   const [, dispatchVerses] = useVerses()
-  const [addingVerse, setAddingVerse] = useState(false)
-  const { ref } = useOutsideClick(() => setAddingVerse(false))
 
   const submitNewVerse = async (verse: Verse) => {
     // non null assertion is okay because validateReference guarantees verse is defined
-    await dispatchVerses(verse, 'add')
-    setAddingVerse(false)
+    return await dispatchVerses(verse, 'add')
   }
 
   return (
-    <>
-      {addingVerse ? (
-        <div
-          className='w-full'
-          ref={ref}
-        >
-          <UpdateVerse
-            id=''
-            reference=''
-            text=''
-            onSubmit={submitNewVerse}
-          />
-        </div>
-      ) : (
-        <div
-          onClick={() => setAddingVerse(true)}
-          className='w-full hover:cursor-pointer'
-        >
-          <Lightbox className='rounded dark:!bg-charcoal'>
-            <h5 className='centered'>+ Add Verse</h5>
-          </Lightbox>
-        </div>
-      )}
-    </>
+    <VerseSelect submitVerse={submitNewVerse}>
+      <Button
+        variant='outline'
+        className='w-full'
+        asDiv
+      >
+        + Add Verse
+      </Button>
+    </VerseSelect>
   )
 }
 

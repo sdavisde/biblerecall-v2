@@ -5,11 +5,8 @@ import { ArrowRight } from 'lucide-react'
 import Lightbox from '@components/common/Lightbox'
 import Darkbox from '@components/common/Darkbox'
 import LoadingDots from '@components/loading/LoadingDots'
-import toast from 'react-hot-toast'
 import { Verse } from 'types/verse'
-import { Verses } from '@util/bible'
 import { api } from '@lib/trpc/client'
-import { Lodash } from '@util/lodash'
 
 type UpdateVerseProps = {
   id: string
@@ -27,18 +24,18 @@ const UpdateVerse = (props: UpdateVerseProps) => {
 
   const submitNewVerse = async () => {
     const text = verseText.data?.hasValue ? verseText.data.value.verseText : ''
-    const verse = Verses.createVerse(reference, { id: props.id, text: text, version })
+    // const verse = Verses.createVerse(reference, { id: props.id, text: text, version })
 
-    if (!verse.hasValue) {
-      console.error(verse.error)
-      toast.error('Invalid reference format, please enter your verse like: John 3:16 or John 3:16-17')
-    } else if (!verse) {
-      toast.error('Error adding verse, check that the verse is using the correct format')
-    } else if (Lodash.isEmpty(text)) {
-      toast.error('Could not find verse, does this verse exist?')
-    } else if (!verseText.isLoading && !verseText.isFetching) {
-      await props.onSubmit(verse.value)
-    }
+    // if (!verse.hasValue) {
+    //   console.error(verse.error)
+    //   toast.error('Invalid reference format, please enter your verse like: John 3:16 or John 3:16-17')
+    // } else if (!verse) {
+    //   toast.error('Error adding verse, check that the verse is using the correct format')
+    // } else if (Lodash.isEmpty(text)) {
+    //   toast.error('Could not find verse, does this verse exist?')
+    // } else if (!verseText.isLoading && !verseText.isFetching) {
+    //   await props.onSubmit(verse.value)
+    // }
   }
 
   return (

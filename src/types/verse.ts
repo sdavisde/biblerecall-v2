@@ -1,4 +1,4 @@
-import { Bible } from '@util/bible'
+import { Bible } from '@util/verses'
 import { z } from 'zod'
 
 export enum Testament {
@@ -25,14 +25,16 @@ export type VerseMetadata = {
  * Details of a reference for a verse (the location inside the bible this verse resides)
  */
 export type VerseReference = {
-  book: {
-    id: number
-    name: string
-    testament: Testament
-  }
+  book: Book
   chapter: number
   start: number
   end: number | null
+}
+
+export type Book = {
+  id: number
+  name: string
+  testament: Testament
 }
 
 export type BookNames = (typeof Bible.books)[number]['name']

@@ -1,5 +1,4 @@
 import { LandingPageBibleSplash } from '@components/icons/LandingPageBibleSplash'
-import Image from 'next/image'
 import Link from 'next/link'
 
 export default function Landing() {
