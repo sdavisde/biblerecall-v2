@@ -3,12 +3,14 @@ import './globals.css'
 import { Urbanist, Rock_Salt, Satisfy } from 'next/font/google'
 import localFont from 'next/font/local'
 import { Analytics } from '@vercel/analytics/react'
-import { TRPCReactProvider } from '@lib/trpc/client'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { GoogleOAuthProvider } from '@react-oauth/google'
+
+import { TRPCReactProvider } from '@lib/trpc/client'
 import { SettingsProvider } from '@components/Settings/Provider'
 import { api } from '@lib/trpc/server'
-import { GoogleOAuthProvider } from '@react-oauth/google'
 import { clientConfig } from 'firebase-config'
+import { ThemeProvider } from 'next-themes'
 
 const urbanist = Urbanist({
   subsets: ['latin'],
@@ -79,7 +81,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <GoogleOAuthProvider clientId={clientConfig.googleClientId}>
           <SettingsProvider authUserSettings={settingsResult.hasValue ? settingsResult.value : null}>
             {/* IMPORTANT: This body tag gets swapped out in `SettingsProvider`, but needs to be here so the server doesn't throw hydration errors */}
-            <body>{children}</body>
+            <body>
+              <ThemeProvider
+                defaultTheme={settingsResult.hasValue ? settingsResult.value?.theme : undefined}
+                attribute='class'
+              >
+                {children}
+              </ThemeProvider>
+            </body>
           </SettingsProvider>
         </GoogleOAuthProvider>
       </TRPCReactProvider>

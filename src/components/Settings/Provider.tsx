@@ -3,8 +3,7 @@
 import { PropsWithChildren, createContext, useEffect, useState } from 'react'
 import { DEFAULT_SETTINGS, Settings } from '@configuration/settings'
 import { getSettingsFromLocalStorage, setSettingsIntoLocalStorage } from '@lib/local-storage'
-import Script from 'next/script'
-import { setThemeInDocument } from '@components/Settings'
+import { useTheme } from 'next-themes'
 
 type SettingsContext = {
   settings: Settings | null
@@ -25,6 +24,7 @@ export const SettingsProvider = ({
   children,
 }: PropsWithChildren<{ authUserSettings: Settings | null }>) => {
   const [settingsState, setSettingsState] = useState<Settings | null>(null)
+  const { setTheme } = useTheme()
 
   useEffect(() => {
     //get settings from local storage as initial page load default
@@ -37,46 +37,26 @@ export const SettingsProvider = ({
     if (authUserSettings) {
       setSettingsState(authUserSettings)
       setSettingsIntoLocalStorage(authUserSettings)
-      setThemeInDocument(authUserSettings.theme)
+      setTheme(authUserSettings.theme)
     } else {
       const localStorageSettings = getSettingsFromLocalStorage() ?? DEFAULT_SETTINGS
       setSettingsIntoLocalStorage(localStorageSettings)
-      setThemeInDocument(localStorageSettings.theme)
+      setTheme(localStorageSettings.theme)
     }
   }, [authUserSettings])
 
   return (
-    <>
-      {/* This script is responsible for blocking page load until theme has been set, preventing flickering */}
-      {/* <Script
-        id='settings-script'
-        defer
-        dangerouslySetInnerHTML={{
-          __html: `
-        const theme = localStorage.theme
-        
-        if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          if (!document.documentElement.classList.contains('dark')) {
-            document.documentElement.classList.add('dark')
-          }
-        } else {
-          document.documentElement.classList.remove('dark')
-        }
-      `,
-        }}
-      /> */}
-      <SettingsContext.Provider
-        value={{
-          settings: settingsState,
-          setSettings: setSettingsState,
-        }}
-      >
-        {/* This component must be wrapping all of the application except for the HTML tags
+    <SettingsContext.Provider
+      value={{
+        settings: settingsState,
+        setSettings: setSettingsState,
+      }}
+    >
+      {/* This component must be wrapping all of the application except for the HTML tags
             settingsState should always be defined */}
-        <body className={`font-${settingsState?.font} bg-lightGrey dark:bg-black text-black dark:text-white`}>
-          {children}
-        </body>
-      </SettingsContext.Provider>
-    </>
+      <body className={`font-${settingsState?.font} bg-lightGrey dark:bg-black text-black dark:text-white`}>
+        {children}
+      </body>
+    </SettingsContext.Provider>
   )
 }

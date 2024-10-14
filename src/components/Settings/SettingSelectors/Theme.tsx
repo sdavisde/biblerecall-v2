@@ -1,31 +1,31 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useSettings } from 'hooks/use-settings'
 import { Theme } from '@configuration/settings'
 import { SettingSlot } from '@components/Settings/SettingSlot'
 import { Moon } from 'lucide-react'
 import { Sun } from 'lucide-react'
-import { setThemeInDocument } from '@components/Settings'
+import { useTheme } from 'next-themes'
 
 export function ThemeSelect() {
   const [settings, setSettings] = useSettings()
-  const [colorTheme, setColorTheme] = useState<Theme>(settings?.theme ?? Theme.System)
+  const { theme, resolvedTheme, setTheme } = useTheme()
 
   // Update user preferences when color theme changes
   useEffect(() => {
     const updateSettings = async () => {
-      if (settings && colorTheme !== settings?.theme) {
+      if (settings && theme !== settings?.theme) {
         // Async func used here to keep from changing the UI on the site until the settings are set on the server (db or cookies)
-        const newSettings = await setSettings({ ...settings, theme: colorTheme })
+        const newSettings = await setSettings({ ...settings, theme: theme as Theme })
         if (newSettings) {
-          setThemeInDocument(newSettings?.theme)
+          setTheme(newSettings.theme)
         }
       }
     }
 
     updateSettings()
-  }, [colorTheme])
+  }, [theme])
 
   return (
     <SettingSlot
@@ -33,10 +33,10 @@ export function ThemeSelect() {
         label,
         value,
       }))}
-      selectedValue={colorTheme}
-      setter={setColorTheme}
+      selectedValue={theme!}
+      setter={setTheme}
     >
-      {colorTheme === Theme.System || colorTheme === Theme.Dark ? <Moon size={24} /> : <Sun size={24} />}
+      {resolvedTheme === Theme.Dark ? <Moon size={24} /> : <Sun size={24} />}
     </SettingSlot>
   )
 }
