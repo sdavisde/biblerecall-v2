@@ -3,7 +3,7 @@ import { ErrorCode } from '@util/error'
 import { Lodash } from '@util/lodash'
 import { Result } from '@util/result'
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore'
-import { Verse } from 'types/verse'
+import { Verse } from 'service/verse/types'
 
 export namespace Database {
   type GetVerseRequest = {

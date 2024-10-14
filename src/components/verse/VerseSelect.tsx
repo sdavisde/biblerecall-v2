@@ -1,6 +1,7 @@
 'use client'
 
 import toast from 'react-hot-toast'
+import { v4 as uuidv4 } from 'uuid'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@components/ui/accordion'
 import { Button } from '@components/ui/button'
 import {
@@ -14,51 +15,47 @@ import {
 } from '@components/ui/drawer'
 import { Bible, Verses } from '@util/verses'
 import { Result } from '@util/result'
-import { PropsWithChildren, useEffect, useMemo, useState } from 'react'
-import { Book, Verse, VerseReference } from 'types/verse'
+import { PropsWithChildren, useMemo, useState } from 'react'
 import { Lodash } from '@util/lodash'
 import { api } from '@lib/trpc/client'
 import LoadingDots from '@components/loading/LoadingDots'
+import { VerseBuilder } from 'service/verse'
+import { Book, Verse } from 'service/verse/types'
 
 type VerseSelectProps = PropsWithChildren<{
   submitVerse: (verse: Verse) => Promise<Result<unknown>>
 }>
 
+type VerseSelectorAccordions = 'books' | 'chapters' | 'verses' | 'review'
+
 export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false)
-  const [activeAccordion, setActiveAccordion] = useState<'books' | 'chapters' | 'verses'>('books')
+  const [activeAccordion, setActiveAccordion] = useState<VerseSelectorAccordions>('books')
   const [submitting, setSubmitting] = useState(false)
 
-  const [book, setBook] = useState<Book | undefined>(undefined)
-  const [chapter, setChapter] = useState<number | undefined>(undefined)
-  const [verseStart, setVerseStart] = useState<number | undefined>(undefined)
-  const [verseEnd, setVerseEnd] = useState<number | undefined>(undefined)
-  const reference = useMemo<Partial<VerseReference>>(
-    () => ({ book, chapter, start: verseStart, end: verseEnd ?? verseStart }),
-    [book, chapter, verseStart, verseEnd]
-  )
-  const referenceIsComplete = useMemo(
-    () => Verses.parseReference(Verses.stringifyPartialReference(reference)).hasValue,
-    [reference]
-  )
-  const { chapters, isLoading: chaptersLoading } = useChapters(book)
-  const { verses, isLoading: versesLoading } = useVerses(book, chapter)
+  const [verseBuilder, setVerseBuilder] = useState<VerseBuilder>(new VerseBuilder())
+  const reference = useMemo(() => {
+    const newReference = verseBuilder.toReference()
+    return newReference.hasValue ? newReference.value : null
+  }, [verseBuilder.toString()])
+  const referenceString = useMemo(() => Verses.stringifyPartialReference(reference ?? {}), [reference])
+  const { chapters, isLoading: chaptersLoading } = useChapters(verseBuilder.book)
+  const { verses, isLoading: versesLoading } = useVerses(verseBuilder.book, verseBuilder.chapter)
+  const text = api.bible.getVerse.useQuery({ reference, version: verseBuilder.version })
 
-  const resetState = () => {
-    setBook(undefined)
-    setChapter(undefined)
-    setVerseStart(undefined)
-    setVerseEnd(undefined)
-  }
+  const resetState = () => setVerseBuilder(new VerseBuilder())
 
   const onSave = async () => {
     setSubmitting(true)
 
     try {
-      if (!referenceIsComplete) {
-        throw Error('Verse is malformed')
+      if (!text.data?.hasValue) {
+        throw Error(text.data?.error.message ?? 'verse text not found')
       }
-      const verse = Verses.createVerse(reference as VerseReference)
+
+      const randomId = uuidv4()
+      verseBuilder.withText(text.data.value.verseText).withId(uuidv4())
+      const verse = verseBuilder.toVerse()
       if (!verse.hasValue) {
         throw Error(verse.error.message)
       }
@@ -86,7 +83,7 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
         <DrawerClose className='absolute top-4 left-4'>Close</DrawerClose>
         <DrawerHeader>
           <DrawerTitle>New Verse</DrawerTitle>
-          <DrawerDescription>{Verses.stringifyPartialReference(reference)}</DrawerDescription>
+          <DrawerDescription>{referenceString}</DrawerDescription>
         </DrawerHeader>
         <Accordion
           type='single'
@@ -95,15 +92,16 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
         >
           <AccordionItem value='books'>
             <AccordionTrigger onClick={() => setActiveAccordion('books')}>Book</AccordionTrigger>
-            <AccordionContent className='max-h-52'>
+            <AccordionContent className='max-h-52 overflow-y-auto bg-gray-50'>
               {Bible.books.map((book) => (
                 <Button
                   key={book.id}
+                  variant='ghost'
+                  className='w-full justify-start'
                   onClick={() => {
-                    setBook(book)
+                    setVerseBuilder((prev) => prev.withBook(book))
                     setActiveAccordion('chapters')
                   }}
-                  variant='outline'
                 >
                   {book.name}
                 </Button>
@@ -112,10 +110,10 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
           </AccordionItem>
           <AccordionItem
             value='chapters'
-            disabled={Lodash.isNil(book)}
+            disabled={Lodash.isNil(verseBuilder.book)}
           >
             <AccordionTrigger onClick={() => setActiveAccordion('chapters')}>Chapter</AccordionTrigger>
-            <AccordionContent>
+            <AccordionContent className='max-h-52 overflow-y-auto grid grid-cols-6 gap-2'>
               {chaptersLoading ? (
                 <LoadingDots />
               ) : (
@@ -124,7 +122,7 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
                     key={chapter}
                     variant='outline'
                     onClick={() => {
-                      setChapter(chapter)
+                      setVerseBuilder((prev) => prev.withChapter(chapter))
                       setActiveAccordion('verses')
                     }}
                   >
@@ -136,10 +134,10 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
           </AccordionItem>
           <AccordionItem
             value='verses'
-            disabled={Lodash.isNil(chapter)}
+            disabled={Lodash.isNil(verseBuilder.chapter)}
           >
             <AccordionTrigger onClick={() => setActiveAccordion('verses')}>Verse(s)</AccordionTrigger>
-            <AccordionContent>
+            <AccordionContent className='max-h-52 overflow-y-auto grid grid-cols-6 gap-2'>
               {versesLoading ? (
                 <LoadingDots />
               ) : (
@@ -147,28 +145,41 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
                   <Button
                     key={index}
                     variant='outline'
-                    onClick={() => setVerseStart(index)}
+                    onClick={() => {
+                      setVerseBuilder((prev) => prev.withStart(index + 1))
+                      setActiveAccordion('review')
+                    }}
                   >
-                    {index}
+                    {index + 1}
                   </Button>
                 ))
               )}
             </AccordionContent>
           </AccordionItem>
+          <AccordionItem value='review'>
+            <AccordionTrigger>Review</AccordionTrigger>
+            <AccordionContent>
+              <h4>{referenceString}</h4>
+              <p>{text.data?.hasValue ? text.data.value.verseText : ''}</p>
+            </AccordionContent>
+          </AccordionItem>
         </Accordion>
-        <Button
-          onClick={onSave}
-          loading={submitting}
-          disabled={!referenceIsComplete}
-        >
-          Save Verse
-        </Button>
+        <div className='flex-1 flex justify-center items-end'>
+          <Button
+            onClick={onSave}
+            loading={submitting}
+            disabled={Lodash.isNil(reference)}
+            className='w-full'
+          >
+            Save Verse
+          </Button>
+        </div>
       </DrawerContent>
     </Drawer>
   )
 }
 
-const useChapters = (book: Book | undefined): { chapters: Array<number>; isLoading: boolean } => {
+const useChapters = (book: Book | null): { chapters: Array<number>; isLoading: boolean } => {
   const { data, isLoading } = api.bible.getSkeleton.useQuery()
 
   if (Lodash.isNil(book) || Lodash.isNil(data)) {
@@ -178,7 +189,7 @@ const useChapters = (book: Book | undefined): { chapters: Array<number>; isLoadi
   return { chapters: Object.keys(chaptersRecord).map((id) => parseInt(id)), isLoading }
 }
 
-const useVerses = (book: Book | undefined, chapter: number | undefined): { verses: number; isLoading: boolean } => {
+const useVerses = (book: Book | null, chapter: number | null): { verses: number; isLoading: boolean } => {
   const { data, isLoading } = api.bible.getSkeleton.useQuery()
 
   if (Lodash.isNil(book) || Lodash.isNil(chapter) || Lodash.isNil(data)) {

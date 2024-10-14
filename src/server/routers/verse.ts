@@ -2,8 +2,8 @@ import { publicProcedure, router } from 'server/trpc'
 import { z } from 'zod'
 import { Cookies } from '@lib/providers/cookies'
 import { Database } from '@lib/providers/database'
-import { verseSchema } from 'types/verse'
 import { RequestType } from 'types/api'
+import { verseSchema } from 'service/verse/types'
 
 /**
  * Verses API Routes

@@ -17,8 +17,8 @@ export type Verse = VerseReference & VerseMetadata
 export type VerseMetadata = {
   id: string
   text: string
-  version: string
   favorite: boolean
+  version: string
 }
 
 /**
@@ -40,8 +40,7 @@ export type Book = {
 export type BookNames = (typeof Bible.books)[number]['name']
 export type VerseReferenceString = `${string} ${number}:${number}` | `${string} ${number}:${number}${string}`
 
-export const verseSchema = z.object({
-  id: z.string(),
+export const verseReferenceSchema = z.object({
   book: z.object({
     id: z.number(),
     name: z.string(),
@@ -50,7 +49,12 @@ export const verseSchema = z.object({
   chapter: z.number(),
   start: z.number(),
   end: z.number().nullable(),
+})
+
+export const verseSchema = z.object({
+  ...verseReferenceSchema.shape,
+  id: z.string(),
   text: z.string(),
-  version: z.string(),
   favorite: z.boolean(),
+  version: z.string(),
 })

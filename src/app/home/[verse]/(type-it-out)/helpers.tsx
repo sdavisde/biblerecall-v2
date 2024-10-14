@@ -3,7 +3,7 @@
 import { ChangeEvent, RefObject, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import $ from 'jquery'
-import { Verse } from 'types/verse'
+import { Verse } from 'service/verse/types'
 
 export default function useHelpers(verse: Verse, inputRef: RefObject<HTMLInputElement>) {
   const [loading, setLoading] = useState(false)

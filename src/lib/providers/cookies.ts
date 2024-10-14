@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers'
-import { Verse } from 'types/verse'
+import { Verse } from 'service/verse/types'
 import { randomUUID } from 'crypto'
 import { Result } from '@util/result'
 import { ErrorCode } from '@util/error'

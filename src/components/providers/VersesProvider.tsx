@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useState } from 'react'
-import { Verse } from 'types/verse'
+import { Verse } from 'service/verse/types'
 
 type verseContext = {
   verses: Verse[]

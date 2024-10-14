@@ -5,7 +5,7 @@ import { Hovered } from '@components/util/Hovered'
 import { useVerses } from 'hooks/use-verses'
 import LoadingCircle from './LoadingCircle'
 import { useState } from 'react'
-import { Verse } from 'types/verse'
+import { Verse } from 'service/verse/types'
 
 type FavoriteIconProps = {
   verse: Verse

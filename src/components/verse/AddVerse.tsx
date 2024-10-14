@@ -1,7 +1,7 @@
 'use client'
 
 import { useVerses } from 'hooks/use-verses'
-import { Verse } from 'types/verse'
+import { Verse } from 'service/verse/types'
 import { VerseSelect } from './VerseSelect'
 import { Button } from '@components/ui/button'
 

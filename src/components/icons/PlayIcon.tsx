@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { LucideProps, Play } from 'lucide-react'
 import { Hovered } from '@components/util/Hovered'
-import { Verse } from 'types/verse'
+import { Verse } from 'service/verse/types'
 
 type PlayIconProps = LucideProps & {
   verse: Verse

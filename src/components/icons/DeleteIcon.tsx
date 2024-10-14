@@ -5,7 +5,7 @@ import { useVerses } from 'hooks/use-verses'
 import { Hovered } from '@components/util/Hovered'
 import { useState } from 'react'
 import LoadingCircle from './LoadingCircle'
-import { Verse } from 'types/verse'
+import { Verse } from 'service/verse/types'
 
 type DeleteIconProps = {
   verse: Verse

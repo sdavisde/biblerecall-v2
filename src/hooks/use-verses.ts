@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import { VersesContext } from '@components/providers/VersesProvider'
 import toast from 'react-hot-toast'
 import { api } from '@lib/trpc/client'
-import { Verse } from 'types/verse'
+import { Verse } from 'service/verse/types'
 import { Verses } from '@util/verses'
 
 export const useVerses = () => {
