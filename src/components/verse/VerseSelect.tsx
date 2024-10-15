@@ -1,7 +1,6 @@
 'use client'
 
 import toast from 'react-hot-toast'
-import { v4 as uuidv4 } from 'uuid'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@components/ui/accordion'
 import { Button } from '@components/ui/button'
 import {
@@ -15,35 +14,50 @@ import {
 } from '@components/ui/drawer'
 import { Bible, Verses } from '@util/verses'
 import { Result } from '@util/result'
-import { PropsWithChildren, useMemo, useState } from 'react'
+import { PropsWithChildren, useEffect, useMemo, useState } from 'react'
 import { Lodash } from '@util/lodash'
 import { api } from '@lib/trpc/client'
 import LoadingDots from '@components/loading/LoadingDots'
 import { VerseBuilder } from 'service/verse'
-import { Book, Verse } from 'service/verse/types'
+import { Book, Verse, VerseReference } from 'service/verse/types'
+import { cn } from '@components/lib/utils'
 
 type VerseSelectProps = PropsWithChildren<{
   submitVerse: (verse: Verse) => Promise<Result<unknown>>
 }>
 
-type VerseSelectorAccordions = 'books' | 'chapters' | 'verses' | 'review'
+type VerseSelectorAccordions = 'none' | 'books' | 'chapters' | 'verses' | 'review'
 
 export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false)
   const [activeAccordion, setActiveAccordion] = useState<VerseSelectorAccordions>('books')
   const [submitting, setSubmitting] = useState(false)
 
-  const [verseBuilder, setVerseBuilder] = useState<VerseBuilder>(new VerseBuilder())
+  const [builder, setBuilder] = useState<VerseBuilder>(VerseBuilder.init())
   const reference = useMemo(() => {
-    const newReference = verseBuilder.toReference()
+    const newReference = VerseBuilder.toReference(builder)
     return newReference.hasValue ? newReference.value : null
-  }, [verseBuilder.toString()])
-  const referenceString = useMemo(() => Verses.stringifyPartialReference(reference ?? {}), [reference])
-  const { chapters, isLoading: chaptersLoading } = useChapters(verseBuilder.book)
-  const { verses, isLoading: versesLoading } = useVerses(verseBuilder.book, verseBuilder.chapter)
-  const text = api.bible.getVerse.useQuery({ reference, version: verseBuilder.version })
+  }, [builder])
+  const referenceString = useMemo(() => Verses.stringifyPartialReference(builder as Partial<VerseReference>), [builder])
+  const { chapters, isLoading: chaptersLoading } = useChapters(builder.book)
+  const { verses, isLoading: versesLoading } = useVerses(builder.book, builder.chapter)
+  const text = api.bible.getVerse.useQuery({ reference, version: builder.version })
 
-  const resetState = () => setVerseBuilder(new VerseBuilder())
+  const resetState = () => setBuilder(VerseBuilder.init())
+  const toggleAccordion = (accordion: VerseSelectorAccordions) => {
+    if (activeAccordion === accordion) {
+      setActiveAccordion('none')
+    } else {
+      setActiveAccordion(accordion)
+    }
+  }
+
+  useEffect(() => {
+    if (text.data && text.data.hasValue) {
+      const verseText = text.data.value.verseText
+      setBuilder((prev) => ({ ...prev, text: verseText }))
+    }
+  }, [text.data])
 
   const onSave = async () => {
     setSubmitting(true)
@@ -53,9 +67,7 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
         throw Error(text.data?.error.message ?? 'verse text not found')
       }
 
-      const randomId = uuidv4()
-      verseBuilder.withText(text.data.value.verseText).withId(uuidv4())
-      const verse = verseBuilder.toVerse()
+      const verse = VerseBuilder.toVerse(builder)
       if (!verse.hasValue) {
         throw Error(verse.error.message)
       }
@@ -87,11 +99,11 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
         </DrawerHeader>
         <Accordion
           type='single'
-          collapsible
           value={activeAccordion}
+          collapsible
         >
           <AccordionItem value='books'>
-            <AccordionTrigger onClick={() => setActiveAccordion('books')}>Book</AccordionTrigger>
+            <AccordionTrigger onClick={() => toggleAccordion('books')}>Book</AccordionTrigger>
             <AccordionContent className='max-h-52 overflow-y-auto bg-gray-50'>
               {Bible.books.map((book) => (
                 <Button
@@ -99,8 +111,8 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
                   variant='ghost'
                   className='w-full justify-start'
                   onClick={() => {
-                    setVerseBuilder((prev) => prev.withBook(book))
-                    setActiveAccordion('chapters')
+                    setBuilder((prev) => ({ ...prev, book }))
+                    toggleAccordion('chapters')
                   }}
                 >
                   {book.name}
@@ -110,10 +122,10 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
           </AccordionItem>
           <AccordionItem
             value='chapters'
-            disabled={Lodash.isNil(verseBuilder.book)}
+            disabled={Lodash.isNil(builder.book)}
           >
-            <AccordionTrigger onClick={() => setActiveAccordion('chapters')}>Chapter</AccordionTrigger>
-            <AccordionContent className='max-h-52 overflow-y-auto grid grid-cols-6 gap-2'>
+            <AccordionTrigger onClick={() => toggleAccordion('chapters')}>Chapter</AccordionTrigger>
+            <AccordionContent className='max-h-52 overflow-y-auto flex flex-wrap gap-2'>
               {chaptersLoading ? (
                 <LoadingDots />
               ) : (
@@ -121,9 +133,10 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
                   <Button
                     key={chapter}
                     variant='outline'
+                    className='w-8 aspect-square'
                     onClick={() => {
-                      setVerseBuilder((prev) => prev.withChapter(chapter))
-                      setActiveAccordion('verses')
+                      setBuilder((prev) => ({ ...prev, chapter }))
+                      toggleAccordion('verses')
                     }}
                   >
                     {chapter}
@@ -134,46 +147,71 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
           </AccordionItem>
           <AccordionItem
             value='verses'
-            disabled={Lodash.isNil(verseBuilder.chapter)}
+            disabled={Lodash.isNil(builder.chapter)}
           >
-            <AccordionTrigger onClick={() => setActiveAccordion('verses')}>Verse(s)</AccordionTrigger>
-            <AccordionContent className='max-h-52 overflow-y-auto grid grid-cols-6 gap-2'>
+            <AccordionTrigger onClick={() => toggleAccordion('verses')}>
+              <span>Verse(s)</span>
+              {!Lodash.isNil(builder.start) && Lodash.isNil(builder.end) && (
+                <p className='!no-underline font-light'>
+                  You can select an ending verse number to memorize a set of verses, or you can save now
+                </p>
+              )}
+            </AccordionTrigger>
+            <AccordionContent className='max-h-52 overflow-y-auto flex flex-wrap gap-2'>
               {versesLoading ? (
                 <LoadingDots />
               ) : (
-                Lodash.times(verses, (index) => (
-                  <Button
-                    key={index}
-                    variant='outline'
-                    onClick={() => {
-                      setVerseBuilder((prev) => prev.withStart(index + 1))
-                      setActiveAccordion('review')
-                    }}
-                  >
-                    {index + 1}
-                  </Button>
-                ))
+                Lodash.times(verses, (index) => {
+                  const verseNumber = index + 1
+                  return (
+                    <Button
+                      key={verseNumber}
+                      variant='outline'
+                      className={cn('w-8 aspect-square', {
+                        'bg-green': verseNumber === builder.start,
+                        'bg-red': verseNumber === builder.end,
+                        'bg-gray-300':
+                          !Lodash.isNil(builder.start) &&
+                          !Lodash.isNil(builder.end) &&
+                          verseNumber > builder.start &&
+                          verseNumber < builder.end,
+                      })}
+                      onClick={() => {
+                        if (!Lodash.isNil(builder.start) && Lodash.isNil(builder.end) && verseNumber > builder.start) {
+                          // If we haven't selected an "end" verse, set that
+                          setBuilder((prev) => ({ ...prev, end: verseNumber }))
+                        } else {
+                          // We're selecting a verse for the first time, or selecting a new range of verses
+                          setBuilder((prev) => ({ ...prev, start: verseNumber, end: null }))
+                        }
+                      }}
+                    >
+                      {verseNumber}
+                    </Button>
+                  )
+                })
               )}
             </AccordionContent>
           </AccordionItem>
-          <AccordionItem value='review'>
-            <AccordionTrigger>Review</AccordionTrigger>
-            <AccordionContent>
+        </Accordion>
+        <div className='flex-1 flex flex-col justify-start items-center overflow-y-auto'>
+          <h3 className='py-4 text-sm font-medium w-full'>Review</h3>
+          {!Lodash.isNil(reference) && (
+            <>
               <h4>{referenceString}</h4>
               <p>{text.data?.hasValue ? text.data.value.verseText : ''}</p>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-        <div className='flex-1 flex justify-center items-end'>
+            </>
+          )}
+        </div>
+        {!Lodash.isNil(reference) && (
           <Button
             onClick={onSave}
             loading={submitting}
-            disabled={Lodash.isNil(reference)}
-            className='w-full'
+            className='w-full mt-2'
           >
             Save Verse
           </Button>
-        </div>
+        )}
       </DrawerContent>
     </Drawer>
   )

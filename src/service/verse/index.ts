@@ -1,116 +1,75 @@
 import { Result } from '@util/result'
-import { Book, Verse, VerseReference } from './types'
+import { Verse, VerseReference } from './types'
 import { Lodash } from '@util/lodash'
+import { v4 as uuidv4 } from 'uuid'
 
-export class VerseBuilder {
-  id: string | null
-  text: string | null
-  version: string
+export type VerseBuilder = { [F in keyof Verse]: Verse[F] | null } & {
   favorite: boolean
-  book: Book | null
-  chapter: number | null
-  start: number | null
-  end: number | null
+  version: string
+}
 
-  constructor() {
-    this.id = null
-    this.text = null
-    this.version = 'ESV'
-    // Todo: use user preferred version here
-    this.favorite = false
-    this.book = null
-    this.chapter = null
-    this.start = null
-    this.end = null
+export namespace VerseBuilder {
+  export function init() {
+    return {
+      id: uuidv4(),
+      text: null,
+      // Todo: use user preferred version here
+      version: 'ESV',
+      favorite: false,
+      book: null,
+      chapter: null,
+      start: null,
+      end: null,
+    }
   }
 
-  withId(id: string) {
-    this.id = id
-    return this
-  }
-
-  withText(text: string) {
-    this.text = text
-    return this
-  }
-
-  withVersion(version: string) {
-    this.version = version
-    return this
-  }
-
-  withFavorite(favorite: boolean) {
-    this.favorite = favorite
-    return this
-  }
-
-  withBook(book: Book) {
-    this.book = book
-    return this
-  }
-
-  withChapter(chapter: number) {
-    this.chapter = chapter
-    return this
-  }
-
-  withStart(start: number) {
-    this.start = start
-    return this
-  }
-
-  withEnd(end: number) {
-    this.end = end
-    return this
-  }
-
-  toVerse(): Result<Verse> {
-    if (Lodash.isNil(this.id)) {
+  export function toVerse(builder: VerseBuilder): Result<Verse> {
+    if (Lodash.isNil(builder.id)) {
       return Result.failure({ code: 'verse-builder:missing-id' })
     }
-    if (Lodash.isNil(this.text)) {
+    if (Lodash.isNil(builder.text)) {
       return Result.failure({ code: 'verse-builder:missing-text' })
     }
-    if (Lodash.isNil(this.version)) {
+    if (Lodash.isNil(builder.version)) {
       return Result.failure({ code: 'verse-builder:missing-version' })
     }
-    if (Lodash.isNil(this.favorite)) {
+    if (Lodash.isNil(builder.favorite)) {
       return Result.failure({ code: 'verse-builder:missing-favorite' })
     }
-    const reference = this.toReference()
+    const reference = VerseBuilder.toReference(builder)
     if (!reference.hasValue) {
       return reference
     }
 
     return Result.success({
-      id: this.id,
-      text: this.text,
-      version: this.version,
-      favorite: this.favorite,
+      id: builder.id,
+      text: builder.text,
+      version: builder.version,
+      favorite: builder.favorite,
       ...reference.value,
     })
   }
 
-  toReference(): Result<VerseReference> {
-    if (Lodash.isNil(this.book)) {
+  export function toReference(builder: VerseBuilder): Result<VerseReference> {
+    if (Lodash.isNil(builder.book)) {
       return Result.failure({ code: 'verse-builder:missing-book' })
     }
-    if (Lodash.isNil(this.chapter)) {
+    if (Lodash.isNil(builder.chapter)) {
       return Result.failure({ code: 'verse-builder:missing-chapter' })
     }
-    if (Lodash.isNil(this.start)) {
+    if (Lodash.isNil(builder.start)) {
       return Result.failure({ code: 'verse-builder:missing-start' })
     }
 
     return Result.success({
-      book: this.book,
-      chapter: this.chapter,
-      start: this.start,
-      end: this.end,
+      book: builder.book,
+      chapter: builder.chapter,
+      start: builder.start,
+      end: builder.end,
     })
   }
 
-  toString() {
-    return `VerseBuilder[id=${this.id},book=${this.book?.name},chapter=${this.chapter},start=${this.start},end=${this.end},text=${this.text},favorite=${this.favorite}]`
+  export function toString(builder: VerseBuilder) {
+    return `VerseBuilder[id=${builder.id},book=${builder.book?.name},chapter=${builder.chapter},start=${builder.start},end=${builder.end},text=${builder.text},favorite=${builder.favorite}]`
   }
 }
