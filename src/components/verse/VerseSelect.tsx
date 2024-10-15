@@ -224,11 +224,13 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
           </AccordionItem>
         </Accordion>
         <div className='flex-1 flex flex-col justify-start items-center overflow-y-auto'>
-          <h3 className='py-4 text-sm font-medium w-full'>Review</h3>
+          <h3 className='pt-4 pb-1 text-sm font-medium w-full flex gap-2'>
+            <span>Review</span>
+            <span className='font-light'>{referenceString}</span>
+          </h3>
           {!Lodash.isNil(reference) && (
             <>
-              <h4>{referenceString}</h4>
-              <p>{text.data?.hasValue ? text.data.value.verseText : ''}</p>
+              <p>&quot;{text.data?.hasValue ? text.data.value.verseText : ''}&quot;</p>
             </>
           )}
         </div>
