@@ -74,10 +74,13 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
 
   useEffect(() => {
     if (activeAccordion === 'books') {
-      console.log('focus')
       bookSearchRef.current?.focus()
     }
   }, [activeAccordion])
+  useEffect(() => {
+    console.log('log focus', bookSearchRef)
+    setTimeout(() => bookSearchRef.current?.focus(), 400)
+  }, [drawerIsOpen])
 
   const onSave = async () => {
     setSubmitting(true)
@@ -197,9 +200,9 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
                       key={verseNumber}
                       variant='outline'
                       className={cn('w-8 aspect-square', {
-                        'bg-green': verseNumber === builder.start,
-                        'bg-red': verseNumber === builder.end,
-                        'bg-gray-300':
+                        'bg-green hover:bg-green': verseNumber === builder.start,
+                        'bg-red hover:bg-red': verseNumber === builder.end,
+                        'bg-gray-300 hover:bg-gray-300':
                           !Lodash.isNil(builder.start) &&
                           !Lodash.isNil(builder.end) &&
                           verseNumber > builder.start &&
