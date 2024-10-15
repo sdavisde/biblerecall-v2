@@ -45,7 +45,7 @@ export default function SuccessPage({ params, searchParams }: SuccessPageProps) 
         </Button>
         <Button>
           <Link
-            href={`/home`}
+            href='/home/verses'
             className='w-40 h-12 centered cursor-pointer mx-2'
           >
             <h3 className='w-32 text-center'>Home</h3> <House className='w-12 scale-150' />
