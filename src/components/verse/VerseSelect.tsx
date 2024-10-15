@@ -14,13 +14,25 @@ import {
 } from '@components/ui/drawer'
 import { Bible, Verses } from '@util/verses'
 import { Result } from '@util/result'
-import { PropsWithChildren, useEffect, useMemo, useState } from 'react'
+import { PropsWithChildren, useEffect, useMemo, useRef, useState } from 'react'
 import { Lodash } from '@util/lodash'
 import { api } from '@lib/trpc/client'
 import LoadingDots from '@components/loading/LoadingDots'
 import { VerseBuilder } from 'service/verse'
 import { Book, Verse, VerseReference } from 'service/verse/types'
 import { cn } from '@components/lib/utils'
+import { Calculator, Calendar, CreditCard, Settings, Smile, User } from 'lucide-react'
+
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from '@components/ui/command'
 
 type VerseSelectProps = PropsWithChildren<{
   submitVerse: (verse: Verse) => Promise<Result<unknown>>
@@ -32,6 +44,7 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false)
   const [activeAccordion, setActiveAccordion] = useState<VerseSelectorAccordions>('books')
   const [submitting, setSubmitting] = useState(false)
+  const bookSearchRef = useRef<HTMLInputElement>(null)
 
   const [builder, setBuilder] = useState<VerseBuilder>(VerseBuilder.init())
   const reference = useMemo(() => {
@@ -58,6 +71,13 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
       setBuilder((prev) => ({ ...prev, text: verseText }))
     }
   }, [text.data])
+
+  useEffect(() => {
+    if (activeAccordion === 'books') {
+      console.log('focus')
+      bookSearchRef.current?.focus()
+    }
+  }, [activeAccordion])
 
   const onSave = async () => {
     setSubmitting(true)
@@ -104,20 +124,29 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
         >
           <AccordionItem value='books'>
             <AccordionTrigger onClick={() => toggleAccordion('books')}>Book</AccordionTrigger>
-            <AccordionContent className='max-h-52 overflow-y-auto bg-gray-50'>
-              {Bible.books.map((book) => (
-                <Button
-                  key={book.id}
-                  variant='ghost'
-                  className='w-full justify-start'
-                  onClick={() => {
-                    setBuilder((prev) => ({ ...prev, book }))
-                    toggleAccordion('chapters')
-                  }}
-                >
-                  {book.name}
-                </Button>
-              ))}
+            <AccordionContent className='flex-1'>
+              <Command className='rounded-lg border shadow-md md:min-w-[450px]'>
+                <CommandInput
+                  placeholder='Type a book name to search...'
+                  ref={bookSearchRef}
+                />
+                <CommandList>
+                  <CommandEmpty>No results found.</CommandEmpty>
+                  <CommandGroup heading='Books'>
+                    {Bible.books.map((book) => (
+                      <CommandItem
+                        key={book.id}
+                        onSelect={() => {
+                          setBuilder((prev) => ({ ...prev, book }))
+                          toggleAccordion('chapters')
+                        }}
+                      >
+                        <span> {book.name}</span>
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
             </AccordionContent>
           </AccordionItem>
           <AccordionItem
@@ -125,7 +154,7 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
             disabled={Lodash.isNil(builder.book)}
           >
             <AccordionTrigger onClick={() => toggleAccordion('chapters')}>Chapter</AccordionTrigger>
-            <AccordionContent className='max-h-52 overflow-y-auto flex flex-wrap gap-2'>
+            <AccordionContent className='flex-1 overflow-y-auto flex flex-wrap gap-2'>
               {chaptersLoading ? (
                 <LoadingDots />
               ) : (
@@ -157,7 +186,7 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
                 </p>
               )}
             </AccordionTrigger>
-            <AccordionContent className='max-h-52 overflow-y-auto flex flex-wrap gap-2'>
+            <AccordionContent className='flex-1 overflow-y-auto flex flex-wrap gap-2'>
               {versesLoading ? (
                 <LoadingDots />
               ) : (
