@@ -33,9 +33,7 @@ type VerseSelectorAccordions = 'none' | 'books' | 'chapters' | 'verses' | 'revie
 
 export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSelectProps) => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false)
-  const [activeAccordion, setActiveAccordion] = useState<VerseSelectorAccordions>(
-    !Lodash.isNil(initialVerse) ? 'none' : 'books'
-  )
+  const [activeAccordion, setActiveAccordion] = useState<VerseSelectorAccordions>('none')
   const [submitting, setSubmitting] = useState(false)
   const bookSearchRef = useRef<HTMLInputElement>(null)
 
@@ -51,7 +49,7 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
 
   const resetState = () => {
     setBuilder(VerseBuilder.init(initialVerse ?? null))
-    setActiveAccordion('books')
+    setActiveAccordion('none')
   }
   const toggleAccordion = (accordion: VerseSelectorAccordions) => {
     if (activeAccordion === accordion) {
@@ -75,10 +73,10 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
   }, [activeAccordion])
 
   useEffect(() => {
-    if (drawerIsOpen) {
+    resetState()
+    if (drawerIsOpen && Lodash.isNil(initialVerse)) {
+      setActiveAccordion('books')
       setTimeout(() => bookSearchRef.current?.focus(), 400)
-    } else {
-      resetState()
     }
   }, [drawerIsOpen])
 
@@ -107,6 +105,7 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
       setSubmitting(false)
     }
   }
+  console.log(activeAccordion, initialVerse)
 
   return (
     <Drawer
