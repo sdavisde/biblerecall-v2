@@ -105,7 +105,6 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
       setSubmitting(false)
     }
   }
-  console.log(activeAccordion, initialVerse)
 
   return (
     <Drawer
