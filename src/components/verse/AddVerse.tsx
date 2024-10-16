@@ -2,7 +2,7 @@
 
 import { useVerses } from 'hooks/use-verses'
 import { Verse } from 'service/verse/types'
-import { VerseSelect } from './VerseSelect'
+import { VerseSelector } from './VerseSelector'
 import { Button } from '@components/ui/button'
 
 type AddVerseProps = {}
@@ -15,7 +15,7 @@ const AddVerse = ({}: AddVerseProps) => {
   }
 
   return (
-    <VerseSelect submitVerse={submitNewVerse}>
+    <VerseSelector submitVerse={submitNewVerse}>
       <Button
         variant='outline'
         className='w-full'
@@ -23,7 +23,7 @@ const AddVerse = ({}: AddVerseProps) => {
       >
         + Add Verse
       </Button>
-    </VerseSelect>
+    </VerseSelector>
   )
 }
 

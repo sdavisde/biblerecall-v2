@@ -1,11 +1,14 @@
 import { initTRPC } from '@trpc/server'
 import { ApiContext } from 'types/api'
+import superjson from 'superjson'
 
 /**
  * Initialization of tRPC backend
  * Should be done only once per backend!
  */
-const t = initTRPC.context<ApiContext>().create()
+const t = initTRPC.context<ApiContext>().create({
+  transformer: superjson,
+})
 
 /**
  * Create a router

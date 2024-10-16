@@ -21,32 +21,25 @@ import LoadingDots from '@components/loading/LoadingDots'
 import { VerseBuilder } from 'service/verse'
 import { Book, Verse, VerseReference } from 'service/verse/types'
 import { cn } from '@components/lib/utils'
-import { Calculator, Calendar, CreditCard, Settings, Smile, User } from 'lucide-react'
 
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-  CommandShortcut,
-} from '@components/ui/command'
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@components/ui/command'
 
 type VerseSelectProps = PropsWithChildren<{
   submitVerse: (verse: Verse) => Promise<Result<unknown>>
+  initialVerse?: Verse
 }>
 
 type VerseSelectorAccordions = 'none' | 'books' | 'chapters' | 'verses' | 'review'
 
-export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
+export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSelectProps) => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false)
-  const [activeAccordion, setActiveAccordion] = useState<VerseSelectorAccordions>('books')
+  const [activeAccordion, setActiveAccordion] = useState<VerseSelectorAccordions>(
+    !Lodash.isNil(initialVerse) ? 'none' : 'books'
+  )
   const [submitting, setSubmitting] = useState(false)
   const bookSearchRef = useRef<HTMLInputElement>(null)
 
-  const [builder, setBuilder] = useState<VerseBuilder>(VerseBuilder.init())
+  const [builder, setBuilder] = useState<VerseBuilder>(VerseBuilder.init(initialVerse ?? null))
   const reference = useMemo(() => {
     const newReference = VerseBuilder.toReference(builder)
     return newReference.hasValue ? newReference.value : null
@@ -56,7 +49,10 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
   const { verses, isLoading: versesLoading } = useVerses(builder.book, builder.chapter)
   const text = api.bible.getVerse.useQuery({ reference, version: builder.version })
 
-  const resetState = () => setBuilder(VerseBuilder.init())
+  const resetState = () => {
+    setBuilder(VerseBuilder.init(initialVerse ?? null))
+    setActiveAccordion('books')
+  }
   const toggleAccordion = (accordion: VerseSelectorAccordions) => {
     if (activeAccordion === accordion) {
       setActiveAccordion('none')
@@ -77,9 +73,13 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
       bookSearchRef.current?.focus()
     }
   }, [activeAccordion])
+
   useEffect(() => {
-    console.log('log focus', bookSearchRef)
-    setTimeout(() => bookSearchRef.current?.focus(), 400)
+    if (drawerIsOpen) {
+      setTimeout(() => bookSearchRef.current?.focus(), 400)
+    } else {
+      resetState()
+    }
   }, [drawerIsOpen])
 
   const onSave = async () => {
@@ -126,7 +126,12 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
           collapsible
         >
           <AccordionItem value='books'>
-            <AccordionTrigger onClick={() => toggleAccordion('books')}>Book</AccordionTrigger>
+            <AccordionTrigger onClick={() => toggleAccordion('books')}>
+              <span>
+                Book
+                <span className='italic ms-2'>{reference?.book.name}</span>
+              </span>
+            </AccordionTrigger>
             <AccordionContent className='flex-1'>
               <Command className='rounded-lg border shadow-md md:min-w-[450px]'>
                 <CommandInput
@@ -156,7 +161,12 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
             value='chapters'
             disabled={Lodash.isNil(builder.book)}
           >
-            <AccordionTrigger onClick={() => toggleAccordion('chapters')}>Chapter</AccordionTrigger>
+            <AccordionTrigger onClick={() => toggleAccordion('chapters')}>
+              <span>
+                Chapter
+                <span className='italic ms-2'>{reference?.chapter}</span>
+              </span>
+            </AccordionTrigger>
             <AccordionContent className='flex-1 overflow-y-auto flex flex-wrap gap-2'>
               {chaptersLoading ? (
                 <LoadingDots />
@@ -182,12 +192,12 @@ export const VerseSelect = ({ submitVerse, children }: VerseSelectProps) => {
             disabled={Lodash.isNil(builder.chapter)}
           >
             <AccordionTrigger onClick={() => toggleAccordion('verses')}>
-              <span>Verse(s)</span>
-              {!Lodash.isNil(builder.start) && Lodash.isNil(builder.end) && (
-                <p className='!no-underline font-light'>
-                  You can select an ending verse number to memorize a set of verses, or you can save now
-                </p>
-              )}
+              <span>
+                Verse(s)
+                <span className='italic ms-2'>
+                  {reference?.start} {reference?.end ? '-' + reference!.end : ''}
+                </span>
+              </span>
             </AccordionTrigger>
             <AccordionContent className='flex-1 overflow-y-auto flex flex-wrap gap-2'>
               {versesLoading ? (

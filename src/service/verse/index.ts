@@ -6,10 +6,15 @@ import { v4 as uuidv4 } from 'uuid'
 export type VerseBuilder = { [F in keyof Verse]: Verse[F] | null } & {
   favorite: boolean
   version: string
+  createdDate: Date
 }
 
 export namespace VerseBuilder {
-  export function init() {
+  export function init(verse: Verse | null): VerseBuilder {
+    if (!Lodash.isNil(verse)) {
+      return verse
+    }
+
     return {
       id: uuidv4(),
       text: null,
@@ -20,6 +25,7 @@ export namespace VerseBuilder {
       chapter: null,
       start: null,
       end: null,
+      createdDate: new Date(),
     }
   }
 
@@ -46,6 +52,7 @@ export namespace VerseBuilder {
       text: builder.text,
       version: builder.version,
       favorite: builder.favorite,
+      createdDate: builder.createdDate,
       ...reference.value,
     })
   }

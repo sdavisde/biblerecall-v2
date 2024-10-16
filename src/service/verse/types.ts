@@ -19,6 +19,7 @@ export type VerseMetadata = {
   text: string
   favorite: boolean
   version: string
+  createdDate: Date
 }
 
 /**
@@ -57,4 +58,5 @@ export const verseSchema = z.object({
   text: z.string(),
   favorite: z.boolean(),
   version: z.string(),
+  createdDate: z.date(),
 })

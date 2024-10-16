@@ -83,15 +83,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           defaultTheme={settingsResult.hasValue ? settingsResult.value?.theme : undefined}
           attribute='class'
         >
-          <TRPCReactProvider>
-            <GoogleOAuthProvider clientId={clientConfig.googleClientId}>
-              <SettingsProvider authUserSettings={settingsResult.hasValue ? settingsResult.value : null}>
-                {children}
-              </SettingsProvider>
-            </GoogleOAuthProvider>
-          </TRPCReactProvider>
-          <Analytics />
-          <SpeedInsights />
+          <SettingsProvider authUserSettings={settingsResult.hasValue ? settingsResult.value : null}>
+            <TRPCReactProvider>
+              <GoogleOAuthProvider clientId={clientConfig.googleClientId}>{children}</GoogleOAuthProvider>
+            </TRPCReactProvider>
+            <Analytics />
+            <SpeedInsights />
+          </SettingsProvider>
         </ThemeProvider>
       </body>
     </html>

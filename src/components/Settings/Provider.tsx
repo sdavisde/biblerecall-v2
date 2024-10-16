@@ -54,9 +54,9 @@ export const SettingsProvider = ({
     >
       {/* This component must be wrapping all of the application except for the HTML tags
             settingsState should always be defined */}
-      <body className={`font-${settingsState?.font} bg-lightGrey dark:bg-black text-black dark:text-white`}>
+      <div className={`font-${settingsState?.font} bg-lightGrey dark:bg-black text-black dark:text-white`}>
         {children}
-      </body>
+      </div>
     </SettingsContext.Provider>
   )
 }

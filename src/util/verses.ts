@@ -46,21 +46,13 @@ export namespace Verses {
    * @param reference verse in the format: Book C:V or 1 Book C:V-V2
    */
   export function createVerse(reference: VerseReference, metadata?: Partial<VerseMetadata>): Result<Verse> {
-    // if (!reference.includes(' ') || !reference.includes(':')) {
-    //   return Result.failure({ code: `Attempted to create verse with malformed reference: ${reference}` })
-    // }
-
-    // const referenceResult = parseReference(reference)
-    // if (!referenceResult.hasValue) {
-    //   return referenceResult
-    // }
-
     return Result.success({
       ...reference,
       id: metadata?.id ?? '',
       text: metadata?.text ?? '',
       version: metadata?.version ?? '',
       favorite: metadata?.favorite ?? false,
+      createdDate: metadata?.createdDate ?? new Date(),
     })
   }
 

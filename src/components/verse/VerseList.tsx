@@ -2,7 +2,7 @@
 
 import { useVerses } from 'hooks/use-verses'
 import { useSort } from 'hooks/use-sort'
-import VerseBox from '@components/verse/VerseBox'
+import { VerseBox } from '@components/verse/VerseBox'
 
 const VerseList = () => {
   const [verses] = useVerses()
@@ -10,11 +10,10 @@ const VerseList = () => {
 
   return (
     <>
-      {verses?.sort(sortFn).map((verse, i) => (
+      {verses?.sort(sortFn).map((verse) => (
         <VerseBox
           verse={verse}
-          key={`${verse.book.name}-${verse.chapter}:${verse.start}-${verse.end ?? verse.start}(${i})`}
-          className='w-full'
+          key={verse.id}
         />
       ))}
     </>

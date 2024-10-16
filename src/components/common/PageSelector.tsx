@@ -19,13 +19,13 @@ export const PageSelector = ({ title, subtitle, imageSrc, href }: PageSelectorPr
     >
       <Button
         asDiv
-        className='relative w-full h-[120px] rounded-lg cursor-pointer overflow-hidden bg-white shadow-md p-0 hover:bg-white hover:shadow-lg transition-all duration-300'
+        className='relative w-full h-[120px] rounded-lg cursor-pointer overflow-hidden bg-white dark:bg-gray-700 shadow-md p-0 hover:bg-white hover:dark:bg-gray-700 hover:shadow-lg transition-all duration-300'
         variant='outline'
       >
-        {Lodash.isNil(href) && <div className='absolute inset-0 bg-gray-500 opacity-30 z-30'></div>}
-        <div className='flex-1 p-4 bg-white flex flex-col justify-center z-10'>
+        {Lodash.isNil(href) && <div className='absolute inset-0 bg-gray-500 dark:bg-black opacity-50 z-30'></div>}
+        <div className='flex-1 p-4 flex flex-col justify-center z-10'>
           <h2 className='text-lg font-bold'>{title}</h2>
-          <p className='text-sm text-gray-600'>{subtitle}</p>
+          <p className='text-sm text-gray-600 dark:text-white'>{subtitle}</p>
         </div>
 
         <div className='relative w-1/2 h-full overflow-hidden'>
@@ -36,10 +36,10 @@ export const PageSelector = ({ title, subtitle, imageSrc, href }: PageSelectorPr
             width='250'
             className='w-full h-full object-cover group-hover:blur-sm transition-all duration-300'
             placeholder='blur'
-            blurDataURL='/blurry-bible.jpg'
+            blurDataURL={imageSrc}
           />
 
-          <div className='absolute top-0 left-[-50px] w-full h-full bg-white z-20 diagonal-cutoff' />
+          <div className='absolute top-0 left-[-50px] w-full h-full bg-white dark:bg-gray-700 z-20 diagonal-cutoff' />
         </div>
       </Button>
     </ConditionalLink>

@@ -3,7 +3,8 @@ import { z } from 'zod'
 import { Cookies } from '@lib/providers/cookies'
 import { Database } from '@lib/providers/database'
 import { RequestType } from 'types/api'
-import { verseSchema } from 'service/verse/types'
+import { Verse, verseSchema } from 'service/verse/types'
+import { Result } from '@util/result'
 
 /**
  * Verses API Routes
@@ -33,7 +34,7 @@ export const versesRouter = router({
         return await Database.getVerses({ userId: user.uid })
     }
   }),
-  add: publicProcedure.input(verseSchema).mutation(async ({ input: verse, ctx }) => {
+  add: publicProcedure.input(verseSchema).mutation(async ({ input: verse, ctx }): Promise<Result<Verse>> => {
     const { type, user } = ctx
 
     switch (type) {
