@@ -1,14 +1,16 @@
 'use client'
 
-import { useState } from 'react'
 import { useVerses } from 'hooks/use-verses'
 import { useSettings } from 'hooks/use-settings'
 import { Visibility } from '@configuration/settings'
 import { Verse } from 'service/verse/types'
-import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@components/ui/card'
 import { Verses } from '@util/verses'
 import { Lodash } from '@util/lodash'
 import { VerseSelector } from './VerseSelector'
+import { Button } from '@components/ui/button'
+import { CircleArrowRight, Maximize2 } from 'lucide-react'
+import Link from 'next/link'
 
 type VerseBoxProps = {
   verse: Verse
@@ -23,22 +25,38 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
   }
 
   return (
-    <VerseSelector
-      submitVerse={onUpdate}
-      initialVerse={verse}
-    >
-      <Card className='cursor-pointer text-start'>
-        <CardHeader>
-          <CardTitle>{Verses.stringifyReference(verse)}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <VerseText
-            text={verse.text}
-            visibility={settings?.visibility}
-          />
-        </CardContent>
-      </Card>
-    </VerseSelector>
+    <Card className='cursor-pointer text-start w-full'>
+      <CardHeader>
+        <CardTitle className='flex items-center justify-between'>
+          <span>{Verses.stringifyReference(verse)}</span>
+          <div className='flex items-center gap-2'>
+            <VerseSelector
+              submitVerse={onUpdate}
+              initialVerse={verse}
+            >
+              <Button
+                variant='outline'
+                size='icon'
+                asDiv
+              >
+                <Maximize2 />
+              </Button>
+            </VerseSelector>
+            <Link href={`/home/verses/${verse.id}`}>
+              <Button size='icon'>
+                <CircleArrowRight />
+              </Button>
+            </Link>
+          </div>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <VerseText
+          text={verse.text}
+          visibility={settings?.visibility}
+        />
+      </CardContent>
+    </Card>
   )
 }
 

@@ -25,7 +25,7 @@ module.exports = {
         yellow: '#D0CE94',
         red: '#CC706F',
         darkRed: '#B64846',
-        green: '#81957f',
+        green: 'hsl(var(--green))',
         darkGreen: '#5F775B',
         black: '#292728',
         blackHover: '#201e1f',

@@ -19,6 +19,7 @@ const AddVerse = ({}: AddVerseProps) => {
       <Button
         variant='outline'
         className='w-full'
+        size='lg'
         asDiv
       >
         + Add Verse

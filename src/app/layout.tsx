@@ -74,7 +74,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html
       lang='en'
-      className={`bg-lightGrey dark:bg-black text-black dark:text-white ${urbanist.variable} ${openDyslexic.variable} ${satisfy.variable} ${rockSalt.variable} font-satisfy font-rockSalt font-openDyslexic font-urbanist`}
+      className={`bg-background text-foreground ${urbanist.variable} ${openDyslexic.variable} ${satisfy.variable} ${rockSalt.variable} font-satisfy font-rockSalt font-openDyslexic font-urbanist`}
       suppressHydrationWarning
     >
       {/* IMPORTANT: This body tag gets swapped out in `SettingsProvider`, but needs to be here so the server doesn't throw hydration errors */}
