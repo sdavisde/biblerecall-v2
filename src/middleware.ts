@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { authMiddleware, redirectToHome, redirectToLogin, redirectToPath } from 'next-firebase-auth-edge'
 import { clientConfig, serverConfig } from './firebase-config'
 
-const PUBLIC_PATHS = ['/register', '/login', '/reset-password']
+const PUBLIC_PATHS = ['/', '/register', '/login', '/reset-password']
 
 export async function middleware(request: NextRequest) {
   return authMiddleware(request, {

@@ -59,7 +59,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   minimumScale: 1,
   maximumScale: 1,
-  themeColor: '#81957f',
+  themeColor: 'var(--green)',
   colorScheme: 'light dark',
 }
 
