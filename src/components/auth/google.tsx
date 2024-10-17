@@ -1,28 +1,29 @@
 'use client'
 
-import { handleLoginWithAccessToken } from '@lib/firebase'
-import { CredentialResponse, GoogleLogin as GoogleSignInButton, useGoogleOneTapLogin } from '@react-oauth/google'
-
-const handleGoogleLogin = (credentialResponse: CredentialResponse) => {
-  const accessToken = credentialResponse.credential
-  handleLoginWithAccessToken(accessToken)
-}
+import { Button } from '@components/ui/button'
+import { signInWithGoogle } from '@lib/firebase'
 
 export const GoogleLogin = () => {
-  return (
-    <GoogleSignInButton
-      onSuccess={handleGoogleLogin}
-      onError={() => console.error('Login Failed')}
-    />
-  )
-}
+  const handleGoogleLogin = async () => {
+    try {
+      const response = await signInWithGoogle()
+      if (!response) {
+        throw new Error('google signin failed')
+      }
 
-export const useOneTapLogin = () => {
-  useGoogleOneTapLogin({
-    onSuccess: handleGoogleLogin,
-    onError: () => {
-      console.error('Google One Tap Login failed')
-    },
-    auto_select: true,
-  })
+      location.reload()
+    } catch (error) {
+      console.error('Google login failed:', error)
+    }
+  }
+
+  return (
+    <Button
+      variant='secondary'
+      className='w-full'
+      onClick={handleGoogleLogin}
+    >
+      Login with Google
+    </Button>
+  )
 }

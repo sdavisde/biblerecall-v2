@@ -1,7 +1,4 @@
 import { Profile } from '@components/Profile'
-import { ThemeSelect } from '@components/Settings/SettingSelectors/Theme'
-import { VisibilitySelect } from '@components/Settings/SettingSelectors/Visibility'
-import { FontSelect } from '@components/Settings/SettingSelectors/Font'
 import Link from 'next/link'
 
 export default async function Navbar() {
@@ -14,9 +11,6 @@ export default async function Navbar() {
       </div>
       <div className='flex flex-row mr-4 h-full'>
         <Profile />
-        <FontSelect />
-        <VisibilitySelect />
-        <ThemeSelect />
       </div>
     </nav>
   )

@@ -29,6 +29,8 @@ export function ThemeSelect() {
 
   return (
     <SettingSlot
+      title='Theme'
+      description='Dark vs Light mode'
       options={Object.entries(Theme).map(([label, value]) => ({
         label,
         value,

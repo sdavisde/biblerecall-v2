@@ -19,6 +19,8 @@ export function VisibilitySelect() {
 
   return (
     <SettingSlot
+      title='Verse Visibility'
+      description='The difficulty level when viewing verses on your verse page'
       options={Object.entries(Visibility).map(([label, value]) => ({
         label,
         value,

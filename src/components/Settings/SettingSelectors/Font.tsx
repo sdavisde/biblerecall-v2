@@ -19,6 +19,8 @@ export function FontSelect() {
 
   return (
     <SettingSlot
+      title='Font'
+      description='Choose the font that works best for you'
       options={Object.entries(Font).map(([label, value]) => ({
         label,
         value,
