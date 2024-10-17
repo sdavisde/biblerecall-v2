@@ -8,7 +8,7 @@ import { Input } from '@components/ui/input'
 import { Label } from '@components/ui/label'
 import { GoogleLogin } from '@components/auth/google'
 import { Separator } from '@components/ui/separator'
-import { loginWithCredentials } from '@lib/firebase'
+import { signInWithCredentials, signInAsGuest } from '@lib/firebase'
 
 export const description =
   "A login form with email and password. There's an option to login with Google and a link to sign up if you don't have an account."
@@ -19,13 +19,19 @@ export default function LoginForm() {
   const [error, setError] = useState<string | null>('')
   const router = useRouter()
 
-  const handleLogin = async () => {
-    const userCredential = await loginWithCredentials(email, password)
-    console.log(userCredential)
-    if (!userCredential.hasValue) {
-      setError(userCredential.error.message)
+  const handleCredentialsLogin = async () => {
+    const user = await signInWithCredentials(email, password)
+    if (!user.hasValue) {
+      setError(user.error.message)
     }
-    // router.push('/home')
+    router.push('/home')
+  }
+  const handleAnonymousLogin = async () => {
+    const user = await signInAsGuest()
+    if (!user.hasValue) {
+      setError(user.error.message)
+    }
+    router.push('/home')
   }
 
   return (
@@ -63,12 +69,19 @@ export default function LoginForm() {
       <Button
         type='submit'
         className='w-full'
-        onClick={handleLogin}
+        onClick={handleCredentialsLogin}
       >
         Login
       </Button>
       <Separator label='or' />
       <GoogleLogin />
+      <Button
+        type='button'
+        variant='outline'
+        onClick={handleAnonymousLogin}
+      >
+        Continue as Guest
+      </Button>
     </form>
   )
 }

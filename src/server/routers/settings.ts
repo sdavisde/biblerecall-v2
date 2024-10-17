@@ -30,6 +30,7 @@ export const settingsRouter = router({
         const settings = snapshot.data() as Settings
 
         if (
+          Lodash.isNil(settings) ||
           settings.theme === undefined ||
           settings.visibility === undefined ||
           settings.defaultVersion === undefined ||

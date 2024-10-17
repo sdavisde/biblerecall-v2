@@ -10,6 +10,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   User,
+  signInAnonymously,
 } from 'firebase/auth'
 import { clientConfig } from 'firebase-config'
 import { Result } from '@util/result'
@@ -21,7 +22,22 @@ const auth = getAuth(app)
 const database = getFirestore(app)
 const googleProvider = new GoogleAuthProvider()
 
-const signInWithGoogle = async () => {
+async function giveJwtToTrpc(user: User) {
+  const idToken = await user.getIdToken()
+  // After signing in the user, tell the backend that the user is logged in
+  const res = await fetch('/api/login', {
+    headers: {
+      Authorization: `Bearer ${idToken}`,
+    },
+  })
+  if (res.ok) {
+    return Result.success(null)
+  } else {
+    return Result.failure(await res.json())
+  }
+}
+
+async function signInWithGoogle(): Promise<Result<User>> {
   try {
     const res = await signInWithPopup(auth, googleProvider)
     const user = res.user
@@ -33,53 +49,19 @@ const signInWithGoogle = async () => {
       authProvider: 'google',
     })
 
-    // After signing in the user, tell the backend that the user is logged in
-    const idToken = await user.getIdToken()
-    await fetch('/api/login', {
-      headers: {
-        Authorization: `Bearer ${idToken}`,
-      },
-    })
+    const apiResponse = await giveJwtToTrpc(user)
+    if (!apiResponse.hasValue) {
+      return apiResponse
+    }
 
-    return user
+    return Result.success(user)
   } catch (err: any) {
     console.error(err)
-    alert(err.message)
-    return null
+    return Result.failure({ code: err.code, message: err.message })
   }
 }
 
-const handleLoginWithAccessToken = async (accessToken: string | undefined) => {
-  try {
-    // Now use the Google access token with Firebase Authentication
-    const credential = GoogleAuthProvider.credential(accessToken)
-    const { user } = await signInWithCredential(auth, credential)
-
-    await setDoc(doc(database, 'Users', user.uid), {
-      uid: user.uid,
-      name: user.displayName,
-      email: user.email,
-      photoURL: user.photoURL,
-      authProvider: 'google',
-    })
-
-    // After signing in the user, tell the backend that the user is logged in
-    const idToken = await user.getIdToken()
-    await fetch('/api/login', {
-      headers: {
-        Authorization: `Bearer ${idToken}`,
-      },
-    })
-
-    location.reload()
-  } catch (err: any) {
-    console.error(err)
-    alert(err.message)
-    return null
-  }
-}
-
-async function loginWithCredentials(email: string, password: string): Promise<Result<User>> {
+async function signInWithCredentials(email: string, password: string): Promise<Result<User>> {
   try {
     if (Lodash.isNil(email) || typeof email !== 'string') {
       return Result.failure({ code: 'email:missing', message: 'Please enter an email address' })
@@ -91,6 +73,10 @@ async function loginWithCredentials(email: string, password: string): Promise<Re
 
     // create a new user with email and password
     const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+    const apiResponse = await giveJwtToTrpc(userCredential.user)
+    if (!apiResponse.hasValue) {
+      return apiResponse
+    }
 
     // Pull out user's data from the userCredential property
     return Result.success(userCredential.user)
@@ -117,6 +103,16 @@ async function loginWithCredentials(email: string, password: string): Promise<Re
   }
 }
 
+async function signInAsGuest(): Promise<Result<User>> {
+  const userCredential = await signInAnonymously(auth)
+  const apiResponse = await giveJwtToTrpc(userCredential.user)
+  if (!apiResponse.hasValue) {
+    return apiResponse
+  }
+
+  return Result.success(userCredential.user)
+}
+
 const logout = async () => {
   const signedOutPromise = signOut(auth)
   const serverLogoutPromise = fetch('/api/logout')
@@ -127,4 +123,4 @@ const logout = async () => {
   location.reload()
 }
 
-export { auth, database, signInWithGoogle, handleLoginWithAccessToken, loginWithCredentials, logout }
+export { auth, database, signInWithGoogle, signInWithCredentials, signInAsGuest, logout }

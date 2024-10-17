@@ -1,6 +1,6 @@
 'use client'
 
-import { Avatar, AvatarImage } from '@components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar'
 import { logout } from '@lib/firebase'
 import { api } from '@lib/trpc/client'
 import { SignedInUser } from 'types/api'
@@ -19,7 +19,7 @@ import Link from 'next/link'
 export function Profile() {
   const user = api.user.get.useQuery<SignedInUser>()
 
-  if (user.isLoading || !user.data) {
+  if (user.isPending || !user.data) {
     return <></>
   }
 
@@ -29,6 +29,9 @@ export function Profile() {
         <button className='centered cursor-pointer scale-75'>
           <Avatar>
             <AvatarImage src={user.data.picture} />
+            <AvatarFallback>
+              <User />
+            </AvatarFallback>
           </Avatar>
         </button>
       </DropdownMenuTrigger>

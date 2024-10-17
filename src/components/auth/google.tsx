@@ -7,13 +7,13 @@ export const GoogleLogin = () => {
   const handleGoogleLogin = async () => {
     try {
       const response = await signInWithGoogle()
-      if (!response) {
+      if (!response.hasValue) {
         throw new Error('google signin failed')
       }
 
       location.reload()
     } catch (error) {
-      console.error('Google login failed:', error)
+      console.error(error)
     }
   }
 
