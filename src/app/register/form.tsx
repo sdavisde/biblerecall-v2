@@ -1,17 +1,13 @@
 'use client'
 
 import { z } from 'zod'
-import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@components/ui/button'
-import { GoogleLogin } from '@components/auth/google'
-import { Separator } from '@components/ui/separator'
-import { signInWithCredentials, signInAsGuest } from '@lib/firebase'
+import { signUpWithCredentials } from '@lib/firebase'
 import { PasswordField, passwordSchema } from '@components/form/PasswordField'
 import { EmailField, emailSchema } from '@components/form/EmailField'
-import Link from 'next/link'
 
 // Define Zod schema
 type FormData = z.infer<typeof formSchema>
@@ -20,7 +16,7 @@ const formSchema = z.object({
   password: passwordSchema,
 })
 
-export function LoginForm() {
+export function SignUpForm() {
   const {
     register,
     handleSubmit,
@@ -32,18 +28,10 @@ export function LoginForm() {
   })
   const router = useRouter()
 
-  async function handleCredentialsLogin({ email, password }: FormData) {
-    const user = await signInWithCredentials(email, password)
+  async function handleCredentialsSignUp({ email, password }: FormData) {
+    const user = await signUpWithCredentials(email, password)
     if (!user.hasValue) {
       setError('root', user.error)
-      return
-    }
-    router.push('/home')
-  }
-  const handleAnonymousLogin = async () => {
-    const user = await signInAsGuest()
-    if (!user.hasValue) {
-      toast.error('Failed to login as guest. Please reload the page and try again')
       return
     }
     router.push('/home')
@@ -51,7 +39,7 @@ export function LoginForm() {
 
   return (
     <form
-      onSubmit={handleSubmit(handleCredentialsLogin)}
+      onSubmit={handleSubmit(handleCredentialsSignUp)}
       className='grid gap-4'
     >
       <div className='grid gap-2'>
@@ -65,14 +53,6 @@ export function LoginForm() {
         <PasswordField
           register={register('password')}
           error={errors.password}
-          SecondaryLabel={
-            <Link
-              href='/reset-password'
-              className='ml-auto inline-block text-sm underline'
-            >
-              Forgot your password?
-            </Link>
-          }
         />
       </div>
       {errors.root?.message && <p className='text-darkRed text-center'>{errors.root.message}</p>}
@@ -81,16 +61,7 @@ export function LoginForm() {
         className='w-full'
         loading={isSubmitting}
       >
-        Login
-      </Button>
-      <Separator label='or' />
-      <GoogleLogin />
-      <Button
-        type='button'
-        variant='outline'
-        onClick={handleAnonymousLogin}
-      >
-        Continue as Guest
+        Create Account
       </Button>
     </form>
   )

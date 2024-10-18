@@ -1,31 +1,22 @@
 import Link from 'next/link'
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@components/ui/card'
-import { LoginForm } from './form'
+import { ResetPasswordForm } from './form'
 import { Button } from '@components/ui/button'
 
-export default function LoginPage() {
+export default function ResetPasswordPage() {
   return (
     <div className='w-screen h-screen centered flex-col gap-4 p-4'>
       <Card className='mx-auto max-w-sm'>
         <CardHeader>
-          <CardTitle className='text-2xl'>Login</CardTitle>
-          <CardDescription>Enter your email below to login to your account</CardDescription>
+          <CardTitle className='text-2xl'>Forgot your password?</CardTitle>
+          <CardDescription>Please enter the email you use to sign into Bible Recall</CardDescription>
         </CardHeader>
         <CardContent>
-          <LoginForm />
-          <div className='mt-4 text-center text-sm'>
-            Don&apos;t have an account?
-            <Link
-              href='/register'
-              className='underline ms-2'
-            >
-              Sign up
-            </Link>
-          </div>
+          <ResetPasswordForm />
         </CardContent>
         <CardFooter>
-          <Link href='/'>
+          <Link href='/login'>
             <Button
               variant='link'
               className='text-gray-400 !p-0'

@@ -1,10 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { authMiddleware, redirectToHome, redirectToLogin, redirectToPath } from 'next-firebase-auth-edge'
+import { authMiddleware, redirectToLogin, redirectToPath } from 'next-firebase-auth-edge'
 import { clientConfig, serverConfig } from './firebase-config'
 
-const PUBLIC_PATHS = ['/', '/register', '/login', '/reset-password']
+const PUBLIC_PATHS = ['/', '/register', '/login', '/reset-password', '/change-password']
 
 export async function middleware(request: NextRequest) {
+  const { searchParams } = new URL(request.url)
+  // Check if the requested path is '/change-password' and 'oobCode' is present in the query parameters
+  if (request.nextUrl.pathname === '/change-password') {
+    if (!searchParams.has('oobCode')) {
+      // If 'oobCode' is not present, redirect to an error page or another page
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+  }
+
   return authMiddleware(request, {
     loginPath: '/api/login',
     logoutPath: '/api/logout',

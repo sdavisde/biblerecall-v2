@@ -27,4 +27,5 @@ export const clientConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
   googleClientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+  baseUrl: process.env.BASE_URL!,
 }

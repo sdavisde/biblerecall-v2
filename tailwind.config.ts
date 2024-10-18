@@ -25,6 +25,7 @@ module.exports = {
         yellow: '#D0CE94',
         red: '#CC706F',
         darkRed: '#B64846',
+        error: 'hsl(var(--error))',
         green: 'hsl(var(--green))',
         darkGreen: '#5F775B',
         black: '#292728',
