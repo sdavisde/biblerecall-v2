@@ -156,7 +156,7 @@ function normalizeFirebaseVerse(firebaseVerse: FirebaseVerse, id: string): Resul
   return Result.success({
     ...firebaseVerse,
     id,
-    createdDate: firebaseVerse.createdDate.toDate(),
+    createdDate: firebaseVerse.createdDate?.toDate() ?? new Date(),
     completions: firebaseVerse.completions ?? 0,
     favorite: firebaseVerse.favorite ?? false,
     version: firebaseVerse.version ?? 'ESV',
