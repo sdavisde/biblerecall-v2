@@ -1,7 +1,6 @@
 'use client'
 
 import toast from 'react-hot-toast'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@components/ui/accordion'
 import { Button } from '@components/ui/button'
 import {
   Drawer,
@@ -50,15 +49,7 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
 
   const resetState = () => {
     setBuilder(VerseBuilder.init(initialVerse ?? null))
-    console.log('initial verse', initialVerse)
     setActiveTab('Review')
-  }
-  const toggleAccordion = (accordion: VerseSelectorTabs) => {
-    if (activeTab === accordion) {
-      setActiveTab('Review')
-    } else {
-      setActiveTab(accordion)
-    }
   }
 
   useEffect(() => {
@@ -127,14 +118,14 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
           <TabsList className='w-full'>
             <TabsTrigger
               value='Books'
-              onClick={() => toggleAccordion('Books')}
+              onClick={() => setActiveTab('Books')}
               className='flex-1'
             >
               Book
             </TabsTrigger>
             <TabsTrigger
               value='Chapters'
-              onClick={() => toggleAccordion('Chapters')}
+              onClick={() => setActiveTab('Chapters')}
               disabled={Lodash.isNil(builder.book)}
               className='flex-1'
             >
@@ -142,7 +133,7 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
             </TabsTrigger>
             <TabsTrigger
               value='Verses'
-              onClick={() => toggleAccordion('Verses')}
+              onClick={() => setActiveTab('Verses')}
               disabled={Lodash.isNil(builder.chapter)}
               className='flex-1'
             >
@@ -150,7 +141,7 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
             </TabsTrigger>
             <TabsTrigger
               value='Review'
-              onClick={() => toggleAccordion('Review')}
+              onClick={() => setActiveTab('Review')}
               disabled={Lodash.isNil(reference)}
               className='flex-1'
             >
@@ -175,7 +166,7 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
                         key={book.id}
                         onSelect={() => {
                           setBuilder((prev) => ({ ...prev, book, chapter: null, start: null, end: null }))
-                          toggleAccordion('Chapters')
+                          setActiveTab('Chapters')
                         }}
                       >
                         <span> {book.name}</span>
@@ -199,7 +190,7 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
                     className='w-full h-full aspect-square'
                     onClick={() => {
                       setBuilder((prev) => ({ ...prev, chapter, start: null, end: null }))
-                      toggleAccordion('Verses')
+                      setActiveTab('Verses')
                     }}
                   >
                     {chapter}
@@ -209,8 +200,8 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
             </TabsContent>
             <TabsContent
               value='Verses'
-              className={cn('flex-1 flex flex-col justify-between gap-4', {
-                'max-h-[calc(100%-1.5rem)]': activeTab === 'Verses',
+              className={cn('flex flex-col justify-between gap-4', {
+                'flex-1 max-h-[calc(100%-1.5rem)]': activeTab === 'Verses',
               })}
             >
               <div className='grid grid-cols-5 gap-3 max-h-full overflow-y-auto'>

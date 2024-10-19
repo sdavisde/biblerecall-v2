@@ -21,10 +21,12 @@ export function VisibilityMenu() {
 
   // Update settings when visibility changes
   useEffect(() => {
+    console.log('visibility change', visibility)
     if (settings && visibility !== settings.visibility) {
       setSettings({ ...settings, visibility })
     }
   }, [visibility])
+  console.log(settings)
 
   return (
     <DropdownMenu>

@@ -44,13 +44,6 @@ export async function signInWithGoogle(): Promise<Result<User>> {
   try {
     const res = await signInWithPopup(auth, googleProvider)
     const user = res.user
-    await setDoc(doc(database, 'Users', user.uid), {
-      uid: user.uid,
-      name: user.displayName,
-      email: user.email,
-      photoURL: user.photoURL,
-      authProvider: 'google',
-    })
 
     const apiResponse = await giveJwtToTrpc(user)
     if (!apiResponse.hasValue) {

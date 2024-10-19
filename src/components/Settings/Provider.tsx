@@ -25,6 +25,7 @@ export const SettingsProvider = ({
 }: PropsWithChildren<{ authUserSettings: Settings | null }>) => {
   const [settingsState, setSettingsState] = useState<Settings | null>(null)
   const { setTheme } = useTheme()
+  console.log(authUserSettings)
 
   useEffect(() => {
     //get settings from local storage as initial page load default

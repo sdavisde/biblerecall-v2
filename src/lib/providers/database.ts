@@ -2,7 +2,7 @@ import { database } from '@lib/firebase'
 import { ErrorCode } from '@util/error'
 import { Lodash } from '@util/lodash'
 import { Result } from '@util/result'
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, Timestamp, updateDoc } from 'firebase/firestore'
 import { Verse } from 'service/verse/types'
 
 export namespace Database {
@@ -50,9 +50,14 @@ export namespace Database {
     const snapshot = await getDocs(versesRef)
 
     snapshot.forEach((doc) => {
-      const verseData = doc.data()
-      verses.push({ ...(verseData as Verse), id: doc.id })
+      const verseData = doc.data() as Verse
+      verses.push({
+        ...verseData,
+        id: doc.id,
+        createdDate: new Date((verseData.createdDate as unknown as Timestamp)?.seconds * 1000),
+      })
     })
+    console.log(verses)
 
     return Result.success(verses)
   }
