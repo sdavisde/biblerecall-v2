@@ -86,10 +86,10 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
       </Card>
       <Button
         variant='destructive'
-        className='absolute right-0 top-0 h-full centered z-10 transition-all duration-300 rounded-xl'
+        className='absolute right-[1px] top-[1px] h-[calc(100%-2px)] centered z-10 transition-all duration-300 rounded-xl'
         onClick={onDelete}
       >
-        <X color='red' />
+        <X className='text-destructive-foreground' />
       </Button>
     </div>
   )

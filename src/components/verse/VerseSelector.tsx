@@ -21,19 +21,20 @@ import LoadingDots from '@components/loading/LoadingDots'
 import { VerseBuilder } from 'service/verse'
 import { Book, Verse, VerseReference } from 'service/verse/types'
 import { cn } from '@components/lib/utils'
-
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@components/ui/command'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs'
 
 type VerseSelectProps = PropsWithChildren<{
   submitVerse: (verse: Verse) => Promise<Result<unknown>>
   initialVerse?: Verse
 }>
 
-type VerseSelectorAccordions = 'none' | 'books' | 'chapters' | 'verses' | 'review'
+type VerseSelectorTabs = (typeof verseSelectorTabs)[number]
+const verseSelectorTabs = ['Books', 'Chapters', 'Verses', 'Review'] as const
 
 export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSelectProps) => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false)
-  const [activeAccordion, setActiveAccordion] = useState<VerseSelectorAccordions>('none')
+  const [activeTab, setActiveTab] = useState<VerseSelectorTabs>('Review')
   const [submitting, setSubmitting] = useState(false)
   const bookSearchRef = useRef<HTMLInputElement>(null)
 
@@ -49,13 +50,14 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
 
   const resetState = () => {
     setBuilder(VerseBuilder.init(initialVerse ?? null))
-    setActiveAccordion('none')
+    console.log('initial verse', initialVerse)
+    setActiveTab('Review')
   }
-  const toggleAccordion = (accordion: VerseSelectorAccordions) => {
-    if (activeAccordion === accordion) {
-      setActiveAccordion('none')
+  const toggleAccordion = (accordion: VerseSelectorTabs) => {
+    if (activeTab === accordion) {
+      setActiveTab('Review')
     } else {
-      setActiveAccordion(accordion)
+      setActiveTab(accordion)
     }
   }
 
@@ -67,15 +69,15 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
   }, [text.data])
 
   useEffect(() => {
-    if (activeAccordion === 'books') {
+    if (activeTab === 'Books') {
       bookSearchRef.current?.focus()
     }
-  }, [activeAccordion])
+  }, [activeTab])
 
   useEffect(() => {
     resetState()
     if (drawerIsOpen && Lodash.isNil(initialVerse)) {
-      setActiveAccordion('books')
+      setActiveTab('Books')
       setTimeout(() => bookSearchRef.current?.focus(), 400)
     }
   }, [drawerIsOpen])
@@ -112,25 +114,54 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
       onOpenChange={setDrawerIsOpen}
     >
       <DrawerTrigger className='w-full'>{children}</DrawerTrigger>
-      <DrawerContent className='h-[90dvh] p-4'>
+      <DrawerContent className='h-[90dvh] max-h-[90dvh] p-4 '>
         <DrawerClose className='absolute top-4 left-4'>Close</DrawerClose>
         <DrawerHeader>
           <DrawerTitle>New Verse</DrawerTitle>
           <DrawerDescription>{referenceString}</DrawerDescription>
         </DrawerHeader>
-        <Accordion
-          type='single'
-          value={activeAccordion}
-          collapsible
+        <Tabs
+          value={activeTab}
+          className='flex-1 max-h-[calc(90dvh-8rem)] flex flex-col relative'
         >
-          <AccordionItem value='books'>
-            <AccordionTrigger onClick={() => toggleAccordion('books')}>
-              <span>
-                Book
-                <span className='italic ms-2'>{reference?.book.name}</span>
-              </span>
-            </AccordionTrigger>
-            <AccordionContent className='flex-1'>
+          <TabsList className='w-full'>
+            <TabsTrigger
+              value='Books'
+              onClick={() => toggleAccordion('Books')}
+              className='flex-1'
+            >
+              Book
+            </TabsTrigger>
+            <TabsTrigger
+              value='Chapters'
+              onClick={() => toggleAccordion('Chapters')}
+              disabled={Lodash.isNil(builder.book)}
+              className='flex-1'
+            >
+              Chapters
+            </TabsTrigger>
+            <TabsTrigger
+              value='Verses'
+              onClick={() => toggleAccordion('Verses')}
+              disabled={Lodash.isNil(builder.chapter)}
+              className='flex-1'
+            >
+              Verses
+            </TabsTrigger>
+            <TabsTrigger
+              value='Review'
+              onClick={() => toggleAccordion('Review')}
+              disabled={Lodash.isNil(reference)}
+              className='flex-1'
+            >
+              Review
+            </TabsTrigger>
+          </TabsList>
+          <div className='flex-1 px-2 pt-2 flex flex-col max-h-[calc(100%-2rem)]'>
+            <TabsContent
+              value='Books'
+              className='max-h-full overflow-y-auto'
+            >
               <Command className='rounded-lg border shadow-md md:min-w-[450px]'>
                 <CommandInput
                   placeholder='Type a book name to search...'
@@ -143,8 +174,8 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
                       <CommandItem
                         key={book.id}
                         onSelect={() => {
-                          setBuilder((prev) => ({ ...prev, book }))
-                          toggleAccordion('chapters')
+                          setBuilder((prev) => ({ ...prev, book, chapter: null, start: null, end: null }))
+                          toggleAccordion('Chapters')
                         }}
                       >
                         <span> {book.name}</span>
@@ -153,19 +184,11 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
                   </CommandGroup>
                 </CommandList>
               </Command>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem
-            value='chapters'
-            disabled={Lodash.isNil(builder.book)}
-          >
-            <AccordionTrigger onClick={() => toggleAccordion('chapters')}>
-              <span>
-                Chapter
-                <span className='italic ms-2'>{reference?.chapter}</span>
-              </span>
-            </AccordionTrigger>
-            <AccordionContent className='flex-1 overflow-y-auto flex flex-wrap gap-2'>
+            </TabsContent>
+            <TabsContent
+              value='Chapters'
+              className='grid grid-cols-5 gap-3 max-h-full overflow-y-auto'
+            >
               {chaptersLoading ? (
                 <LoadingDots />
               ) : (
@@ -173,87 +196,99 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
                   <Button
                     key={chapter}
                     variant='outline'
-                    className='w-8 aspect-square'
+                    className='w-full h-full aspect-square'
                     onClick={() => {
-                      setBuilder((prev) => ({ ...prev, chapter }))
-                      toggleAccordion('verses')
+                      setBuilder((prev) => ({ ...prev, chapter, start: null, end: null }))
+                      toggleAccordion('Verses')
                     }}
                   >
                     {chapter}
                   </Button>
                 ))
               )}
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem
-            value='verses'
-            disabled={Lodash.isNil(builder.chapter)}
-          >
-            <AccordionTrigger onClick={() => toggleAccordion('verses')}>
-              <span>
-                Verse(s)
-                <span className='italic ms-2'>
-                  {reference?.start} {reference?.end ? '-' + reference!.end : ''}
-                </span>
-              </span>
-            </AccordionTrigger>
-            <AccordionContent className='flex-1 overflow-y-auto flex flex-wrap gap-2'>
-              {versesLoading ? (
-                <LoadingDots />
-              ) : (
-                Lodash.times(verses, (index) => {
-                  const verseNumber = index + 1
-                  return (
-                    <Button
-                      key={verseNumber}
-                      variant='outline'
-                      className={cn('w-8 aspect-square', {
-                        'bg-green hover:bg-green': verseNumber === builder.start,
-                        'bg-red hover:bg-red': verseNumber === builder.end,
-                        'bg-gray-300 hover:bg-gray-300':
-                          !Lodash.isNil(builder.start) &&
-                          !Lodash.isNil(builder.end) &&
-                          verseNumber > builder.start &&
-                          verseNumber < builder.end,
-                      })}
-                      onClick={() => {
-                        if (!Lodash.isNil(builder.start) && Lodash.isNil(builder.end) && verseNumber > builder.start) {
-                          // If we haven't selected an "end" verse, set that
-                          setBuilder((prev) => ({ ...prev, end: verseNumber }))
-                        } else {
-                          // We're selecting a verse for the first time, or selecting a new range of verses
-                          setBuilder((prev) => ({ ...prev, start: verseNumber, end: null }))
-                        }
-                      }}
-                    >
-                      {verseNumber}
-                    </Button>
-                  )
-                })
+            </TabsContent>
+            <TabsContent
+              value='Verses'
+              className={cn('flex-1 flex flex-col justify-between gap-4', {
+                'max-h-[calc(100%-1.5rem)]': activeTab === 'Verses',
+              })}
+            >
+              <div className='grid grid-cols-5 gap-3 max-h-full overflow-y-auto'>
+                {versesLoading ? (
+                  <LoadingDots />
+                ) : (
+                  Lodash.times(verses, (index) => {
+                    const verseNumber = index + 1
+                    return (
+                      <Button
+                        key={verseNumber}
+                        variant='outline'
+                        className={cn('w-full h-full aspect-square', {
+                          'bg-green hover:bg-green': verseNumber === builder.start,
+                          'bg-red hover:bg-red': verseNumber === builder.end,
+                          'bg-gray-300 hover:bg-gray-300':
+                            !Lodash.isNil(builder.start) &&
+                            !Lodash.isNil(builder.end) &&
+                            verseNumber > builder.start &&
+                            verseNumber < builder.end,
+                        })}
+                        onClick={() => {
+                          if (
+                            !Lodash.isNil(builder.start) &&
+                            Lodash.isNil(builder.end) &&
+                            verseNumber > builder.start
+                          ) {
+                            // If we haven't selected an "end" verse, set that
+                            setBuilder((prev) => ({ ...prev, end: verseNumber }))
+                          } else {
+                            // We're selecting a verse for the first time, or selecting a new range of verses
+                            setBuilder((prev) => ({ ...prev, start: verseNumber, end: null }))
+                          }
+                        }}
+                      >
+                        {verseNumber}
+                      </Button>
+                    )
+                  })
+                )}
+              </div>
+              <Button
+                className='w-full'
+                disabled={Lodash.isNil(reference)}
+                onClick={() => setActiveTab('Review')}
+              >
+                Continue
+              </Button>
+            </TabsContent>
+            <TabsContent
+              value='Review'
+              className={cn('flex flex-col justify-between gap-4 mt-2', {
+                'flex-1 max-h-[calc(100%-1.5rem)]': activeTab === 'Review',
+              })}
+            >
+              <div className='flex flex-col max-h-full overflow-y-auto'>
+                <h3 className='pb-1 text-sm font-medium w-full flex gap-2'>
+                  <span>Review</span>
+                  <span className='font-light'>{referenceString}</span>
+                </h3>
+                {!Lodash.isNil(reference) && (
+                  <>
+                    <p>&quot;{text.data?.hasValue ? text.data.value.verseText : ''}&quot;</p>
+                  </>
+                )}
+              </div>
+              {!Lodash.isNil(reference) && (
+                <Button
+                  onClick={onSave}
+                  loading={submitting}
+                  className='w-full'
+                >
+                  Save Verse
+                </Button>
               )}
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-        <div className='flex-1 flex flex-col justify-start items-center overflow-y-auto'>
-          <h3 className='pt-4 pb-1 text-sm font-medium w-full flex gap-2'>
-            <span>Review</span>
-            <span className='font-light'>{referenceString}</span>
-          </h3>
-          {!Lodash.isNil(reference) && (
-            <>
-              <p>&quot;{text.data?.hasValue ? text.data.value.verseText : ''}&quot;</p>
-            </>
-          )}
-        </div>
-        {!Lodash.isNil(reference) && (
-          <Button
-            onClick={onSave}
-            loading={submitting}
-            className='w-full mt-2'
-          >
-            Save Verse
-          </Button>
-        )}
+            </TabsContent>
+          </div>
+        </Tabs>
       </DrawerContent>
     </Drawer>
   )
