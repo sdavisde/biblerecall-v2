@@ -1,4 +1,4 @@
-import Button from '@components/common/button'
+import { Button } from '@components/ui/button'
 import { RotateCcw } from 'lucide-react'
 import { House } from 'lucide-react'
 import Link from 'next/link'

@@ -1,9 +1,9 @@
+import { Button } from '@components/ui/button'
 import { ArrowRight } from 'lucide-react'
 import { RotateCcw } from 'lucide-react'
 import { House } from 'lucide-react'
 import Link from 'next/link'
 import { ParsedUrlQuery } from 'querystring'
-import Button from '@components/common/button'
 
 type SuccessPageProps = {
   params: {

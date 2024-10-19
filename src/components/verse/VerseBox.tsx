@@ -41,49 +41,48 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
 
   return (
     <div className='h-fit w-full relative'>
-      <Card
-        className={cn('cursor-pointer text-start w-full relative flex gap-4 duration-300 transition-all z-20', {
-          '-translate-x-16': showDeleteButton,
-        })}
-        {...handlers}
+      <VerseSelector
+        submitVerse={onUpdate}
+        initialVerse={verse}
       >
-        <div className='w-full h-full'>
-          <CardHeader>
-            <CardTitle className='flex items-center justify-between'>
-              <span>{Verses.stringifyReference(verse)}</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <VerseText
-              text={verse.text}
-              visibility={settings?.visibility}
-            />
-          </CardContent>
-        </div>
-        <div
-          className={cn('flex items-center gap-2', {
-            'flex-col': settings?.visibility !== Visibility.None,
+        <Card
+          className={cn('cursor-pointer text-start w-full relative flex gap-4 duration-300 transition-all z-20', {
+            '-translate-x-16': showDeleteButton,
           })}
+          {...handlers}
         >
-          <VerseSelector
-            submitVerse={onUpdate}
-            initialVerse={verse}
+          <div className='w-full h-full'>
+            <CardHeader>
+              <CardTitle className='flex items-center justify-between'>
+                <span>{Verses.stringifyReference(verse)}</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <VerseText
+                text={verse.text}
+                visibility={settings?.visibility}
+              />
+            </CardContent>
+          </div>
+          <div
+            className={cn('flex items-center gap-2', {
+              'flex-col': settings?.visibility !== Visibility.None,
+            })}
           >
-            <Button
-              variant='outline'
-              size='icon'
-              asDiv
+            <Link
+              href={`/home/verses/${verse.id}`}
+              onClick={(e) => e.stopPropagation()}
             >
-              <Maximize2 />
-            </Button>
-          </VerseSelector>
-          <Link href={`/home/verses/${verse.id}`}>
-            <Button size='icon'>
-              <CircleArrowRight />
-            </Button>
-          </Link>
-        </div>
-      </Card>
+              <Button
+                size='icon'
+                asDiv
+              >
+                <CircleArrowRight />
+              </Button>
+            </Link>
+          </div>
+        </Card>
+      </VerseSelector>
       <Button
         variant='destructive'
         className='absolute right-[1px] top-[1px] h-[calc(100%-2px)] centered z-10 transition-all duration-300 rounded-xl'

@@ -57,7 +57,6 @@ export namespace Database {
         createdDate: new Date((verseData.createdDate as unknown as Timestamp)?.seconds * 1000),
       })
     })
-    console.log(verses)
 
     return Result.success(verses)
   }
