@@ -14,7 +14,7 @@ import { Result } from '@util/result'
  */
 
 export const versesRouter = router({
-  byId: publicProcedure.input(z.string()).query(async ({ input: verseId, ctx }) => {
+  byId: publicProcedure.input(z.string()).query(async ({ input: verseId, ctx }): Promise<Result<Verse>> => {
     const { type, user } = ctx
 
     switch (type) {

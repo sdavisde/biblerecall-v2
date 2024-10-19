@@ -9,28 +9,7 @@ export enum Testament {
 /**
  * Full details for a verse in bible recall's system
  */
-export type Verse = VerseReference & VerseMetadata
-
-/**
- * Metadata related to a verse, used for display purposes
- */
-export type VerseMetadata = {
-  id: string
-  text: string
-  favorite: boolean
-  version: string
-  createdDate: Date
-}
-
-/**
- * Details of a reference for a verse (the location inside the bible this verse resides)
- */
-export type VerseReference = {
-  book: Book
-  chapter: number
-  start: number
-  end: number | null
-}
+// export type Verse = VerseReference & VerseMetadata
 
 export type Book = {
   id: number
@@ -41,6 +20,10 @@ export type Book = {
 export type BookNames = (typeof Bible.books)[number]['name']
 export type VerseReferenceString = `${string} ${number}:${number}` | `${string} ${number}:${number}${string}`
 
+/**
+ * Details of a reference for a verse (the location inside the bible this verse resides)
+ */
+export type VerseReference = z.infer<typeof verseReferenceSchema>
 export const verseReferenceSchema = z.object({
   book: z.object({
     id: z.number(),
@@ -52,11 +35,21 @@ export const verseReferenceSchema = z.object({
   end: z.number().nullable(),
 })
 
-export const verseSchema = z.object({
-  ...verseReferenceSchema.shape,
+/**
+ * Metadata related to a verse, used for display purposes
+ */
+export type VerseMetadata = z.infer<typeof verseMetadataSchema>
+export const verseMetadataSchema = z.object({
   id: z.string(),
   text: z.string(),
   favorite: z.boolean(),
   version: z.string(),
   createdDate: z.date(),
+  completions: z.number().min(0),
+})
+
+export type Verse = z.infer<typeof verseSchema>
+export const verseSchema = z.object({
+  ...verseReferenceSchema.shape,
+  ...verseMetadataSchema.shape,
 })

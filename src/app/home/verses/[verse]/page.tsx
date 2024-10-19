@@ -14,11 +14,11 @@ type VersePageProps = {
 
 export default async function VersePage({ params: { verse: id } }: VersePageProps) {
   const verse = await api.verse.byId(id)
-  const completions = 0 // verse.completions
 
   if (!verse.hasValue) {
     return notFound()
   }
+  const completions = verse.value.completions
 
   return (
     <>

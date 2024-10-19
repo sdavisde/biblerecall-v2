@@ -5,6 +5,11 @@ import { Result } from '@util/result'
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, Timestamp, updateDoc } from 'firebase/firestore'
 import { Verse } from 'service/verse/types'
 
+// Firebase stores data a little differently - here's a type to signify that
+type FirebaseVerse = Omit<Verse, 'createdDate'> & {
+  createdDate: Timestamp
+}
+
 export namespace Database {
   type GetVerseRequest = {
     userId: string
@@ -23,8 +28,8 @@ export namespace Database {
 
     try {
       const snapshot = await getDoc(verseRef)
-      const verse = { ...snapshot.data(), id: snapshot.id } as Verse
-      return Result.success(verse)
+      const firebaseVerse = snapshot.data() as FirebaseVerse
+      return normalizeFirebaseVerse(firebaseVerse, snapshot.id)
     } catch (e) {
       return Result.failure({ code: ErrorCode.VERSE_NOT_FOUND, message: 'Verse not found' })
     }
@@ -50,12 +55,11 @@ export namespace Database {
     const snapshot = await getDocs(versesRef)
 
     snapshot.forEach((doc) => {
-      const verseData = doc.data() as Verse
-      verses.push({
-        ...verseData,
-        id: doc.id,
-        createdDate: new Date((verseData.createdDate as unknown as Timestamp)?.seconds * 1000),
-      })
+      const firebaseVerse = doc.data() as FirebaseVerse
+      const verse = normalizeFirebaseVerse(firebaseVerse, doc.id)
+      if (verse.hasValue) {
+        verses.push(verse.value)
+      }
     })
 
     return Result.success(verses)
@@ -134,4 +138,27 @@ export namespace Database {
       return Result.failure({ code: ErrorCode.INTERNAL_SERVER_ERROR, message: e.message })
     }
   }
+}
+
+function normalizeFirebaseVerse(firebaseVerse: FirebaseVerse, id: string): Result<Verse> {
+  if (Lodash.isNil(firebaseVerse.book)) {
+    return Result.failure({ code: 'verse:missing-book' })
+  }
+  if (Lodash.isNil(firebaseVerse.chapter)) {
+    return Result.failure({ code: 'verse:missing-chapter' })
+  }
+  if (Lodash.isNil(firebaseVerse.start)) {
+    return Result.failure({ code: 'verse:missing-start' })
+  }
+  if (Lodash.isNil(firebaseVerse.text)) {
+    return Result.failure({ code: 'verse:missing-text' })
+  }
+  return Result.success({
+    ...firebaseVerse,
+    id,
+    createdDate: firebaseVerse.createdDate.toDate(),
+    completions: firebaseVerse.completions ?? 0,
+    favorite: firebaseVerse.favorite ?? false,
+    version: firebaseVerse.version ?? 'ESV',
+  })
 }

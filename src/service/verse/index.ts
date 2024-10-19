@@ -26,6 +26,7 @@ export namespace VerseBuilder {
       start: null,
       end: null,
       createdDate: new Date(),
+      completions: 0,
     }
   }
 
@@ -42,6 +43,9 @@ export namespace VerseBuilder {
     if (Lodash.isNil(builder.favorite)) {
       return Result.failure({ code: 'verse-builder:missing-favorite' })
     }
+    if (Lodash.isNil(builder.completions)) {
+      return Result.failure({ code: 'verse-builder:missing-completions' })
+    }
     const reference = VerseBuilder.toReference(builder)
     if (!reference.hasValue) {
       return reference
@@ -53,6 +57,7 @@ export namespace VerseBuilder {
       version: builder.version,
       favorite: builder.favorite,
       createdDate: builder.createdDate,
+      completions: builder.completions,
       ...reference.value,
     })
   }

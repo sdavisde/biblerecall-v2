@@ -53,6 +53,7 @@ export namespace Verses {
       version: metadata?.version ?? '',
       favorite: metadata?.favorite ?? false,
       createdDate: metadata?.createdDate ?? new Date(),
+      completions: metadata?.completions ?? 0,
     })
   }
 
