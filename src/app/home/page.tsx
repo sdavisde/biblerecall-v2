@@ -1,31 +1,27 @@
 export const dynamic = 'auto'
 
-import { api } from '@lib/trpc/server'
 import { PageSelector } from '@components/common/PageSelector'
+import { Searchbar } from '@components/common/Searchbar'
+import { BookOpenCheck, Settings } from 'lucide-react'
 
 export default async function Home() {
-  const user = await api.user.get()
-
-  // if (Lodash.isNil(user)) {
-  //   redirect('/')
-  // }
-
   return (
     <div
       id='panel'
       className='w-full p-4 min-h-[92%] flex flex-col items-center gap-4'
     >
+      <h1>Bible Recall</h1>
+      <Searchbar />
       <PageSelector
-        title='My Verses'
-        subtitle='Memorize your saved verses'
-        imageSrc='/blurry-bible.jpg'
+        text='Memorize your saved verses'
         href='/home/verses'
+        Icon={BookOpenCheck}
       />
       <PageSelector
-        title='Discover'
-        subtitle='Find new verses'
-        imageSrc='/mag-glass-bible.jpg'
-        href={null}
+        text='Settings'
+        href='/home/settings'
+        Icon={Settings}
+        variant='outline'
       />
     </div>
   )

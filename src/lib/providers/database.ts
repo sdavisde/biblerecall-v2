@@ -71,6 +71,7 @@ export namespace Database {
   }
   export const addVerse = async (request: AddVerseRequest): Promise<Result<Verse>> => {
     const { userId, verse } = request
+    console.log('ADDING VERSE', verse)
 
     if (Lodash.isNil(userId)) {
       return Result.failure({ code: ErrorCode.USER_ID_NOT_PROVIDED, message: 'User id not provided' })
@@ -156,6 +157,7 @@ function normalizeFirebaseVerse(firebaseVerse: FirebaseVerse, id: string): Resul
   return Result.success({
     ...firebaseVerse,
     id,
+    end: firebaseVerse.end ?? firebaseVerse.start,
     createdDate: firebaseVerse.createdDate?.toDate() ?? new Date(),
     completions: firebaseVerse.completions ?? 0,
     favorite: firebaseVerse.favorite ?? false,

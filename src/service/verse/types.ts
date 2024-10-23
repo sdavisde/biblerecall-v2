@@ -32,7 +32,7 @@ export const verseReferenceSchema = z.object({
   }),
   chapter: z.number(),
   start: z.number(),
-  end: z.number().nullable(),
+  end: z.number(),
 })
 
 /**

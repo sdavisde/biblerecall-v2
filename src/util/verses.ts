@@ -21,19 +21,23 @@ export namespace Verses {
       const chapterIndex = first.lastIndexOf(' ')
       const book = first.slice(0, chapterIndex)
       const chapter = first.slice(chapterIndex)
-      const [start, end] = last.split('-')
+      const [startString, endString] = last.split('-')
 
+      let start = parseInt(startString)
+      let end = null
       if (last.includes('-')) {
+        end = parseInt(endString)
         if (!end || start > end) {
           return Result.failure({ code: `invalid reference: ${reference}` })
         }
       }
 
+      end = end ?? start
       return Result.success({
         book: Bible.books.find((b) => b.name.toLowerCase() === book.toLowerCase()) ?? Bible.books[0],
         chapter: parseInt(chapter),
-        start: parseInt(start),
-        end: parseInt(end),
+        start,
+        end,
       })
     } catch (e) {
       console.error(e)
@@ -45,20 +49,22 @@ export namespace Verses {
    * Parses a verse reference into its different attributes
    * @param reference verse in the format: Book C:V or 1 Book C:V-V2
    */
-  export function createVerse(reference: VerseReference, metadata?: Partial<VerseMetadata>): Result<Verse> {
-    return Result.success({
+  export function createVerse(reference: VerseReference, metadata?: Partial<VerseMetadata>): Verse {
+    return {
       ...reference,
       id: metadata?.id ?? '',
       text: metadata?.text ?? '',
-      version: metadata?.version ?? '',
+      version: metadata?.version ?? 'ESV',
       favorite: metadata?.favorite ?? false,
       createdDate: metadata?.createdDate ?? new Date(),
       completions: metadata?.completions ?? 0,
-    })
+    }
   }
 
   export function stringifyReference(verse: VerseReference): VerseReferenceString {
-    return `${verse.book.name} ${verse.chapter}:${verse.start}${verse.end ? '-' + verse.end : ''}`
+    return `${verse.book.name} ${verse.chapter}:${verse.start}${
+      verse.end && verse.end !== verse.start ? '-' + verse.end : ''
+    }`
   }
 
   /**

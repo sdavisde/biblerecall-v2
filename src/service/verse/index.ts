@@ -77,7 +77,7 @@ export namespace VerseBuilder {
       book: builder.book,
       chapter: builder.chapter,
       start: builder.start,
-      end: builder.end,
+      end: builder.end ?? builder.start,
     })
   }
 

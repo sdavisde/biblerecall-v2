@@ -16,6 +16,7 @@ export const serverConfig = {
     clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL!,
     privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, '\n')!,
   },
+  openApiKey: process.env.OPENAI_API_KEY,
 }
 
 export const clientConfig = {
