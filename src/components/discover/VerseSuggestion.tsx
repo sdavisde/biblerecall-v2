@@ -1,7 +1,7 @@
 'use client'
 
 import { Alert, AlertDescription, AlertTitle } from '@components/ui/alert'
-import { VerseSuggestion as VerseSuggestionType } from '@app/home/discover/actions'
+import { VerseSuggestion as VerseSuggestionType } from '@components/discover/actions'
 import { Plus } from 'lucide-react'
 import { Button } from '@components/ui/button'
 import { Verses } from '@util/verses'

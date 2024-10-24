@@ -1,7 +1,10 @@
+'use server'
+
 import { openai } from '@ai-sdk/openai'
 import { Lodash } from '@util/lodash'
 import { Result } from '@util/result'
 import { generateText } from 'ai'
+import { cache } from 'react'
 import { z } from 'zod'
 
 export type VerseSuggestion = z.infer<typeof verseSuggestionSchema>
@@ -9,7 +12,7 @@ const verseSuggestionSchema = z.object({
   reference: z.string(),
   text: z.string(),
 })
-export async function generateTextFromQuery(input: string) {
+export const generateTextFromQuery = cache(async (input: string) => {
   if (Lodash.isEmpty(input)) {
     return Result.failure({ code: 'ai-verse-gen:invalid-input', message: 'Malformed input' })
   }
@@ -34,4 +37,4 @@ export async function generateTextFromQuery(input: string) {
       message: 'Verses returned by openai were in the wrong format',
     })
   }
-}
+})
