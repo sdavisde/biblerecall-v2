@@ -16,11 +16,11 @@ export const PageSelector = ({ text, Icon, href, ...buttonProps }: PageSelectorP
       className='w-full max-w-lg group'
     >
       <Button
-        className='w-full gap-2'
+        className='w-full gap-2 py-5'
         {...buttonProps}
       >
         <span className='relative'>
-          <Icon className='absolute -left-9 -top-[2px]' />
+          <Icon className='absolute -left-9 -top-[3px]' />
           {text}
         </span>
       </Button>

@@ -24,33 +24,45 @@ export default function SuccessPage({ params, searchParams }: SuccessPageProps) 
       <h1 className={`font-base text-lg text-center ${finishedHardMode ? 'text-xl text-darkGreen' : ''}`}>
         Well done completing that verse!
       </h1>
-      <div className='flex flex-col gap-4 text-center'>
+      <div className='flex flex-col gap-4 text-center w-1/2'>
         {nextDifficulty <= 2 && (
-          <Button>
-            <Link
-              href={`/home/${verse}?diff=${nextDifficulty}`}
-              className='w-40 h-12 centered cursor-pointer mx-2'
+          <Link
+            href={`/home/verses/${verse}/type-it-out?diff=${nextDifficulty}`}
+            className='cursor-pointer mx-2'
+          >
+            <Button
+              size='lg'
+              className='text-base gap-2 w-full'
             >
-              <h3 className='w-32 text-center'>Continue</h3> <ArrowRight className='w-12 scale-150' />
-            </Link>
-          </Button>
+              Continue
+              <ArrowRight />
+            </Button>
+          </Link>
         )}
-        <Button>
-          <Link
-            href={`/home/${verse}?diff=${difficulty}`}
-            className='w-40 h-12 centered cursor-pointer mx-2'
+        <Link
+          href={`/home/verses/${verse}/type-it-out?diff=${difficulty}`}
+          className='cursor-pointer mx-2'
+        >
+          <Button
+            variant='secondary'
+            size='lg'
+            className='text-base gap-2 w-full'
           >
-            <h3 className='w-32 text-center'>Retry</h3> <RotateCcw className='w-12 scale-150' />
-          </Link>
-        </Button>
-        <Button>
-          <Link
-            href='/home/verses'
-            className='w-40 h-12 centered cursor-pointer mx-2'
+            Retry <RotateCcw />
+          </Button>
+        </Link>
+        <Link
+          href='/home/verses'
+          className='cursor-pointer mx-2'
+        >
+          <Button
+            variant='outline'
+            size='lg'
+            className='text-base gap-2 w-full'
           >
-            <h3 className='w-32 text-center'>Home</h3> <House className='w-12 scale-150' />
-          </Link>
-        </Button>
+            Home <House />
+          </Button>
+        </Link>
       </div>
     </div>
   )

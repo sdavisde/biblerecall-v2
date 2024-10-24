@@ -70,9 +70,9 @@ export default function useHelpers(verse: Verse, inputRef: RefObject<HTMLInputEl
   async function onStageComplete(correctPercent: number) {
     if (correctPercent >= 90) {
       // todo add api call here for verse completions
-      router.push(`/home/${verse.id}/success?diff=${difficulty}`)
+      router.push(`/home/verses/${verse.id}/type-it-out/success?diff=${difficulty}`)
     } else {
-      router.push(`/home/${verse.id}/failed?diff=${difficulty}&percent=${correctPercent}`)
+      router.push(`/home/verses/${verse.id}/type-it-out/failed?diff=${difficulty}&percent=${correctPercent}`)
     }
   }
 
