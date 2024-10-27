@@ -8,7 +8,8 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { TapToRead } from './game'
 
-export default async function ReadVersePage({ params }: { params: { verse: string } }) {
+export default async function ReadVersePage(props: { params: Promise<{ verse: string }> }) {
+  const params = await props.params;
   const verseResult = await api.verse.byId(params.verse)
 
   if (!verseResult.hasValue) {

@@ -19,7 +19,7 @@
       ],
       "@configuration/*": [
         "./configuration/*"
-      ],
+      ]
     },
     "lib": [
       "dom",
@@ -42,7 +42,8 @@
         "name": "next"
       }
     ],
-    "allowJs": true
+    "allowJs": true,
+    "target": "ES2017"
   },
   "include": [
     ".next/types/**/*.ts",

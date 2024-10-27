@@ -6,13 +6,15 @@ import Link from 'next/link'
 import { ParsedUrlQuery } from 'querystring'
 
 type SuccessPageProps = {
-  params: {
+  params: Promise<{
     verse: string
-  }
-  searchParams: ParsedUrlQuery
+  }>
+  searchParams: Promise<ParsedUrlQuery>
 }
 
-export default function SuccessPage({ params, searchParams }: SuccessPageProps) {
+export default async function SuccessPage(props: SuccessPageProps) {
+  const searchParams = await props.searchParams
+  const params = await props.params
   const verse = params.verse
   const difficulty = searchParams?.diff
   const nextDifficulty = difficulty ? parseInt(difficulty as string) + 1 : 3

@@ -8,10 +8,11 @@ import { verifyPasswordResetCode } from '@lib/firebase'
 import { notFound } from 'next/navigation'
 
 type ChangePasswordPageProps = {
-  searchParams: ParsedUrlQuery
+  searchParams: Promise<ParsedUrlQuery>
 }
 
-export default function ChangePasswordPage({ searchParams }: ChangePasswordPageProps) {
+export default async function ChangePasswordPage(props: ChangePasswordPageProps) {
+  const searchParams = await props.searchParams
   // middlware checks that this path contains this code, so this is safe
   const code = searchParams['oobCode'] as string
   const verifyCode = async () => {

@@ -3,12 +3,14 @@ import { CardDescription, CardTitle } from '@components/ui/card'
 import { Suggestions } from '@components/discover/suggestions'
 import { Suspense } from 'react'
 import { Skeleton } from '@components/ui/skeleton'
+import { Lodash } from '@util/lodash'
 
 type DiscoverPageProps = {
-  searchParams: ParsedUrlQuery
+  searchParams: Promise<ParsedUrlQuery>
 }
 
-export default async function DiscoverPage({ searchParams }: DiscoverPageProps) {
+export default async function DiscoverPage(props: DiscoverPageProps) {
+  const searchParams = await props.searchParams
   const query = searchParams.query as string
 
   return (
@@ -20,16 +22,12 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
           <Suspense
             fallback={
               <>
-                <Skeleton className='w-full h-20' />
-                <Skeleton className='w-full h-20' />
-                <Skeleton className='w-full h-20' />
-                <Skeleton className='w-full h-20' />
-                <Skeleton className='w-full h-20' />
-                <Skeleton className='w-full h-20' />
-                <Skeleton className='w-full h-20' />
-                <Skeleton className='w-full h-20' />
-                <Skeleton className='w-full h-20' />
-                <Skeleton className='w-full h-20' />
+                {Lodash.range(1, 10).map((i) => (
+                  <Skeleton
+                    key={i}
+                    className='w-full h-20'
+                  />
+                ))}
               </>
             }
           >

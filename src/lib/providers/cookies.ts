@@ -1,12 +1,12 @@
-import { cookies } from 'next/headers'
+import { cookies, type UnsafeUnwrappedCookies } from 'next/headers'
 import { Verse } from 'service/verse/types'
 import { randomUUID } from 'crypto'
 import { Result } from '@util/result'
 import { ErrorCode } from '@util/error'
 import { Lodash } from '@util/lodash'
 
-function getVersesCookie(): Verse[] | null {
-  const value = cookies().get('verses')?.value
+async function getVersesCookie(): Promise<Verse[] | null> {
+  const value = (await cookies()).get('verses')?.value
 
   if (value) {
     return JSON.parse(value)
@@ -23,7 +23,7 @@ export namespace Cookies {
       return Result.failure({ code: ErrorCode.VERSE_ID_NOT_PROVIDED, message: 'Verse id not provided' })
     }
 
-    const verses = getVersesCookie()
+    const verses = await getVersesCookie()
     const verse = verses?.find((v) => v.id === id) ?? null
 
     if (Lodash.isNil(verse)) {
@@ -34,7 +34,7 @@ export namespace Cookies {
   }
 
   export async function fetchVerses(): Promise<Result<Verse[]>> {
-    const verses = getVersesCookie()
+    const verses = await getVersesCookie()
 
     if (Lodash.isNil(verses)) {
       return Result.failure({ code: ErrorCode.VERSE_NOT_FOUND, message: 'Verses not found' })
@@ -47,16 +47,15 @@ export namespace Cookies {
     'use server'
 
     try {
-      let versesCookie = getVersesCookie()
+      let versesCookie = await getVersesCookie()
       if (!versesCookie) {
-        cookies().delete('verses')
+        ;(await cookies()).delete('verses')
         versesCookie = []
       }
 
       const newVerse = { ...verse, id: randomUUID() }
       const verses = [...versesCookie, newVerse]
-
-      cookies().set('verses', JSON.stringify(verses))
+      ;(await cookies()).set('verses', JSON.stringify(verses))
       return Result.success(newVerse)
     } catch (e: any) {
       return Result.failure({ code: ErrorCode.INTERNAL_SERVER_ERROR, message: e.message })
@@ -70,11 +69,11 @@ export namespace Cookies {
       return Result.failure({ code: ErrorCode.VERSE_ID_NOT_PROVIDED, message: 'Verse id not provided' })
     }
 
-    if (cookies().has('verses')) {
+    if ((await cookies()).has('verses')) {
       try {
-        const verses = JSON.parse(cookies().get('verses')?.value!) as Verse[]
+        const verses = JSON.parse((await cookies()).get('verses')?.value!) as Verse[]
         const result = verses.filter((v) => v.id !== id)
-        cookies().set('verses', JSON.stringify(result))
+        ;(await cookies()).set('verses', JSON.stringify(result))
         return Result.success(null)
       } catch (e: any) {
         return Result.failure({ code: ErrorCode.INTERNAL_SERVER_ERROR, message: e.message })
@@ -92,10 +91,9 @@ export namespace Cookies {
     }
 
     try {
-      const versesCookie = cookies().get('verses')?.value ?? '[]'
+      const versesCookie = (await cookies()).get('verses')?.value ?? '[]'
       const verses = [...JSON.parse(versesCookie).filter((v: Verse) => v.id !== verse.id), verse]
-
-      cookies().set('verses', JSON.stringify(verses))
+      ;(await cookies()).set('verses', JSON.stringify(verses))
       return Result.success(verse)
     } catch (e: any) {
       return Result.failure({ code: ErrorCode.INTERNAL_SERVER_ERROR, message: e.message })

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import $ from 'jquery'
 import { Verse } from 'service/verse/types'
 
-export default function useHelpers(verse: Verse, inputRef: RefObject<HTMLInputElement>) {
+export default function useHelpers(verse: Verse, inputRef: RefObject<HTMLInputElement | null>) {
   const [loading, setLoading] = useState(false)
   const [cursor, setCursor] = useState(0)
   const displayedText = verse ? verse.text?.replaceAll('"', '').split(' ') : []

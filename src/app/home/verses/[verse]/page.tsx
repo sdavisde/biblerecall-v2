@@ -7,12 +7,18 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 type VersePageProps = {
-  params: {
+  params: Promise<{
     verse: string
-  }
+  }>
 }
 
-export default async function VersePage({ params: { verse: id } }: VersePageProps) {
+export default async function VersePage(props: VersePageProps) {
+  const params = await props.params;
+
+  const {
+    verse: id
+  } = params;
+
   const verse = await api.verse.byId(id)
 
   if (!verse.hasValue) {

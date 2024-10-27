@@ -3,7 +3,7 @@
 import { clientConfig, serverConfig } from 'firebase-config'
 import { getTokens } from 'next-firebase-auth-edge'
 import { cookies } from 'next/headers'
-import { ApiContext, RequestType, SignedInUser } from 'types/api'
+import { ApiContext, RequestType } from 'types/api'
 
 /**
  * 1. CONTEXT
@@ -18,7 +18,7 @@ import { ApiContext, RequestType, SignedInUser } from 'types/api'
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opt: { headers: Headers }): Promise<ApiContext> => {
-  const tokens = await getTokens(cookies(), {
+  const tokens = await getTokens(await cookies(), {
     apiKey: clientConfig.apiKey,
     cookieName: serverConfig.cookieName,
     cookieSignatureKeys: serverConfig.cookieSignatureKeys,

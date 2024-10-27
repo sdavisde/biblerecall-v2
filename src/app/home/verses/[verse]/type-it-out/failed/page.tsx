@@ -6,13 +6,15 @@ import Link from 'next/link'
 import { ParsedUrlQuery } from 'querystring'
 
 type FailedPageProps = {
-  params: {
+  params: Promise<{
     verse: string
-  }
-  searchParams: ParsedUrlQuery
+  }>
+  searchParams: Promise<ParsedUrlQuery>
 }
 
-export default function FailedPage({ params, searchParams }: FailedPageProps) {
+export default async function FailedPage(props: FailedPageProps) {
+  const searchParams = await props.searchParams
+  const params = await props.params
   const verse = params.verse
   const difficulty = searchParams?.diff
   const percentCorrect = typeof searchParams?.percent === 'string' ? parseFloat(searchParams.percent) : 0

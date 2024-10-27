@@ -4,7 +4,8 @@ import TypeItOut from './(type-it-out)/type-it-out'
 import { Brain } from 'lucide-react'
 import { api } from '@lib/trpc/server'
 
-export default async function GamePage({ params }: { params: { verse: string } }) {
+export default async function GamePage(props: { params: Promise<{ verse: string }> }) {
+  const params = await props.params;
   const verseResult = await api.verse.byId(params.verse)
 
   return (
