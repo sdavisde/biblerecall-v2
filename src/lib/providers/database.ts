@@ -71,7 +71,6 @@ export namespace Database {
   }
   export const addVerse = async (request: AddVerseRequest): Promise<Result<Verse>> => {
     const { userId, verse } = request
-    console.log('ADDING VERSE', verse)
 
     if (Lodash.isNil(userId)) {
       return Result.failure({ code: ErrorCode.USER_ID_NOT_PROVIDED, message: 'User id not provided' })

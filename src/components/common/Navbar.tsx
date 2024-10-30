@@ -1,4 +1,5 @@
 import { Profile } from '@components/Profile'
+import { VersionSelect } from '@components/Settings/SettingSelectors/Version-Select'
 import Link from 'next/link'
 
 export default async function Navbar() {
@@ -9,7 +10,8 @@ export default async function Navbar() {
           <Link href='/home'>Bible Recall</Link>
         </h1>
       </div>
-      <div className='flex flex-row mr-4 h-full'>
+      <div className='flex flex-row items-center gap-2 mr-4 h-full'>
+        <VersionSelect />
         <Profile />
       </div>
     </nav>

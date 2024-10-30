@@ -18,7 +18,6 @@ export async function POST(req: Request) {
   })
 
   const verses = JSON.parse(result.text)
-  console.log(verses)
   return new Response(
     JSON.stringify({
       content: verses,

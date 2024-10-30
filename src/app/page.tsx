@@ -1,6 +1,8 @@
 import { LandingPageBibleSplash } from '@components/icons/LandingPageBibleSplash'
 import Link from 'next/link'
 
+export const dynamic = 'force-static'
+
 export default function Landing() {
   return (
     <main className='w-screen h-screen flex flex-col justify-between overflow-hidden'>

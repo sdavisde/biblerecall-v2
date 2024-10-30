@@ -42,7 +42,7 @@
     "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
     "@types/uuid": "^10.0.0",
     "@vercel/analytics": "^1.0.2",
-    "@vercel/speed-insights": "^1.0.10",
+    "@vercel/speed-insights": "^1.0.14",
     "ai": "^3.4.16",
     "autoprefixer": "^10.4.15",
     "class-variance-authority": "^0.7.0",

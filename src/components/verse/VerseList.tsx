@@ -9,14 +9,16 @@ const VerseList = () => {
   const [sortFn] = useSort()
 
   return (
-    <div className='h-full w-full overflow-x-hidden centered flex-col gap-4'>
-      {verses?.sort(sortFn).map((verse) => (
-        <VerseBox
-          verse={verse}
-          key={verse.id}
-        />
-      ))}
-    </div>
+    <>
+      <div className='h-full w-full overflow-x-hidden centered flex-col gap-4'>
+        {verses?.sort(sortFn).map((verse) => (
+          <VerseBox
+            verse={verse}
+            key={verse.id}
+          />
+        ))}
+      </div>
+    </>
   )
 }
 

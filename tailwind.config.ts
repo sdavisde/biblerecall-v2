@@ -96,10 +96,21 @@ module.exports = {
             height: '0',
           },
         },
+        'fade-left': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateX(2rem)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateX(0)',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'fade-left': 'fade-left 0.2s ease',
       },
       clipPath: {
         diagonal: 'polygon(0 0, 100% 100%, 100% 0)', // Creates the diagonal divider

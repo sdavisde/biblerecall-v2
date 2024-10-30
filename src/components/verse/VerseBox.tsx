@@ -1,7 +1,7 @@
 'use client'
 
 import { useSwipeable } from 'react-swipeable'
-import { CircleArrowRight, Maximize2, X } from 'lucide-react'
+import { CircleArrowRight, Maximize2, Trash2, X } from 'lucide-react'
 import Link from 'next/link'
 import { useVerses } from 'hooks/use-verses'
 import { useSettings } from 'hooks/use-settings'
@@ -14,6 +14,7 @@ import { VerseSelector } from './VerseSelector'
 import { Button } from '@components/ui/button'
 import { useState } from 'react'
 import { cn } from '@components/lib/utils'
+import { DeleteVerseDialog } from './DeleteVerseDialog'
 
 type VerseBoxProps = {
   verse: Verse
@@ -35,10 +36,6 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
     return await dispatchVerses(newVerse, 'update')
   }
 
-  const onDelete = async () => {
-    return await dispatchVerses(verse, 'delete')
-  }
-
   return (
     <div className='h-fit w-full relative'>
       <VerseSelector
@@ -46,9 +43,13 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
         initialVerse={verse}
       >
         <Card
-          className={cn('cursor-pointer text-start w-full relative flex gap-4 duration-300 transition-all z-20', {
-            '-translate-x-16': showDeleteButton,
-          })}
+          className={cn(
+            'cursor-pointer text-start w-full relative flex gap-4 duration-300 transition-all z-20 group',
+            '!outline-0 !ring-0 focus:!ring-0',
+            {
+              '-translate-x-16': showDeleteButton,
+            }
+          )}
           {...handlers}
         >
           <div className='w-full h-full'>
@@ -65,14 +66,12 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
             </CardContent>
           </div>
           <div
-            className={cn('flex items-center gap-2', {
-              'flex-col': settings?.visibility !== Visibility.None,
+            className={cn('flex items-center h-fit gap-2', {
+              'md:flex-row-reverse': settings?.visibility !== Visibility.None,
             })}
+            onClick={(e) => e.stopPropagation()}
           >
-            <Link
-              href={`/home/verses/${verse.id}`}
-              onClick={(e) => e.stopPropagation()}
-            >
+            <Link href={`/home/verses/${verse.id}`}>
               <Button
                 size='icon'
                 asDiv
@@ -80,16 +79,29 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
                 <CircleArrowRight />
               </Button>
             </Link>
+
+            <DeleteVerseDialog verse={verse}>
+              <Button
+                size='icon'
+                variant='destructive'
+                className='opacity-0 group-hover:opacity-100 duration-300 transition-opacity'
+                asDiv
+              >
+                <Trash2 />
+              </Button>
+            </DeleteVerseDialog>
           </div>
         </Card>
       </VerseSelector>
-      <Button
-        variant='destructive'
-        className='absolute right-[1px] top-[1px] h-[calc(100%-2px)] centered z-10 transition-all duration-300 rounded-xl'
-        onClick={onDelete}
-      >
-        <X className='text-destructive-foreground' />
-      </Button>
+      <DeleteVerseDialog verse={verse}>
+        <Button
+          variant='destructive'
+          className='absolute right-[1px] top-[1px] h-[calc(100%-2px)] centered z-10 transition-all duration-300 rounded-xl'
+          asDiv
+        >
+          <X className='text-destructive-foreground' />
+        </Button>
+      </DeleteVerseDialog>
     </div>
   )
 }

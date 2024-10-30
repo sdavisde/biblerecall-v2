@@ -26,7 +26,7 @@ export function Profile() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className='centered cursor-pointer scale-75'>
+        <button className='centered cursor-pointer scale-75 border rounded-full'>
           <Avatar>
             <AvatarImage src={user.data.picture} />
             <AvatarFallback>

@@ -11,9 +11,18 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@components/ui/drawer'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@components/ui/dialog'
 import { Bible, Verses } from '@util/verses'
 import { Result } from '@util/result'
-import { PropsWithChildren, useEffect, useMemo, useRef, useState } from 'react'
+import { Dispatch, PropsWithChildren, SetStateAction, useEffect, useMemo, useRef, useState } from 'react'
 import { Lodash } from '@util/lodash'
 import { api } from '@lib/trpc/client'
 import LoadingDots from '@components/loading/LoadingDots'
@@ -22,6 +31,15 @@ import { Book, Verse, VerseReference } from 'service/verse/types'
 import { cn } from '@components/lib/utils'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@components/ui/command'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs'
+import {
+  Credenza,
+  CredenzaClose,
+  CredenzaContent,
+  CredenzaDescription,
+  CredenzaHeader,
+  CredenzaTitle,
+  CredenzaTrigger,
+} from '@components/ui/credenza'
 
 type VerseSelectProps = PropsWithChildren<{
   submitVerse: (verse: Verse) => Promise<Result<unknown>>
@@ -31,21 +49,22 @@ type VerseSelectProps = PropsWithChildren<{
 type VerseSelectorTabs = (typeof verseSelectorTabs)[number]
 const verseSelectorTabs = ['Books', 'Chapters', 'Verses', 'Review'] as const
 
-export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSelectProps) => {
-  const [drawerIsOpen, setDrawerIsOpen] = useState(false)
-  const [activeTab, setActiveTab] = useState<VerseSelectorTabs>('Review')
+export const VerseSelector = ({ children, submitVerse, initialVerse }: VerseSelectProps) => {
+  const [open, setOpen] = useState(false)
+  const [builder, setBuilder] = useState<VerseBuilder>(VerseBuilder.init(initialVerse ?? null))
+  const referenceString = useMemo(() => Verses.stringifyPartialReference(builder as Partial<VerseReference>), [builder])
   const [submitting, setSubmitting] = useState(false)
+  const [activeTab, setActiveTab] = useState<VerseSelectorTabs>('Review')
   const bookSearchRef = useRef<HTMLInputElement>(null)
 
-  const [builder, setBuilder] = useState<VerseBuilder>(VerseBuilder.init(initialVerse ?? null))
   const reference = useMemo(() => {
     const newReference = VerseBuilder.toReference(builder)
     return newReference.hasValue ? newReference.value : null
   }, [builder])
-  const referenceString = useMemo(() => Verses.stringifyPartialReference(builder as Partial<VerseReference>), [builder])
+  const text = api.bible.getVerse.useQuery({ reference, version: builder.version })
+
   const { chapters, isLoading: chaptersLoading } = useChapters(builder.book)
   const { verses, isLoading: versesLoading } = useVerses(builder.book, builder.chapter)
-  const text = api.bible.getVerse.useQuery({ reference, version: builder.version })
 
   const resetState = () => {
     setBuilder(VerseBuilder.init(initialVerse ?? null))
@@ -67,11 +86,11 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
 
   useEffect(() => {
     resetState()
-    if (drawerIsOpen && Lodash.isNil(initialVerse)) {
+    if (open && Lodash.isNil(initialVerse)) {
       setActiveTab('Books')
       setTimeout(() => bookSearchRef.current?.focus(), 400)
     }
-  }, [drawerIsOpen])
+  }, [open])
 
   const onSave = async () => {
     setSubmitting(true)
@@ -90,7 +109,7 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
         throw Error(result.error.message)
       }
       resetState()
-      setDrawerIsOpen(false)
+      setOpen(false)
     } catch (e) {
       console.error(e)
       toast.error('Verse could not be saved. Please reload the page and try again.')
@@ -98,22 +117,23 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
       setSubmitting(false)
     }
   }
-
   return (
-    <Drawer
-      open={drawerIsOpen}
-      onOpenChange={setDrawerIsOpen}
+    <Credenza
+      open={open}
+      onOpenChange={setOpen}
     >
-      <DrawerTrigger className='w-full'>{children}</DrawerTrigger>
-      <DrawerContent className='h-[90dvh] max-h-[90dvh] p-4 '>
-        <DrawerClose className='absolute top-4 left-4'>Close</DrawerClose>
-        <DrawerHeader>
-          <DrawerTitle>New Verse</DrawerTitle>
-          <DrawerDescription>{referenceString}</DrawerDescription>
-        </DrawerHeader>
+      <CredenzaTrigger className='w-full'>{children}</CredenzaTrigger>
+      <CredenzaContent
+        className={cn('h-[90dvh] max-h-[90dvh] p-4', 'md:w-[50vw] md:h-[50dvh] md:min-h-[540px] md:flex md:flex-col')}
+      >
+        <CredenzaClose className='absolute top-4 left-4'>Close</CredenzaClose>
+        <CredenzaHeader>
+          <CredenzaTitle>New Verse</CredenzaTitle>
+          <CredenzaDescription>{referenceString}</CredenzaDescription>
+        </CredenzaHeader>
         <Tabs
           value={activeTab}
-          className='flex-1 max-h-[calc(90dvh-8rem)] flex flex-col relative'
+          className='h-[calc(calc(100%-4rem))] flex flex-col relative'
         >
           <TabsList className='w-full'>
             <TabsTrigger
@@ -148,17 +168,17 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
               Review
             </TabsTrigger>
           </TabsList>
-          <div className='flex-1 px-2 pt-2 flex flex-col max-h-[calc(100%-2rem)]'>
+          <div className='pt-2 flex flex-col h-[calc(100%-4rem)] lg:h-[calc(100%-2rem)]'>
             <TabsContent
               value='Books'
-              className='max-h-full overflow-y-auto'
+              className='h-full overflow-y-auto animate-fade-left'
             >
               <Command className='rounded-lg border shadow-md md:min-w-[450px]'>
                 <CommandInput
                   placeholder='Type a book name to search...'
                   ref={bookSearchRef}
                 />
-                <CommandList>
+                <CommandList className='!max-h-[450px]'>
                   <CommandEmpty>No results found.</CommandEmpty>
                   <CommandGroup heading='Books'>
                     {Bible.books.map((book) => (
@@ -178,7 +198,7 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
             </TabsContent>
             <TabsContent
               value='Chapters'
-              className='grid grid-cols-5 gap-3 max-h-full overflow-y-auto'
+              className='grid grid-cols-5 gap-3 h-full overflow-y-auto animate-fade-left'
             >
               {chaptersLoading ? (
                 <LoadingDots />
@@ -187,7 +207,7 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
                   <Button
                     key={chapter}
                     variant='outline'
-                    className='w-full h-full aspect-square'
+                    className='w-full h-auto aspect-square'
                     onClick={() => {
                       setBuilder((prev) => ({ ...prev, chapter, start: null, end: null }))
                       setActiveTab('Verses')
@@ -200,7 +220,7 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
             </TabsContent>
             <TabsContent
               value='Verses'
-              className={cn('flex flex-col justify-between gap-4', {
+              className={cn('flex flex-col justify-between gap-4 animate-fade-left', {
                 'flex-1 max-h-[calc(100%-1.5rem)]': activeTab === 'Verses',
               })}
             >
@@ -214,7 +234,7 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
                       <Button
                         key={verseNumber}
                         variant='outline'
-                        className={cn('w-full h-full aspect-square', {
+                        className={cn('w-full h-auto aspect-square', {
                           'bg-green hover:bg-green': verseNumber === builder.start,
                           'bg-red hover:bg-red': verseNumber === builder.end,
                           'bg-gray-300 hover:bg-gray-300':
@@ -253,14 +273,13 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
             </TabsContent>
             <TabsContent
               value='Review'
-              className={cn('flex flex-col justify-between gap-4 mt-2', {
+              className={cn('flex flex-col justify-between gap-4 mt-2 animate-fade-left', {
                 'flex-1 max-h-[calc(100%-1.5rem)]': activeTab === 'Review',
               })}
             >
               <div className='flex flex-col max-h-full overflow-y-auto'>
                 <h3 className='pb-1 text-sm font-medium w-full flex gap-2'>
                   <span>Review</span>
-                  <span className='font-light'>{referenceString}</span>
                 </h3>
                 {!Lodash.isNil(reference) && (
                   <>
@@ -280,8 +299,8 @@ export const VerseSelector = ({ submitVerse, initialVerse, children }: VerseSele
             </TabsContent>
           </div>
         </Tabs>
-      </DrawerContent>
-    </Drawer>
+      </CredenzaContent>
+    </Credenza>
   )
 }
 

@@ -7,7 +7,7 @@ import { cn } from '@components/lib/utils'
 import { Lodash } from '@util/lodash'
 
 const Separator = React.forwardRef<
-  React.ElementRef<typeof SeparatorPrimitive.Root>,
+  React.ComponentRef<typeof SeparatorPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root> & { label?: string }
 >(({ className, orientation = 'horizontal', label, decorative = true, ...props }, ref) => {
   if (Lodash.isNil(label)) {
