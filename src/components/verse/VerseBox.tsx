@@ -52,8 +52,8 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
           )}
           {...handlers}
         >
-          <div className='w-full h-full'>
-            <CardHeader>
+          <div className='w-full h-fit'>
+            <CardHeader className='!pb-0'>
               <CardTitle className='flex items-center justify-between'>
                 <span>{Verses.stringifyReference(verse)}</span>
               </CardTitle>
@@ -66,9 +66,7 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
             </CardContent>
           </div>
           <div
-            className={cn('flex items-center h-fit gap-2', {
-              'md:flex-row-reverse': settings?.visibility !== Visibility.None,
-            })}
+            className='flex items-center h-fit gap-2 md:flex-row-reverse'
             onClick={(e) => e.stopPropagation()}
           >
             <Link href={`/home/verses/${verse.id}`}>
@@ -84,7 +82,7 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
               <Button
                 size='icon'
                 variant='destructive'
-                className='opacity-0 group-hover:opacity-100 duration-300 transition-opacity'
+                className='hidden md:flex opacity-0 group-hover:opacity-100 duration-300 transition-opacity'
                 asDiv
               >
                 <Trash2 />

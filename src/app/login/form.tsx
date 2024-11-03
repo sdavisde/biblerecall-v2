@@ -83,15 +83,20 @@ export function LoginForm() {
       >
         Login
       </Button>
-      <Separator label='or' />
-      <GoogleLogin />
-      <Button
-        type='button'
-        variant='outline'
-        onClick={handleAnonymousLogin}
+      <div
+        className='flex flex-col gap-4'
+        onClick={(e) => e.stopPropagation()}
       >
-        Continue as Guest
-      </Button>
+        <Separator label='or' />
+        <GoogleLogin />
+        <Button
+          type='button'
+          variant='outline'
+          onClick={handleAnonymousLogin}
+        >
+          Continue as Guest
+        </Button>
+      </div>
     </form>
   )
 }
