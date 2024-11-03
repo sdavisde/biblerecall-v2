@@ -6,7 +6,7 @@ export type ErrorPageProps = {
   error: Error & { digest?: string }
   reset: () => void
 }
-export default async function DiscoverPageError({ error, reset }: ErrorPageProps) {
+export default function DiscoverPageError({ error, reset }: ErrorPageProps) {
   useEffect(() => {
     // Log the error to an error reporting service
     console.error(error)
