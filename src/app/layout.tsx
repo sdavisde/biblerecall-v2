@@ -11,6 +11,7 @@ import { SettingsProvider } from '@components/Settings/Provider'
 import { api } from '@lib/trpc/server'
 import { clientConfig } from 'firebase-config'
 import { ThemeProvider } from 'next-themes'
+import Head from 'next/head'
 
 const urbanist = Urbanist({
   subsets: ['latin'],
@@ -77,6 +78,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       className={`bg-background text-foreground ${urbanist.variable} ${openDyslexic.variable} ${satisfy.variable} ${rockSalt.variable} font-satisfy font-rockSalt font-openDyslexic font-urbanist`}
       suppressHydrationWarning
     >
+      <Head>
+        <meta
+          name='apple-mobile-web-app-title'
+          content='Bible Recall'
+        />
+      </Head>
       {/* IMPORTANT: This body tag gets swapped out in `SettingsProvider`, but needs to be here so the server doesn't throw hydration errors */}
       <body suppressHydrationWarning>
         <ThemeProvider
