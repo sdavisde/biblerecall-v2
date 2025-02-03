@@ -5,6 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'Bible Recall',
     short_name: 'BibleRecall',
     description: "Memorize, Meditate, Connect with God's Word",
+    display: 'standalone',
     start_url: '/',
     background_color: '#09090b',
     theme_color: '#4d574c',
