@@ -1,6 +1,6 @@
 import Navbar from '@components/common/Navbar'
-import Footer from '@components/common/Footer'
 import { Toaster } from 'react-hot-toast'
+import MobileNav from '@components/common/mobile-nav'
 
 export default async function HomeLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -14,8 +14,8 @@ export default async function HomeLayout({ children }: { children: React.ReactNo
         >
           <div className='w-[95%] md:w-[70%] lg:w-[55%] flex-1 flex flex-col items-center gap-6 my-6'>{children}</div>
         </div>
+        <MobileNav />
       </main>
-      <Footer />
     </>
   )
 }

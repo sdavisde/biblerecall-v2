@@ -1,6 +1,6 @@
 'use client'
 
-import Lottie from 'react-lottie'
+import dynamic from 'next/dynamic'
 
 type LottieProps = {
   data: any
@@ -9,6 +9,7 @@ type LottieProps = {
   className?: string
 }
 export default function LottieImage({ data, loop, autoplay, className }: LottieProps) {
+  const Lottie = dynamic(() => import('react-lottie'), { ssr: false })
   const options = {
     loop: loop ?? false,
     autoplay: autoplay ?? true,
