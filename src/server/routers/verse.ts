@@ -37,11 +37,9 @@ export const versesRouter = router({
     }
     const supabase = await createClient()
     const verses = await supabase.from('verses').select().eq('user_id', user.id)
-    console.log(verses)
     if (verses.error) {
       return Result.failure(verses.error)
     }
-    console.log(verses.data.map(fromMe))
     return Result.success(verses.data.map(fromMe))
   }),
   add: publicProcedure.input(verseSchema).mutation(async ({ input: verse, ctx }): Promise<Result<Verse>> => {

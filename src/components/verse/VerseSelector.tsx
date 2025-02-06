@@ -25,13 +25,14 @@ import {
 
 type VerseSelectProps = PropsWithChildren<{
   submitVerse: (verse: Verse) => Promise<Result<unknown>>
+  onFinishSubmit?: () => void
   initialVerse?: Verse
 }>
 
 type VerseSelectorTabs = (typeof verseSelectorTabs)[number]
 const verseSelectorTabs = ['Books', 'Chapters', 'Verses', 'Review'] as const
 
-export const VerseSelector = ({ children, submitVerse, initialVerse }: VerseSelectProps) => {
+export const VerseSelector = ({ children, submitVerse, initialVerse, onFinishSubmit }: VerseSelectProps) => {
   const [open, setOpen] = useState(false)
   const [builder, setBuilder] = useState<VerseBuilder>(VerseBuilder.init(initialVerse ?? null))
   const referenceString = useMemo(() => Verses.stringifyPartialReference(builder as Partial<VerseReference>), [builder])
@@ -96,6 +97,7 @@ export const VerseSelector = ({ children, submitVerse, initialVerse }: VerseSele
       console.error(e)
       toast.error('Verse could not be saved. Please reload the page and try again.')
     } finally {
+      onFinishSubmit?.()
       setSubmitting(false)
     }
   }
@@ -104,7 +106,7 @@ export const VerseSelector = ({ children, submitVerse, initialVerse }: VerseSele
       open={open}
       onOpenChange={setOpen}
     >
-      <CredenzaTrigger className='w-full'>{children}</CredenzaTrigger>
+      <CredenzaTrigger asChild>{children}</CredenzaTrigger>
       <CredenzaContent
         className={cn('h-[90dvh] max-h-[90dvh] p-4', 'md:w-[50vw] md:h-[50dvh] md:min-h-[540px] md:flex md:flex-col')}
       >

@@ -6,8 +6,7 @@ import Link from 'next/link'
 import { Users, Book, Plus, User, Search } from 'lucide-react'
 import { VerseSelector } from '@components/verse/VerseSelector'
 import { useRouter } from 'next/navigation'
-import { Result } from '@util/result'
-import { Fragment } from 'react'
+import { useVerses } from 'src/hooks/use-verses'
 
 const navItems = [
   { name: 'Community', href: '/community', icon: Users, disabled: true },
@@ -19,6 +18,7 @@ const navItems = [
 
 export default function MobileNav() {
   const pathname = usePathname()
+  const [, dispatchVerses] = useVerses()
   const router = useRouter()
 
   return (
@@ -38,9 +38,9 @@ export default function MobileNav() {
                 })}
               >
                 {isActive && <div className='absolute -top-[6px] left-0 right-0 h-0.5 bg-accent-foreground' />}
-                <div className={cn({ 'bg-green-500 rounded-lg p-2 hover:bg-primary': isAddVerse })}>
+                <div className={cn({ 'bg-green-500 centered rounded-lg p-2 hover:bg-primary': isAddVerse })}>
                   {isAddVerse ? (
-                    <VerseSelector submitVerse={async () => Result.success(router.push('/home/verses'))}>
+                    <VerseSelector submitVerse={async (verse) => await dispatchVerses(verse, 'add')}>
                       <item.icon className={cn('w-6 h-6', { 'text-white': isAddVerse })} />
                     </VerseSelector>
                   ) : (
