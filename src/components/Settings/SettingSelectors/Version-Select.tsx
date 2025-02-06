@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@components/ui/select'
 import { Version } from '@configuration/settings'
-import { useSettings } from 'hooks/use-settings'
+import { useSettings } from 'src/hooks/use-settings'
 import { useEffect, useState } from 'react'
 
 export const VersionSelect = () => {

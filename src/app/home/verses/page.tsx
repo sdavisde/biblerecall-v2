@@ -1,6 +1,3 @@
-export const dynamic = 'auto'
-
-import AddVerse from '@components/verse/AddVerse'
 import VerseList from '@components/verse/VerseList'
 import BookIcon from '@components/icons/BookIcon'
 import VersesProvider from '@components/providers/VersesProvider'
@@ -20,7 +17,6 @@ export default async function Verses() {
         <VisibilityMenu />
       </div>
       <hr className='w-full bg-darkGrey h-[2px]' />
-      <AddVerse />
       <VerseList />
     </VersesProvider>
   )

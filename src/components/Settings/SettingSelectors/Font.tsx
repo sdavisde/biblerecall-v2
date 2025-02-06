@@ -1,6 +1,6 @@
 'use client'
 
-import { useSettings } from 'hooks/use-settings'
+import { useSettings } from 'src/hooks/use-settings'
 import { useEffect, useState } from 'react'
 import { Font } from '@configuration/settings'
 import { SettingSlot } from '../SettingSlot'

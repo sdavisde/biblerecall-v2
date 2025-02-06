@@ -26,15 +26,9 @@ export enum Version {
   YLT = 'YLT',
 }
 
-export type Settings = {
-  theme: Theme
-  visibility: Visibility
-  font: Font
-  defaultVersion: Version
-  verseOfTheDayEnabled: boolean
-  verseDueDatesEnabled: boolean
-}
+export type Settings = z.infer<typeof settingsSchema>
 export const settingsSchema = z.object({
+  id: z.string(),
   theme: z.nativeEnum(Theme),
   visibility: z.nativeEnum(Visibility),
   font: z.nativeEnum(Font),
@@ -44,6 +38,7 @@ export const settingsSchema = z.object({
 })
 
 export const DEFAULT_SETTINGS: Settings = {
+  id: '',
   theme: Theme.System,
   visibility: Visibility.Full,
   font: Font.Urbanist,

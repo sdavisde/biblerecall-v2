@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@components/ui/button'
-import { confirmPasswordReset } from '@lib/firebase'
 import { PasswordField, passwordSchema } from '@components/form/PasswordField'
 
 // Define Zod schema
@@ -32,7 +31,7 @@ export function ChangePasswordForm({ code }: { code: string }) {
   const router = useRouter()
 
   const updatePassword = async ({ confirmPassword }: FormData) => {
-    await confirmPasswordReset(code, confirmPassword)
+    // await confirmPasswordReset(code, confirmPassword)
     router.push('/login')
   }
 

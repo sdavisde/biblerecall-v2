@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useSettings } from 'hooks/use-settings'
+import { useSettings } from 'src/hooks/use-settings'
 import { Theme } from '@configuration/settings'
 import { SettingSlot } from '@components/Settings/SettingSlot'
 import { Moon } from 'lucide-react'

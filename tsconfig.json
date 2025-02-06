@@ -1,24 +1,27 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
       "@app/*": [
-        "./app/*"
+        "./src/app/*"
       ],
       "@components/*": [
-        "./components/*"
-      ],
-      "@assets/*": [
-        "./assets/*"
+        "./src/components/*"
       ],
       "@lib/*": [
-        "./lib/*"
+        "./src/lib/*"
       ],
       "@util/*": [
-        "./util/*"
+        "./src/util/*"
       ],
       "@configuration/*": [
-        "./configuration/*"
+        "./src/configuration/*"
+      ],
+      "@public": [
+        "./public/*"
+      ],
+      "@server": [
+        "./server/*"
       ]
     },
     "lib": [

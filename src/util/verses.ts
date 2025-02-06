@@ -1,4 +1,4 @@
-import { Testament, Verse, VerseMetadata, VerseReference, VerseReferenceString } from 'service/verse/types'
+import { Testament, Verse, VerseMetadata, VerseReference, VerseReferenceString } from 'src/service/verse/types'
 import { Result } from '@util/result'
 import { Lodash } from './lodash'
 

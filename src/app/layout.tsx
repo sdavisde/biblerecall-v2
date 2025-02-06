@@ -9,7 +9,6 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 import { TRPCReactProvider } from '@lib/trpc/client'
 import { SettingsProvider } from '@components/Settings/Provider'
 import { api } from '@lib/trpc/server'
-import { clientConfig } from 'firebase-config'
 import { ThemeProvider } from 'next-themes'
 import Head from 'next/head'
 
@@ -92,7 +91,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         >
           <SettingsProvider authUserSettings={settingsResult.hasValue ? settingsResult.value : null}>
             <TRPCReactProvider>
-              <GoogleOAuthProvider clientId={clientConfig.googleClientId}>{children}</GoogleOAuthProvider>
+              <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>{children}</GoogleOAuthProvider>
             </TRPCReactProvider>
             <Analytics />
             <SpeedInsights />

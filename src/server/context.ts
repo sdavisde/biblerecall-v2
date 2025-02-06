@@ -1,9 +1,7 @@
 'import server-only'
 
-import { clientConfig, serverConfig } from 'firebase-config'
-import { getTokens } from 'next-firebase-auth-edge'
-import { cookies } from 'next/headers'
-import { ApiContext, RequestType } from 'types/api'
+import { createClient } from '@lib/supabase/server'
+import { ApiContext } from 'src/types/api'
 
 /**
  * 1. CONTEXT
@@ -18,24 +16,13 @@ import { ApiContext, RequestType } from 'types/api'
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opt: { headers: Headers }): Promise<ApiContext> => {
-  const requestCookies = await cookies()
-  const tokens = await getTokens(requestCookies, {
-    apiKey: clientConfig.apiKey,
-    cookieName: serverConfig.cookieName,
-    cookieSignatureKeys: serverConfig.cookieSignatureKeys,
-    serviceAccount: serverConfig.serviceAccount,
-  })
+  const supabase = await createClient()
 
-  if (tokens) {
-    const { decodedToken } = tokens
-    return {
-      type: RequestType.Database,
-      user: decodedToken,
-    }
+  const { data, error } = await supabase.auth.getUser()
+
+  if (error) {
+    return { user: null } as ApiContext
   }
 
-  return {
-    type: RequestType.Cookie,
-    user: null,
-  }
+  return data
 }

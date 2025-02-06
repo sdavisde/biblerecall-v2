@@ -1,6 +1,6 @@
 'use client'
 
-import { useSettings } from 'hooks/use-settings'
+import { useSettings } from 'src/hooks/use-settings'
 import { useEffect, useMemo, useState } from 'react'
 import { Visibility } from '@configuration/settings'
 import { Eye, EyeOff } from 'lucide-react'

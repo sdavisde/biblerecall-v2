@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@components/ui/button'
-import { initPasswordResetProcess } from '@lib/firebase'
 import { EmailField, emailSchema } from '@components/form/EmailField'
 
 // Define Zod schema
@@ -26,7 +25,7 @@ export function ResetPasswordForm() {
   const router = useRouter()
 
   async function sendPasswordReset({ email }: FormData) {
-    await initPasswordResetProcess(email)
+    // await initPasswordResetProcess(email)
   }
 
   return (

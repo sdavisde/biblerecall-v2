@@ -33,7 +33,7 @@ export const InputField: React.FC<InputFieldProps> = ({
         placeholder={placeholder}
         {...register}
       />
-      {error && <p className='text-error text-sm'>{error.message}</p>}
+      {error && <p className='text-destructive text-sm'>{error.message}</p>}
     </div>
   )
 }

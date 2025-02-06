@@ -9,7 +9,7 @@ import { Verses } from '@util/verses'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { Verse } from 'service/verse/types'
+import { Verse } from 'src/service/verse/types'
 
 type TapToReadProps = {
   verse: Verse

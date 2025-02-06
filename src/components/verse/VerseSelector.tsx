@@ -2,32 +2,14 @@
 
 import toast from 'react-hot-toast'
 import { Button } from '@components/ui/button'
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@components/ui/drawer'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@components/ui/dialog'
 import { Bible, Verses } from '@util/verses'
 import { Result } from '@util/result'
-import { Dispatch, PropsWithChildren, SetStateAction, useEffect, useMemo, useRef, useState } from 'react'
+import { PropsWithChildren, useEffect, useMemo, useRef, useState } from 'react'
 import { Lodash } from '@util/lodash'
 import { api } from '@lib/trpc/client'
 import LoadingDots from '@components/loading/LoadingDots'
-import { VerseBuilder } from 'service/verse'
-import { Book, Verse, VerseReference } from 'service/verse/types'
+import { VerseBuilder } from 'src/service/verse'
+import { Book, Verse, VerseReference } from 'src/service/verse/types'
 import { cn } from '@components/lib/utils'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@components/ui/command'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs'

@@ -1,1 +1,1 @@
-export { api } from 'server'
+export { api } from 'src/server'

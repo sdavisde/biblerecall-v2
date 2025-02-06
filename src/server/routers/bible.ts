@@ -1,10 +1,10 @@
 import { ErrorCode } from '@util/error'
 import { Lodash } from '@util/lodash'
 import { Result } from '@util/result'
-import { publicProcedure, router } from 'server/trpc'
+import { publicProcedure, router } from 'src/server/trpc'
 import { z } from 'zod'
 import { BIBLE_BOOKS_SKELETON } from '@util/bible'
-import { verseReferenceSchema } from 'service/verse/types'
+import { verseReferenceSchema } from 'src/service/verse/types'
 
 export type KeplinVerse = {
   id: number

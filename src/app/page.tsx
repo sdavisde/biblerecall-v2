@@ -1,4 +1,5 @@
 import { LandingPageBibleSplash } from '@components/icons/LandingPageBibleSplash'
+import { Button } from '@components/ui/button'
 import Link from 'next/link'
 
 export const dynamic = 'force-static'
@@ -22,7 +23,7 @@ export default function Landing() {
               href='/home'
               className='bg-green text-white rounded-3xl px-4 py-2 z-3'
             >
-              Start Memorizing
+              <Button variant='contrast'>Start Memorizing</Button>
             </Link>
           </div>
           <div className='centered w-full h-full mt-4 relative overflow-hidden'>

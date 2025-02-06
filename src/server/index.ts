@@ -8,7 +8,7 @@ import { userRouter } from './routers/user'
 import { verseSuggestionsRouter } from './routers/verse-suggestions'
 import { headers } from 'next/headers'
 import { cache } from 'react'
-import { createTRPCContext } from 'server/context'
+import { createTRPCContext } from 'src/server/context'
 
 export const appRouter = router({
   user: userRouter,
@@ -38,3 +38,8 @@ const createContext = cache(async () => {
 })
 
 export const api = createCaller(createContext)
+
+export const missingUser = {
+  code: 'user:undefined',
+  message: 'User is not defined',
+}

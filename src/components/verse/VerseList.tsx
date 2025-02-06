@@ -1,7 +1,7 @@
 'use client'
 
-import { useVerses } from 'hooks/use-verses'
-import { useSort } from 'hooks/use-sort'
+import { useVerses } from 'src/hooks/use-verses'
+import { useSort } from 'src/hooks/use-sort'
 import { VerseBox } from '@components/verse/VerseBox'
 
 const VerseList = () => {

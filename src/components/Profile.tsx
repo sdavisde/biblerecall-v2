@@ -1,9 +1,7 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar'
-import { logout } from '@lib/firebase'
 import { api } from '@lib/trpc/client'
-import { SignedInUser } from 'types/api'
 import { LogOut, Settings, User } from 'lucide-react'
 import {
   DropdownMenu,
@@ -15,9 +13,10 @@ import {
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu'
 import Link from 'next/link'
+import { logout } from '@lib/supabase/actions'
 
 export function Profile() {
-  const user = api.user.get.useQuery<SignedInUser>()
+  const user = api.user.get.useQuery()
 
   if (user.isPending || !user.data) {
     return <></>
@@ -28,7 +27,7 @@ export function Profile() {
       <DropdownMenuTrigger asChild>
         <button className='centered cursor-pointer scale-75 border rounded-full'>
           <Avatar>
-            <AvatarImage src={user.data.picture} />
+            <AvatarImage src={user.data.user_metadata.avatar_url} />
             <AvatarFallback>
               <User />
             </AvatarFallback>

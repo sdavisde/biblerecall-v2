@@ -6,7 +6,7 @@ import Reference from '@components/verse/Reference'
 import useHelpers from './helpers'
 import { useEffect, useRef } from 'react'
 import LoadingDots from '@components/loading/LoadingDots'
-import { Verse } from 'service/verse/types'
+import { Verse } from 'src/service/verse/types'
 
 export default function TypeItOut({ verse }: { verse: Verse }) {
   const input = useRef<HTMLInputElement>(null)

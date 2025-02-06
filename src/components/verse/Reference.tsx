@@ -1,4 +1,4 @@
-import { Verse } from 'service/verse/types'
+import { Verse } from 'src/service/verse/types'
 
 type ReferenceProps = {
   verse: Verse

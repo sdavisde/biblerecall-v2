@@ -1,28 +1,28 @@
 'use client'
 
 import { Button } from '@components/ui/button'
-import { signInWithGoogle } from '@lib/firebase'
+import { handleGoogleLogin } from './actions'
+import GoogleIcon from 'public/icons/google-icon.png'
+import Image from 'next/image'
 
 export const GoogleLogin = () => {
-  const handleGoogleLogin = async () => {
-    try {
-      const response = await signInWithGoogle()
-      if (!response.hasValue) {
-        throw new Error('google signin failed')
-      }
-
-      location.reload()
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
   return (
     <Button
-      variant='secondary'
-      className='w-full'
-      onClick={handleGoogleLogin}
+      variant='contrast'
+      className='w-full flex items-center gap-2'
+      onClick={async () => {
+        const redirectUrl = await handleGoogleLogin()
+        if (redirectUrl) {
+          window.location.assign(redirectUrl)
+        }
+      }}
     >
+      <Image
+        src={GoogleIcon}
+        alt='Google icon'
+        width={25}
+        height={25}
+      />
       Login with Google
     </Button>
   )

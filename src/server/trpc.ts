@@ -1,5 +1,5 @@
 import { initTRPC } from '@trpc/server'
-import { ApiContext } from 'types/api'
+import { ApiContext } from 'src/types/api'
 import superjson from 'superjson'
 
 /**

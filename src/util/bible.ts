@@ -1,5 +1,5 @@
 import 'server-only'
-import { Testament } from 'service/verse/types'
+import { Testament } from 'src/service/verse/types'
 
 type BookSkeleton = {
   id: number

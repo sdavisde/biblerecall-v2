@@ -8,13 +8,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@components/ui/button'
 import { GoogleLogin } from '@components/auth/google'
 import { Separator } from '@components/ui/separator'
-import { signInWithCredentials, signInAsGuest } from '@lib/firebase'
 import { PasswordField, passwordSchema } from '@components/form/PasswordField'
 import { EmailField, emailSchema } from '@components/form/EmailField'
 import Link from 'next/link'
+import { createClient } from '@lib/supabase/client'
+import { signUpNewUser } from './actions'
 
 // Define Zod schema
-type FormData = z.infer<typeof formSchema>
+export type LoginFormData = z.infer<typeof formSchema>
 const formSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
@@ -23,37 +24,30 @@ const formSchema = z.object({
 export function LoginForm() {
   const {
     register,
-    handleSubmit,
     setError,
+    watch,
+    trigger,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({
+  } = useForm<LoginFormData>({
     resolver: zodResolver(formSchema),
     mode: 'onBlur',
   })
   const router = useRouter()
 
-  async function handleCredentialsLogin({ email, password }: FormData) {
-    const user = await signInWithCredentials(email, password)
-    if (!user.hasValue) {
-      setError('root', user.error)
-      return
-    }
-    router.push('/home')
-  }
-  const handleAnonymousLogin = async () => {
-    const user = await signInAsGuest()
-    if (!user.hasValue) {
-      toast.error('Failed to login as guest. Please reload the page and try again')
+  async function handleCredentialsLogin(data: LoginFormData) {
+    const supabase = createClient()
+    const { error } = await supabase.auth.signInWithPassword(data)
+
+    if (error) {
+      console.log(error)
+      setError('root', { message: error.message })
       return
     }
     router.push('/home')
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(handleCredentialsLogin)}
-      className='grid gap-4'
-    >
+    <form className='grid gap-4'>
       <div className='grid gap-2'>
         <EmailField
           placeholder='m@example.com'
@@ -75,27 +69,43 @@ export function LoginForm() {
           }
         />
       </div>
-      {errors.root?.message && <p className='text-darkRed text-center'>{errors.root.message}</p>}
+      {errors.root?.message && <p className='text-destructive text-center'>{errors.root.message}</p>}
       <Button
-        type='submit'
+        type='button'
         className='w-full'
         loading={isSubmitting}
+        onClick={async () => {
+          const valid = await trigger()
+          if (valid) {
+            handleCredentialsLogin(watch())
+          }
+        }}
       >
         Login
       </Button>
+      <Button
+        type='button'
+        variant='outline'
+        className='w-full'
+        loading={isSubmitting}
+        onClick={async () => {
+          const valid = await trigger()
+          if (valid) {
+            signUpNewUser(watch())
+          }
+        }}
+      >
+        Sign Up
+      </Button>
       <div
         className='flex flex-col gap-4'
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          e.stopPropagation()
+          e.preventDefault()
+        }}
       >
         <Separator label='or' />
         <GoogleLogin />
-        <Button
-          type='button'
-          variant='outline'
-          onClick={handleAnonymousLogin}
-        >
-          Continue as Guest
-        </Button>
       </div>
     </form>
   )

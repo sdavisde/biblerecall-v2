@@ -9,9 +9,9 @@ import {
   DialogTrigger,
 } from '@components/ui/dialog'
 import { Verses } from '@util/verses'
-import { useVerses } from 'hooks/use-verses'
+import { useVerses } from 'src/hooks/use-verses'
 import { PropsWithChildren, useState } from 'react'
-import { Verse } from 'service/verse/types'
+import { Verse } from 'src/service/verse/types'
 
 type DeleteVerseDialogProps = {
   verse: Verse

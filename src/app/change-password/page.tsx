@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ChangePasswordForm } from './form'
 import { Button } from '@components/ui/button'
 import { ParsedUrlQuery } from 'querystring'
-import { verifyPasswordResetCode } from '@lib/firebase'
 import { notFound } from 'next/navigation'
 
 type ChangePasswordPageProps = {
@@ -16,10 +15,10 @@ export default async function ChangePasswordPage(props: ChangePasswordPageProps)
   // middlware checks that this path contains this code, so this is safe
   const code = searchParams['oobCode'] as string
   const verifyCode = async () => {
-    const result = await verifyPasswordResetCode(code)
-    if (!result.hasValue) {
-      return notFound()
-    }
+    // const result = await verifyPasswordResetCode(code)
+    // if (!result.hasValue) {
+    //   return notFound()
+    // }
   }
   verifyCode()
 

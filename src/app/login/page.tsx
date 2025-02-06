@@ -14,27 +14,7 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           <LoginForm />
-          <div className='mt-4 text-center text-sm'>
-            Don&apos;t have an account?
-            <Link
-              href='/register'
-              className='underline ms-2'
-            >
-              Sign up
-            </Link>
-          </div>
         </CardContent>
-        <CardFooter>
-          <Link href='/'>
-            <Button
-              variant='link'
-              className='text-gray-400 !p-0'
-              asDiv
-            >
-              Go back
-            </Button>
-          </Link>
-        </CardFooter>
       </Card>
     </div>
   )
