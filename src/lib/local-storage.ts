@@ -3,6 +3,7 @@ import { Font, Settings, Theme, Version, Visibility } from '@configuration/setti
 export const getSettingsFromLocalStorage = (): Settings | null => {
   try {
     return {
+      id: '',
       theme: fetchTheme(),
       visibility: fetchVisibility(),
       font: fetchFont(),
