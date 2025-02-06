@@ -1,5 +1,6 @@
 'use server'
 
+import { getBaseUrl } from '@components/lib/utils'
 import { createClient } from '@lib/supabase/server'
 
 export async function handleGoogleLogin() {
@@ -8,7 +9,7 @@ export async function handleGoogleLogin() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${process.env.BASE_URL}/auth/callback`,
+        redirectTo: `${getBaseUrl()}/auth/callback`,
       },
     })
 

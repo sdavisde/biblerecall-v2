@@ -9,7 +9,7 @@ export async function signUpNewUser({ email, password }: LoginFormData) {
     email,
     password,
     options: {
-      emailRedirectTo: `${process.env.BASE_URL}/home`,
+      emailRedirectTo: `${process.env.VERCEL_PROJECT_PRODUCTION_URL}/home`,
     },
   })
 
