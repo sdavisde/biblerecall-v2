@@ -55,6 +55,7 @@ const CredenzaTrigger = ({ className, children, ...props }: CredenzaProps) => {
   return (
     <CredenzaTrigger
       className={className}
+      onClick={(e) => e.stopPropagation()}
       {...props}
     >
       {children}

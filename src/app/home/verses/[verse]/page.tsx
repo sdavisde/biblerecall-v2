@@ -1,5 +1,5 @@
 import { Button } from '@components/ui/button'
-import { ConditionalLink } from '@components/util/ConditionalLink'
+import { ConditionalLink } from '@components/ui/conditional-link'
 import { api } from '@lib/trpc/server'
 import { Verses } from '@util/verses'
 import { AudioLines, ChevronLeft, Keyboard, Puzzle } from 'lucide-react'
@@ -13,11 +13,9 @@ type VersePageProps = {
 }
 
 export default async function VersePage(props: VersePageProps) {
-  const params = await props.params;
+  const params = await props.params
 
-  const {
-    verse: id
-  } = params;
+  const { verse: id } = params
 
   const verse = await api.verse.byId(id)
 

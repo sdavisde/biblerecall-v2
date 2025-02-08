@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from '@components/ui/button'
-import { ConditionalLink } from '@components/util/ConditionalLink'
+import { ConditionalLink } from '@components/ui/conditional-link'
 import { LucideIcon } from 'lucide-react'
 
 type PageSelectorProps = ButtonProps & {

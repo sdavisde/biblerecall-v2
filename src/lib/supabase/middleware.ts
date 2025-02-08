@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr'
+import { Lodash } from '@util/lodash'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
@@ -35,12 +36,9 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user && !request.nextUrl.pathname.startsWith('/login') && !request.nextUrl.pathname.startsWith('/auth')) {
-    // no user, potentially respond by redirecting the user to the login page
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
-  }
+  const PUBLIC_PATHS = ['/register', '/login', '/reset-password', '/change-password', '/auth']
+  // Check if the current path is in PUBLIC_PATHS
+  const isPublicPage = PUBLIC_PATHS.some((path) => request.nextUrl.pathname.startsWith(path))
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
   // If you're creating a new response object with NextResponse.next() make sure to:
@@ -54,6 +52,12 @@ export async function updateSession(request: NextRequest) {
   //    return myNewResponse
   // If this is not done, you may be causing the browser and server to go out
   // of sync and terminate the user's session prematurely!
+  if (request.nextUrl.pathname === '/' || isPublicPage || !Lodash.isNil(user)) {
+    return supabaseResponse
+  }
 
-  return supabaseResponse
+  // no user, potentially respond by redirecting the user to the login page
+  const url = request.nextUrl.clone()
+  url.pathname = '/login'
+  return NextResponse.redirect(url)
 }

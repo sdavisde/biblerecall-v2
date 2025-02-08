@@ -1,35 +1,25 @@
 'use client'
 
-import { createContext, useState } from 'react'
+import { createContext, Dispatch, SetStateAction, useState } from 'react'
 import { Verse } from 'src/service/verse/types'
 
 type verseContext = {
   verses: Verse[]
-  setVerses: (newVerses: Verse[]) => void
+  setVerses: Dispatch<SetStateAction<Verse[]>>
 }
 export const VersesContext = createContext<verseContext>({
   verses: [],
-  setVerses: (newVerses: Verse[]) => {},
+  setVerses: () => {},
 })
 
-export default function VersesProvider({
-  children,
-  verses,
-}: {
-  children: React.ReactNode
-  verses: Verse[] | null
-}): React.ReactNode {
-  const [verseState, setVerseState] = useState<Verse[]>(verses ?? [])
-
-  const updateVerseState = (newVerses: Verse[]) => {
-    setVerseState(newVerses)
-  }
+export default function VersesProvider({ children }: { children: React.ReactNode }): React.ReactNode {
+  const [verseState, setVerseState] = useState<Verse[]>([])
 
   return (
     <VersesContext.Provider
       value={{
         verses: verseState,
-        setVerses: updateVerseState,
+        setVerses: setVerseState,
       }}
     >
       {children}

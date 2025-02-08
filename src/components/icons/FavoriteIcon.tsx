@@ -12,7 +12,7 @@ type FavoriteIconProps = {
 }
 
 const FavoriteIcon = ({ verse }: FavoriteIconProps) => {
-  const [verses, dispatchVerses] = useVerses()
+  const { dispatchVerses } = useVerses()
   const [loading, setLoading] = useState(false)
 
   const toggleFavorite = async () => {

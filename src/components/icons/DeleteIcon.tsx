@@ -12,7 +12,7 @@ type DeleteIconProps = {
 }
 
 const DeleteIcon = ({ verse }: DeleteIconProps) => {
-  const [, dispatchVerses] = useVerses()
+  const { dispatchVerses } = useVerses()
   const [loading, setLoading] = useState(false)
 
   const onDelete = async () => {

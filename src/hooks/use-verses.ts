@@ -1,24 +1,32 @@
 'use client'
 
-import { useContext } from 'react'
-import { VersesContext } from '@components/providers/VersesProvider'
 import toast from 'react-hot-toast'
 import { api } from '@lib/trpc/client'
 import { Verse } from 'src/service/verse/types'
 import { Verses } from '@util/verses'
+import { Result } from '@util/result'
 
-export const useVerses = () => {
-  const { verses, setVerses } = useContext(VersesContext)
+type UseVersesValue = {
+  dispatchVerses: (verse: Verse, action: 'add' | 'update' | 'delete') => Promise<Result<Verse | null>>
+  isMutating: boolean
+}
+
+export const useVerses = (): UseVersesValue => {
+  const utils = api.useUtils()
+
+  const invalidateVerses = () => utils.verse.allByUser.invalidate()
+
   const addMutation = api.verse.add.useMutation()
   const updateMutation = api.verse.update.useMutation()
   const deleteMutation = api.verse.delete.useMutation()
+  const isMutating = addMutation.isPending || updateMutation.isPending || deleteMutation.isPending
 
-  const setNewVerses = async (verse: Verse, action: 'add' | 'update' | 'delete') => {
+  const dispatchVerses = async (verse: Verse, action: 'add' | 'update' | 'delete') => {
     switch (action) {
       case 'add':
         const addResult = await addMutation.mutateAsync(verse)
         if (addResult.hasValue) {
-          setVerses([addResult.value, ...verses])
+          invalidateVerses()
           toast.success(`Added ${Verses.stringifyReference(verse)}`)
         } else {
           toast.error(addResult.error.message)
@@ -27,7 +35,7 @@ export const useVerses = () => {
       case 'update':
         const updateResult = await updateMutation.mutateAsync(verse)
         if (updateResult.hasValue) {
-          setVerses([...verses.filter((v) => v.id !== verse.id), verse])
+          invalidateVerses()
           toast.success('Updated verse')
         } else {
           toast.error(updateResult.error.message)
@@ -36,7 +44,7 @@ export const useVerses = () => {
       case 'delete':
         const deleteResult = await deleteMutation.mutateAsync(verse.id)
         if (deleteResult.hasValue) {
-          setVerses(verses.filter((v) => v.id !== verse.id))
+          invalidateVerses()
           toast.success(`Removed ${Verses.stringifyReference(verse)}`)
         } else {
           toast.error(deleteResult.error.message)
@@ -45,5 +53,8 @@ export const useVerses = () => {
     }
   }
 
-  return [verses, setNewVerses] as const
+  return {
+    dispatchVerses,
+    isMutating,
+  }
 }

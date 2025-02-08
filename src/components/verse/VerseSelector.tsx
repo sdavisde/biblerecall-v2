@@ -22,17 +22,18 @@ import {
   CredenzaTitle,
   CredenzaTrigger,
 } from '@components/ui/credenza'
+import { DynamicVerseText } from './DynamicVerseText'
 
 type VerseSelectProps = PropsWithChildren<{
-  submitVerse: (verse: Verse) => Promise<Result<unknown>>
-  onFinishSubmit?: () => void
+  submitVerse: (verse: Verse) => void
+  onSuccess?: (verse: Verse) => void
   initialVerse?: Verse
 }>
 
 type VerseSelectorTabs = (typeof verseSelectorTabs)[number]
 const verseSelectorTabs = ['Books', 'Chapters', 'Verses', 'Review'] as const
 
-export const VerseSelector = ({ children, submitVerse, initialVerse, onFinishSubmit }: VerseSelectProps) => {
+export const VerseSelector = ({ children, submitVerse, initialVerse, onSuccess }: VerseSelectProps) => {
   const [open, setOpen] = useState(false)
   const [builder, setBuilder] = useState<VerseBuilder>(VerseBuilder.init(initialVerse ?? null))
   const referenceString = useMemo(() => Verses.stringifyPartialReference(builder as Partial<VerseReference>), [builder])
@@ -44,7 +45,6 @@ export const VerseSelector = ({ children, submitVerse, initialVerse, onFinishSub
     const newReference = VerseBuilder.toReference(builder)
     return newReference.hasValue ? newReference.value : null
   }, [builder])
-  const text = api.bible.getVerse.useQuery({ reference, version: builder.version })
 
   const { chapters, isLoading: chaptersLoading } = useChapters(builder.book)
   const { verses, isLoading: versesLoading } = useVerses(builder.book, builder.chapter)
@@ -53,13 +53,6 @@ export const VerseSelector = ({ children, submitVerse, initialVerse, onFinishSub
     setBuilder(VerseBuilder.init(initialVerse ?? null))
     setActiveTab('Review')
   }
-
-  useEffect(() => {
-    if (text.data && text.data.hasValue) {
-      const verseText = text.data.value.verseText
-      setBuilder((prev) => ({ ...prev, text: verseText }))
-    }
-  }, [text.data])
 
   useEffect(() => {
     if (activeTab === 'Books') {
@@ -77,27 +70,21 @@ export const VerseSelector = ({ children, submitVerse, initialVerse, onFinishSub
 
   const onSave = async () => {
     setSubmitting(true)
+    const encounteredError = false
 
     try {
-      if (!text.data?.hasValue) {
-        throw Error(text.data?.error.message ?? 'verse text not found')
-      }
-
       const verse = VerseBuilder.toVerse(builder)
       if (!verse.hasValue) {
         throw Error(verse.error.message)
       }
-      const result = await submitVerse(verse.value)
-      if (!result.hasValue) {
-        throw Error(result.error.message)
-      }
+      submitVerse(verse.value)
       resetState()
       setOpen(false)
+      onSuccess?.(verse.value)
     } catch (e) {
       console.error(e)
       toast.error('Verse could not be saved. Please reload the page and try again.')
     } finally {
-      onFinishSubmit?.()
       setSubmitting(false)
     }
   }
@@ -191,7 +178,9 @@ export const VerseSelector = ({ children, submitVerse, initialVerse, onFinishSub
                   <Button
                     key={chapter}
                     variant='outline'
-                    className='w-full h-auto aspect-square'
+                    className={cn('w-full h-auto aspect-square', {
+                      'bg-primary': !Lodash.isNil(chapter) && chapter === builder.chapter,
+                    })}
                     onClick={() => {
                       setBuilder((prev) => ({ ...prev, chapter, start: null, end: null }))
                       setActiveTab('Verses')
@@ -219,9 +208,9 @@ export const VerseSelector = ({ children, submitVerse, initialVerse, onFinishSub
                         key={verseNumber}
                         variant='outline'
                         className={cn('w-full h-auto aspect-square', {
-                          'bg-green hover:bg-green': verseNumber === builder.start,
-                          'bg-red hover:bg-red': verseNumber === builder.end,
-                          'bg-gray-300 hover:bg-gray-300':
+                          'bg-primary hover:bg-primary': verseNumber === builder.start,
+                          'bg-destructive hover:bg-destructive': verseNumber === builder.end,
+                          'bg-muted hover:bg-muted':
                             !Lodash.isNil(builder.start) &&
                             !Lodash.isNil(builder.end) &&
                             verseNumber > builder.start &&
@@ -266,9 +255,11 @@ export const VerseSelector = ({ children, submitVerse, initialVerse, onFinishSub
                   <span>Review</span>
                 </h3>
                 {!Lodash.isNil(reference) && (
-                  <>
-                    <p>&quot;{text.data?.hasValue ? text.data.value.verseText : ''}&quot;</p>
-                  </>
+                  <DynamicVerseText
+                    reference={reference}
+                    builder={builder}
+                    updateBuilder={setBuilder}
+                  />
                 )}
               </div>
               {!Lodash.isNil(reference) && (

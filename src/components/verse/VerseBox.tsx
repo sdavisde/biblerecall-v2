@@ -38,27 +38,25 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
     preventScrollOnSwipe: true,
     trackMouse: true,
   })
-  const [, dispatchVerses] = useVerses()
+  const { dispatchVerses } = useVerses()
   const [settings] = useSettings()
 
-  const onUpdate = async (newVerse: Verse) => {
-    return await dispatchVerses(newVerse, 'update')
-  }
+  const onUpdate = (newVerse: Verse) => dispatchVerses(newVerse, 'update')
 
   return (
     <div className='h-fit w-full relative'>
-      <Link href={`/home/verses/${verse.id}`}>
-        <Card
-          className={cn(
-            'cursor-pointer text-start w-full relative flex gap-4 duration-300 transition-all z-20 group',
-            '!outline-0 !ring-0 focus:!ring-0',
-            {
-              '-translate-x-16': showDelete(editingState),
-              'translate-x-16': showEdit(editingState),
-            }
-          )}
-          {...handlers}
-        >
+      <Card
+        className={cn(
+          'cursor-pointer text-start w-full relative flex gap-4 duration-300 transition-all z-20 group',
+          '!outline-0 !ring-0 focus:!ring-0',
+          {
+            '-translate-x-16': showDelete(editingState),
+            'translate-x-16': showEdit(editingState),
+          }
+        )}
+        {...handlers}
+      >
+        <Link href={`/home/verses/${verse.id}`}>
           <div className='w-full h-fit'>
             <CardHeader className='!pb-0'>
               <CardTitle className='flex items-center justify-between'>
@@ -72,36 +70,40 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
               />
             </CardContent>
           </div>
-          <div
-            className='flex items-center h-fit gap-2 md:flex-row-reverse'
-            onClick={(e) => e.stopPropagation()}
+        </Link>
+        <div
+          className={cn(
+            'hidden md:flex items-center gap-2 p-2 rounded-lg',
+            'opacity-0 group-hover:opacity-100 duration-300 transition-opacity',
+            'absolute right-0 top-0'
+          )}
+        >
+          <VerseSelector
+            submitVerse={onUpdate}
+            initialVerse={verse}
           >
-            <VerseSelector
-              submitVerse={onUpdate}
-              initialVerse={verse}
+            <Button
+              size='icon'
+              className='aspect-square'
+              variant='secondary'
+              asDiv
             >
-              <Button
-                size='icon'
-                className='aspect-square hidden md:flex opacity-0 group-hover:opacity-100 duration-300 transition-opacity'
-                asDiv
-              >
-                <Pencil />
-              </Button>
-            </VerseSelector>
+              <Pencil />
+            </Button>
+          </VerseSelector>
 
-            <DeleteVerseDialog verse={verse}>
-              <Button
-                size='icon'
-                variant='destructive'
-                className='aspect-square hidden md:flex opacity-0 group-hover:opacity-100 duration-300 transition-opacity'
-                asDiv
-              >
-                <Trash2 />
-              </Button>
-            </DeleteVerseDialog>
-          </div>
-        </Card>
-      </Link>
+          <DeleteVerseDialog verse={verse}>
+            <Button
+              size='icon'
+              variant='destructive'
+              className='aspect-square'
+              asDiv
+            >
+              <Trash2 />
+            </Button>
+          </DeleteVerseDialog>
+        </div>
+      </Card>
       <div className='absolute inset-0 flex items-center justify-between'>
         <VerseSelector
           submitVerse={onUpdate}

@@ -11,6 +11,8 @@ import { SettingsProvider } from '@components/Settings/Provider'
 import { api } from '@lib/trpc/server'
 import { ThemeProvider } from 'next-themes'
 import Head from 'next/head'
+import ThemeModal from '@components/theme/modal'
+import { GearIcon } from '@radix-ui/react-icons'
 
 const urbanist = Urbanist({
   subsets: ['latin'],
@@ -91,7 +93,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         >
           <SettingsProvider authUserSettings={settingsResult.hasValue ? settingsResult.value : null}>
             <TRPCReactProvider>
-              <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>{children}</GoogleOAuthProvider>
+              <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
+                {!process.env.VERCEL_PROJECT_PRODUCTION_URL && (
+                  <ThemeModal>
+                    <GearIcon
+                      className='fixed bottom-4 right-4'
+                      style={{ zIndex: 999 }}
+                    />
+                  </ThemeModal>
+                )}
+                {children}
+              </GoogleOAuthProvider>
             </TRPCReactProvider>
             <Analytics />
             <SpeedInsights />

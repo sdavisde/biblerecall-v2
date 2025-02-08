@@ -19,7 +19,7 @@ type DeleteVerseDialogProps = {
 
 export const DeleteVerseDialog = ({ verse, children }: PropsWithChildren<DeleteVerseDialogProps>) => {
   const [open, setOpen] = useState(false)
-  const [, dispatchVerses] = useVerses()
+  const { dispatchVerses, isMutating } = useVerses()
 
   return (
     <Dialog
@@ -50,6 +50,7 @@ export const DeleteVerseDialog = ({ verse, children }: PropsWithChildren<DeleteV
           <Button
             variant='destructive'
             onClick={() => dispatchVerses(verse, 'delete')}
+            loading={isMutating}
           >
             Delete
           </Button>

@@ -27,6 +27,30 @@ export type Database = {
         }
         Relationships: []
       }
+      colors: {
+        Row: {
+          created_at: string
+          hsl: string
+          id: number
+          name: string
+          theme: Database["public"]["Enums"]["theme"]
+        }
+        Insert: {
+          created_at?: string
+          hsl: string
+          id?: number
+          name: string
+          theme: Database["public"]["Enums"]["theme"]
+        }
+        Update: {
+          created_at?: string
+          hsl?: string
+          id?: number
+          name?: string
+          theme?: Database["public"]["Enums"]["theme"]
+        }
+        Relationships: []
+      }
       groups: {
         Row: {
           created_at: string

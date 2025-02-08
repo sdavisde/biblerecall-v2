@@ -1,61 +1,19 @@
-export default function LoadingDots() {
+interface SuspenseBoundaryLoaderProps {
+  size?: 'sm' | 'md' | 'lg'
+}
+
+const SuspenseBoundaryLoader: React.FC<SuspenseBoundaryLoaderProps> = ({ size = 'sm' }) => {
+  const sizeClasses = {
+    sm: 'w-6 h-6 border-t-2 border-b-2',
+    md: 'w-8 h-8 border-t-4 border-b-4',
+    lg: 'w-12 h-12 border-t-4 border-b-4',
+  }
+
   return (
-    <svg
-      version='1.1'
-      id='L4'
-      xmlns='http://www.w3.org/2000/svg'
-      xmlnsXlink='http://www.w3.org/1999/xlink'
-      x='0px'
-      y='0px'
-      viewBox='0 0 100 100'
-      enableBackground='new 0 0 0 0'
-      xmlSpace='preserve'
-    >
-      <circle
-        fill='#fff'
-        stroke='none'
-        cx='6'
-        cy='50'
-        r='6'
-      >
-        <animate
-          attributeName='opacity'
-          dur='1s'
-          values='0;1;0'
-          repeatCount='indefinite'
-          begin='0.1'
-        />
-      </circle>
-      <circle
-        fill='#fff'
-        stroke='none'
-        cx='26'
-        cy='50'
-        r='6'
-      >
-        <animate
-          attributeName='opacity'
-          dur='1s'
-          values='0;1;0'
-          repeatCount='indefinite'
-          begin='0.2'
-        />
-      </circle>
-      <circle
-        fill='#fff'
-        stroke='none'
-        cx='46'
-        cy='50'
-        r='6'
-      >
-        <animate
-          attributeName='opacity'
-          dur='1s'
-          values='0;1;0'
-          repeatCount='indefinite'
-          begin='0.3'
-        />
-      </circle>
-    </svg>
+    <div className='flex items-center justify-center bg-background'>
+      <div className={`${sizeClasses[size]}  border-primary rounded-full animate-spin`}></div>
+    </div>
   )
 }
+
+export default SuspenseBoundaryLoader

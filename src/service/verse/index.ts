@@ -2,6 +2,7 @@ import { Result } from '@util/result'
 import { Verse, VerseReference } from './types'
 import { Lodash } from '@util/lodash'
 import { v4 as uuidv4 } from 'uuid'
+import { Verses } from '@util/verses'
 
 export type VerseBuilder = { [F in keyof Verse]: Verse[F] | null } & {
   favorite: boolean
@@ -83,5 +84,13 @@ export namespace VerseBuilder {
 
   export function toString(builder: VerseBuilder) {
     return `VerseBuilder[id=${builder.id},book=${builder.book?.name},chapter=${builder.chapter},start=${builder.start},end=${builder.end},text=${builder.text},favorite=${builder.favorite}]`
+  }
+
+  export function toReferenceString(builder: VerseBuilder): string | null {
+    const reference = toReference(builder)
+    if (!reference.hasValue) {
+      return null
+    }
+    return Verses.stringifyReference(reference.value)
   }
 }
