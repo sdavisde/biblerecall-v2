@@ -1,5 +1,4 @@
 import { createServerClient } from '@supabase/ssr'
-import { Lodash } from '@util/lodash'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
@@ -52,7 +51,7 @@ export async function updateSession(request: NextRequest) {
   //    return myNewResponse
   // If this is not done, you may be causing the browser and server to go out
   // of sync and terminate the user's session prematurely!
-  if (request.nextUrl.pathname === '/' || isPublicPage || !Lodash.isNil(user)) {
+  if (request.nextUrl.pathname === '/' || isPublicPage || user) {
     return supabaseResponse
   }
 
