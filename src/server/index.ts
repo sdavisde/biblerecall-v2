@@ -9,6 +9,7 @@ import { verseSuggestionsRouter } from './routers/verse-suggestions'
 import { headers } from 'next/headers'
 import { cache } from 'react'
 import { createTRPCContext } from 'src/server/context'
+import { colorsRouter } from './routers/colors'
 
 export const appRouter = router({
   user: userRouter,
@@ -16,6 +17,7 @@ export const appRouter = router({
   verseSuggestions: verseSuggestionsRouter,
   settings: settingsRouter,
   bible: bibleRouter,
+  colors: colorsRouter,
 })
 
 export const createCaller = createCallerFactory(appRouter)

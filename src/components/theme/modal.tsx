@@ -6,7 +6,7 @@ import { PropsWithChildren } from 'react'
 
 export default async function ThemeModal({ children }: PropsWithChildren<{}>) {
   const supabase = await createClient()
-  const colorsResult = await supabase.from('colors').select()
+  const colorsResult = await supabase.from('colors').select().order('id')
 
   if (colorsResult.error) {
     throw colorsResult.error
@@ -17,7 +17,7 @@ export default async function ThemeModal({ children }: PropsWithChildren<{}>) {
       <DialogTrigger>{children}</DialogTrigger>
       <DialogContent
         id='colorSettings'
-        className='w-[80vw] !max-w-none'
+        className='w-[80vw] !h-[90vh] !max-w-none'
       >
         <DialogHeader className='flex flex-row items-center gap-8'>
           <DialogTitle>Theme settings</DialogTitle>

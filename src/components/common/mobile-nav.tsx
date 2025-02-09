@@ -1,23 +1,9 @@
 'use client'
 
 import cn from 'clsx'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Users, Book, Plus, User, Search } from 'lucide-react'
 import { VerseSelector } from '@components/verse/VerseSelector'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@components/ui/dialog'
-import { useState } from 'react'
-import { Verse } from 'src/service/verse/types'
-import { Lodash } from '@util/lodash'
-import { VerseBuilder } from 'src/service/verse'
-import { Button } from '@components/ui/button'
-import { LinkButton } from '@components/ui/link-button'
 import { api } from '@lib/trpc/client'
 import { ConditionalLink } from '@components/ui/conditional-link'
 
@@ -31,8 +17,8 @@ const navItems = [
 
 export default function MobileNav() {
   const pathname = usePathname()
-  const [verseAdded, setVerseAdded] = useState<Verse | null>(null)
   const addMutation = api.verse.add.useMutation()
+  const router = useRouter()
 
   return (
     <>
@@ -47,8 +33,8 @@ export default function MobileNav() {
                   key={item.name}
                   href={item.href}
                   className={cn('flex flex-col items-center justify-center py-1 px-2 relative transition-colors', {
-                    'text-foreground': isActive,
-                    'text-muted hover:text-muted/50': !isActive,
+                    'text-muted-foreground': isActive,
+                    'text-muted-foreground hover:text-muted-foreground/50': !isActive,
                     'opacity-50 pointer-events-none': item.disabled,
                   })}
                 >
@@ -57,12 +43,9 @@ export default function MobileNav() {
                     {isAddVerse ? (
                       <VerseSelector
                         submitVerse={addMutation.mutate}
-                        onSuccess={(verse) => {
-                          setVerseAdded(verse)
-                          console.log('added verse: ', verse)
-                        }}
+                        onSuccess={() => router.push('/home/verses')}
                       >
-                        <item.icon className={cn('w-6 h-6', { 'text-foreground': isAddVerse })} />
+                        <item.icon className={cn('w-6 h-6', { 'text-muted-foreground': isAddVerse })} />
                       </VerseSelector>
                     ) : (
                       <item.icon className={cn('w-6 h-6')} />
@@ -75,23 +58,6 @@ export default function MobileNav() {
           </div>
         </nav>
       </div>
-      <Dialog
-        open={!Lodash.isNil(verseAdded)}
-        onOpenChange={() => setVerseAdded(null)}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              Successfully added {VerseBuilder.toReferenceString(VerseBuilder.init(verseAdded))}
-            </DialogTitle>
-          </DialogHeader>
-          <DialogDescription>Verse has been added to your account.</DialogDescription>
-          <DialogFooter>
-            <Button variant='secondary'>Close</Button>
-            <LinkButton href='/home/verses'>Go to verse</LinkButton>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </>
   )
 }

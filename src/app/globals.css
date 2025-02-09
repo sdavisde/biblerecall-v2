@@ -79,47 +79,9 @@ h3 {
 
 @layer base {
   :root {
-    --background: 215 18% 95%;
-    --foreground: 215 5% 10%;
-    --card: 215 18% 90%;
-    --card-foreground: 215 5% 15%;
-    --popover: 215 18% 95%;
-    --popover-foreground: 215 95% 10%;
-    --primary: 215 10% 57%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 215 18% 70%;
-    --secondary-foreground: 0 0% 0%;
-    --muted: 177 18% 85%;
-    --muted-foreground: 215 5% 35%;
-    --accent: 177 18% 80%;
-    --accent-foreground: 215 5% 15%;
-    --destructive: 0 50% 30%;
-    --destructive-foreground: 215 5% 90%;
-    --border: 215 20% 50%;
-    --input: 215 20% 23%;
-    --ring: 215 10% 57%;
     --radius: 0.3rem;
   }
   .dark {
-    --background: 215 18% 10%;
-    --foreground: 215 5% 90%;
-    --card: 215 18% 10%;
-    --card-foreground: 215 5% 90%;
-    --popover: 215 18% 5%;
-    --popover-foreground: 215 5% 90%;
-    --primary: 177 18% 23%;
-    --primary-foreground: 215 5% 90%;
-    --secondary: 215 18% 20%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 177 18% 23%;
-    --muted-foreground: 215 5% 60%;
-    --accent: 215 10% 57%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 50% 30%;
-    --destructive-foreground: 215 5% 90%;
-    --border: 215 20% 23%;
-    --input: 215 20% 23%;
-    --ring: 215 10% 57%;
     --radius: 0.3rem;
   }
 }

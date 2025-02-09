@@ -44,7 +44,7 @@ export const settingsRouter = router({
   }),
 })
 
-function fromMe(rawSettings: Tables<'settings'>): Settings {
+export function fromMe(rawSettings: Tables<'settings'>): Settings {
   return {
     id: rawSettings.id,
     theme: (rawSettings.theme as Theme) ?? Theme.System,
@@ -56,7 +56,7 @@ function fromMe(rawSettings: Tables<'settings'>): Settings {
   }
 }
 
-function toMe(settings: Settings, user: User): Omit<Tables<'settings'>, 'created_at'> {
+export function toMe(settings: Settings, user: User): Omit<Tables<'settings'>, 'created_at'> {
   return {
     id: settings.id,
     user_id: user.id,

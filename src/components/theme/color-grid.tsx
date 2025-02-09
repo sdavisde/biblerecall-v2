@@ -4,8 +4,9 @@ import { Tables } from 'database.types'
 import * as ColorUtils from '@components/lib/color-utils'
 import { ColorPicker } from '@components/ui/color-picker'
 import { useTheme } from 'next-themes'
-import { createClient } from '@lib/supabase/client'
 import toast from 'react-hot-toast'
+import { api } from '@lib/trpc/client'
+import { Lodash } from '@util/lodash'
 
 type Props = {
   colors: Array<Tables<'colors'>>
@@ -13,24 +14,24 @@ type Props = {
 export function ColorGrid({ colors }: Props) {
   const { resolvedTheme } = useTheme()
   const filteredColors = colors.filter((it) => it.theme === resolvedTheme)
+  const updateColor = api.colors.set.useMutation()
+  const utils = api.useUtils()
 
-  const handleChange = async (color: Tables<'colors'>, newVal: ColorUtils.HSL | null) => {
+  const handleChange = Lodash.debounce(async (color: Tables<'colors'>, newVal: ColorUtils.HSL | null) => {
     if (!newVal) {
       toast.error(`${color.name} failed to update`)
       return
     }
 
     const newColor = { ...color, hsl: `${newVal.h} ${newVal.s}% ${newVal.l}%` }
-    const supabase = createClient()
-    const result = await supabase.from('colors').update(newColor).eq('id', color.id)
-    if (result.error) {
+    const result = await updateColor.mutateAsync(newColor)
+    if (!result.hasValue) {
       toast.error(`${color.name} failed to update`)
       return
     }
 
-    const appliedColors = [...filteredColors.filter((it) => it.id !== newColor.id), newColor]
-    applyTheme(appliedColors)
-  }
+    utils.colors.invalidate()
+  }, 1000)
 
   return (
     <div className='grid grid-cols-3 gap-8'>
@@ -43,7 +44,7 @@ export function ColorGrid({ colors }: Props) {
           <div key={color.id}>
             <p className='capitalize'>{color.name}</p>
             <ColorPicker
-              color={ColorUtils.formatHsl(hsl)}
+              color={hsl}
               onChange={(val) => handleChange(color, val)}
             />
           </div>
@@ -51,12 +52,4 @@ export function ColorGrid({ colors }: Props) {
       })}
     </div>
   )
-}
-
-const applyTheme = (colors: Array<Tables<'colors'>>) => {
-  const root = document.documentElement
-
-  colors.forEach((color) => {
-    root.style.setProperty(`--${color.name}`, color.hsl)
-  })
 }

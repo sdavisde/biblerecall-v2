@@ -13,6 +13,9 @@ import { ThemeProvider } from 'next-themes'
 import Head from 'next/head'
 import ThemeModal from '@components/theme/modal'
 import { GearIcon } from '@radix-ui/react-icons'
+import { ColorStyle } from '@components/theme/color-style'
+import { createClient } from '@lib/supabase/server'
+import { fromMe } from 'src/server/routers/settings'
 
 const urbanist = Urbanist({
   subsets: ['latin'],
@@ -71,7 +74,14 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const settingsResult = await api.settings.get()
+  const supabase = await createClient()
+  const settingsResult = await supabase.from('settings').select().single()
+  const settings = settingsResult.data ? fromMe(settingsResult.data) : null
+
+  const colorsResult = await supabase.from('colors').select()
+  const normalizedColors = colorsResult.data ?? []
+  const rootColors = normalizedColors.filter((it) => it.theme !== 'dark')
+  const darkColors = normalizedColors.filter((it) => it.theme === 'dark')
 
   return (
     <html
@@ -85,13 +95,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           content='Bible Recall'
         />
       </Head>
+      <ColorStyle
+        rootColors={rootColors}
+        darkColors={darkColors}
+      />
       {/* IMPORTANT: This body tag gets swapped out in `SettingsProvider`, but needs to be here so the server doesn't throw hydration errors */}
       <body suppressHydrationWarning>
         <ThemeProvider
-          defaultTheme={settingsResult.hasValue ? settingsResult.value?.theme : undefined}
+          defaultTheme={settings?.theme ?? 'system'}
           attribute='class'
         >
-          <SettingsProvider authUserSettings={settingsResult.hasValue ? settingsResult.value : null}>
+          <SettingsProvider authUserSettings={settings}>
             <TRPCReactProvider>
               <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
                 {!process.env.VERCEL_PROJECT_PRODUCTION_URL && (
