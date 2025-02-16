@@ -4,11 +4,8 @@ import { Urbanist, Rock_Salt, Satisfy } from 'next/font/google'
 import localFont from 'next/font/local'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import { GoogleOAuthProvider } from '@react-oauth/google'
-
 import { TRPCReactProvider } from '@lib/trpc/client'
 import { SettingsProvider } from '@components/Settings/Provider'
-import { api } from '@lib/trpc/server'
 import { ThemeProvider } from 'next-themes'
 import Head from 'next/head'
 import ThemeModal from '@components/theme/modal'
@@ -16,6 +13,7 @@ import { GearIcon } from '@radix-ui/react-icons'
 import { ColorStyle } from '@components/theme/color-style'
 import { createClient } from '@lib/supabase/server'
 import { fromMe } from 'src/server/routers/settings'
+import { cache } from 'react'
 
 const urbanist = Urbanist({
   subsets: ['latin'],
@@ -64,7 +62,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   minimumScale: 1,
   maximumScale: 1,
-  themeColor: 'var(--green)',
+  themeColor: 'var(--primary)',
   colorScheme: 'light dark',
 }
 
@@ -73,15 +71,24 @@ export const metadata: Metadata = {
   description: "Memorize, Meditate, Connect with God's Word",
 }
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+const getSettings = cache(async () => {
   const supabase = await createClient()
   const settingsResult = await supabase.from('settings').select().single()
-  const settings = settingsResult.data ? fromMe(settingsResult.data) : null
+  return settingsResult.data ? fromMe(settingsResult.data) : null
+})
 
+const getColors = cache(async () => {
+  const supabase = await createClient()
   const colorsResult = await supabase.from('colors').select()
   const normalizedColors = colorsResult.data ?? []
   const rootColors = normalizedColors.filter((it) => it.theme !== 'dark')
   const darkColors = normalizedColors.filter((it) => it.theme === 'dark')
+  return { rootColors, darkColors }
+})
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getSettings()
+  const { rootColors, darkColors } = await getColors()
 
   return (
     <html
@@ -107,17 +114,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         >
           <SettingsProvider authUserSettings={settings}>
             <TRPCReactProvider>
-              <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
-                {!process.env.VERCEL_PROJECT_PRODUCTION_URL && (
-                  <ThemeModal>
-                    <GearIcon
-                      className='fixed bottom-4 right-4'
-                      style={{ zIndex: 999 }}
-                    />
-                  </ThemeModal>
-                )}
-                {children}
-              </GoogleOAuthProvider>
+              {!process.env.VERCEL_PROJECT_PRODUCTION_URL && (
+                <ThemeModal>
+                  <GearIcon
+                    className='fixed bottom-4 right-4'
+                    style={{ zIndex: 999 }}
+                  />
+                </ThemeModal>
+              )}
+              {children}
             </TRPCReactProvider>
             <Analytics />
             <SpeedInsights />
