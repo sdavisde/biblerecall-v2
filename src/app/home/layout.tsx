@@ -1,10 +1,12 @@
 import Navbar from '@components/common/Navbar'
 import { Toaster } from 'react-hot-toast'
 import MobileNav from '@components/common/mobile-nav'
+import { GlobalBanner } from '@components/common/meditations/global-banner'
 
 export default async function HomeLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
+      <GlobalBanner />
       <Navbar />
       <Toaster />
       <main className='w-full min-h-[calc(100vh-5rem)] overflow-x-hidden relative bg-background text-foreground'>
