@@ -1,6 +1,5 @@
-import { Profile } from '@components/Profile'
-import { VersionSelect } from '@components/Settings/SettingSelectors/Version-Select'
 import Link from 'next/link'
+import { DesktopNav } from './desktop-nav'
 
 export default async function Navbar() {
   return (
@@ -9,10 +8,7 @@ export default async function Navbar() {
         <h1 className='centered text-base font-light'>
           <Link href='/home'>Bible Recall</Link>
         </h1>
-      </div>
-      <div className='flex flex-row items-center gap-2 mr-4 h-full'>
-        <VersionSelect />
-        <Profile />
+        <DesktopNav />
       </div>
     </nav>
   )

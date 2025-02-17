@@ -1,34 +1,51 @@
 'use client'
 
-import { useSettings } from 'src/hooks/use-settings'
-import { useEffect, useState } from 'react'
+import cn from 'clsx'
 import { Visibility } from '@configuration/settings'
-import { SettingSlot } from '../SettingSlot'
-import { EyeOff } from 'lucide-react'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@components/ui/form'
+import { useFormContext } from 'react-hook-form'
+import { Skeleton } from '@components/ui/skeleton'
+import { VerseText } from '@components/verse/VerseBox'
+import { CardTitle } from '@components/ui/card'
 
 export function VisibilitySelect() {
-  const [settings, setSettings] = useSettings()
-  const [visibility, setVisibility] = useState<Visibility>(settings?.visibility ?? Visibility.Full)
-
-  // Update settings when visibility changes
-  useEffect(() => {
-    if (settings && visibility !== settings.visibility) {
-      setSettings({ ...settings, visibility })
-    }
-  }, [visibility])
+  const { control } = useFormContext()
 
   return (
-    <SettingSlot
-      title='Verse Visibility'
-      description='The difficulty level when viewing verses on your verse page'
-      options={Object.entries(Visibility).map(([label, value]) => ({
-        label,
-        value,
-      }))}
-      selectedValue={visibility}
-      setter={setVisibility}
-    >
-      <EyeOff size={24} />
-    </SettingSlot>
+    <FormField
+      control={control}
+      name='visibility'
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Visibility</FormLabel>
+          <FormControl>
+            <div className='grid grid-cols-1 md:grid-cols-3 auto-rows-[1fr] gap-4'>
+              {Object.entries(Visibility).map(([name, value]) => (
+                <div
+                  key={name}
+                  onClick={() => field.onChange(value)}
+                  className='flex-col centered justify-start group'
+                >
+                  <button className='w-full centered flex-col items-start justify-start gap-2 border-2 group-hover:border-muted rounded p-2'>
+                    <CardTitle className='flex items-center justify-between'>
+                      <span>John 3:16</span>
+                    </CardTitle>
+                    <VerseText
+                      text='For God so loved the world that He gave his only son'
+                      visibility={value}
+                    />
+                  </button>
+                  <p className='capitalize'>{value}</p>
+                </div>
+              ))}
+            </div>
+          </FormControl>
+          <FormDescription>
+            Visibility impacts how much verse text preview you will see on the verse page.
+          </FormDescription>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   )
 }

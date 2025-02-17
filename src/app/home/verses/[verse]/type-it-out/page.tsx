@@ -2,11 +2,11 @@ export const dynamic = 'auto'
 
 import TypeItOut from './(type-it-out)/type-it-out'
 import { Brain } from 'lucide-react'
-import { api } from '@lib/trpc/server'
+import { getVerseById } from 'src/server/routers/verse'
 
 export default async function GamePage(props: { params: Promise<{ verse: string }> }) {
-  const params = await props.params;
-  const verseResult = await api.verse.byId(params.verse)
+  const params = await props.params
+  const verseResult = await getVerseById(params.verse)
 
   return (
     <div className='w-full min-h-[94%] flex flex-col items-center'>

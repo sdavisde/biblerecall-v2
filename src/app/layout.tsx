@@ -12,8 +12,9 @@ import ThemeModal from '@components/theme/modal'
 import { GearIcon } from '@radix-ui/react-icons'
 import { ColorStyle } from '@components/theme/color-style'
 import { createClient } from '@lib/supabase/server'
-import { fromMe } from 'src/server/routers/settings'
 import { cache } from 'react'
+import { getSettings } from 'src/server/routers/settings'
+import { cacheTag } from 'next/dist/server/use-cache/cache-tag'
 
 const urbanist = Urbanist({
   subsets: ['latin'],
@@ -71,12 +72,6 @@ export const metadata: Metadata = {
   description: "Memorize, Meditate, Connect with God's Word",
 }
 
-const getSettings = cache(async () => {
-  const supabase = await createClient()
-  const settingsResult = await supabase.from('settings').select().single()
-  return settingsResult.data ? fromMe(settingsResult.data) : null
-})
-
 const getColors = cache(async () => {
   const supabase = await createClient()
   const colorsResult = await supabase.from('colors').select()
@@ -109,7 +104,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       {/* IMPORTANT: This body tag gets swapped out in `SettingsProvider`, but needs to be here so the server doesn't throw hydration errors */}
       <body suppressHydrationWarning>
         <ThemeProvider
-          defaultTheme={settings?.theme ?? 'system'}
+          defaultTheme={settings?.theme}
           attribute='class'
         >
           <SettingsProvider authUserSettings={settings}>

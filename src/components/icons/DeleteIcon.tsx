@@ -1,24 +1,23 @@
 'use client'
 
 import { Trash } from 'lucide-react'
-import { useVerses } from 'src/hooks/use-verses'
 import { Hovered } from '@components/util/Hovered'
 import { useState } from 'react'
 import LoadingCircle from './LoadingCircle'
 import { Verse } from 'src/service/verse/types'
+import { deleteVerse } from 'src/server/routers/verse'
 
 type DeleteIconProps = {
   verse: Verse
 }
 
 const DeleteIcon = ({ verse }: DeleteIconProps) => {
-  const { dispatchVerses } = useVerses()
   const [loading, setLoading] = useState(false)
 
   const onDelete = async () => {
     if (!loading) {
       setLoading(true)
-      await dispatchVerses(verse, 'delete')
+      await deleteVerse(verse.id)
       setLoading(false)
     }
   }

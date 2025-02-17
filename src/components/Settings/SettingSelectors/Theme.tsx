@@ -1,44 +1,57 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useSettings } from 'src/hooks/use-settings'
+import cn from 'clsx'
 import { Theme } from '@configuration/settings'
-import { SettingSlot } from '@components/Settings/SettingSlot'
-import { Moon } from 'lucide-react'
-import { Sun } from 'lucide-react'
-import { useTheme } from 'next-themes'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@components/ui/form'
+import { useFormContext } from 'react-hook-form'
+import { Skeleton } from '@components/ui/skeleton'
 
 export function ThemeSelect() {
-  const [settings, setSettings] = useSettings()
-  const { theme, resolvedTheme, setTheme } = useTheme()
-
-  // Update user preferences when color theme changes
-  useEffect(() => {
-    const updateSettings = async () => {
-      if (settings && theme !== settings?.theme) {
-        // Async func used here to keep from changing the UI on the site until the settings are set on the server (db or cookies)
-        const newSettings = await setSettings({ ...settings, theme: theme as Theme })
-        if (newSettings) {
-          setTheme(newSettings.theme)
-        }
-      }
-    }
-
-    updateSettings()
-  }, [theme])
+  const { control } = useFormContext()
 
   return (
-    <SettingSlot
-      title='Theme'
-      description='Dark vs Light mode'
-      options={Object.entries(Theme).map(([label, value]) => ({
-        label,
-        value,
-      }))}
-      selectedValue={theme!}
-      setter={setTheme}
-    >
-      {resolvedTheme === Theme.Dark ? <Moon size={24} /> : <Sun size={24} />}
-    </SettingSlot>
+    <FormField
+      control={control}
+      name='theme'
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Theme</FormLabel>
+          <FormControl>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+              {Object.entries(Theme).map(([name, value]) => (
+                <div
+                  key={name}
+                  onClick={() => field.onChange(value)}
+                  className='flex-col centered group'
+                >
+                  <button
+                    className={cn(
+                      'w-full centered flex-col items-start gap-2 border-2 group-hover:border-muted rounded p-2',
+                      {
+                        'border-primary': value === field.value,
+                        'bg-[hsl(215_18%_95%)]': value === Theme.Light,
+                      }
+                    )}
+                    style={{
+                      background:
+                        value === Theme.System
+                          ? 'linear-gradient(135deg, hsl(215,18%,95%) 50%, hsl(220,18%,10%) 50%)'
+                          : undefined,
+                    }}
+                  >
+                    <Skeleton className='w-8 h-8 rounded-full self-start' />
+                    <Skeleton className='h-6 w-full' />
+                    <Skeleton className='h-6 w-full' />
+                  </button>
+                  <p className='capitalize'>{value}</p>
+                </div>
+              ))}
+            </div>
+          </FormControl>
+          <FormDescription>Choose light vs dark mode, or use your system preference.</FormDescription>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   )
 }

@@ -5,15 +5,14 @@ import { Settings } from '@configuration/settings'
 import toast from 'react-hot-toast'
 import { setSettingsIntoLocalStorage } from '@lib/local-storage'
 import { SettingsContext } from '@components/Settings/Provider'
-import { api } from '@lib/trpc/client'
 import { ErrorCode } from '@util/error'
+import { upsertSettings } from 'src/server/routers/settings'
 
 export const useSettings = () => {
   const { settings, setSettings } = useContext(SettingsContext)
-  const settingsMutation = api.settings.set.useMutation()
 
   const setNewSettings = async (newSettings: Settings) => {
-    const res = await settingsMutation.mutateAsync(newSettings)
+    const res = await upsertSettings(newSettings)
     if (res.hasValue) {
       setSettings(res.value)
       return newSettings

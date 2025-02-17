@@ -1,10 +1,10 @@
 import { Button } from '@components/ui/button'
 import { ConditionalLink } from '@components/ui/conditional-link'
-import { api } from '@lib/trpc/server'
 import { Verses } from '@util/verses'
 import { AudioLines, ChevronLeft, Keyboard, Puzzle } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { getVerseById } from 'src/server/routers/verse'
 
 type VersePageProps = {
   params: Promise<{
@@ -17,7 +17,7 @@ export default async function VersePage(props: VersePageProps) {
 
   const { verse: id } = params
 
-  const verse = await api.verse.byId(id)
+  const verse = await getVerseById(id)
 
   if (!verse.hasValue) {
     return notFound()

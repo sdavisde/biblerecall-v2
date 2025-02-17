@@ -17,5 +17,5 @@ export function ConditionalLink({ href, children, ...props }: ConditionalLinkPro
       </Link>
     )
   }
-  return <span>{children}</span>
+  return <span className={props.className}>{children}</span>
 }

@@ -1,34 +1,56 @@
 'use client'
 
-import { useSettings } from 'src/hooks/use-settings'
-import { useEffect, useState } from 'react'
 import { Font } from '@configuration/settings'
-import { SettingSlot } from '../SettingSlot'
-import { ALargeSmall } from 'lucide-react'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@components/ui/form'
+import { useFormContext } from 'react-hook-form'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@components/ui/select'
 
 export function FontSelect() {
-  const [settings, setSettings] = useSettings()
-  const [font, setFont] = useState<Font>(settings?.font ?? Font.Urbanist)
-
-  // Update user preferences when selected font changes
-  useEffect(() => {
-    if (settings && font !== settings.font) {
-      setSettings({ ...settings, font })
-    }
-  }, [font])
+  const { control } = useFormContext()
 
   return (
-    <SettingSlot
-      title='Font'
-      description='Choose the font that works best for you'
-      options={Object.entries(Font).map(([label, value]) => ({
-        label,
-        value,
-      }))}
-      selectedValue={font}
-      setter={setFont}
-    >
-      <ALargeSmall size={24} />
-    </SettingSlot>
+    <FormField
+      control={control}
+      name='font'
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Font</FormLabel>
+          <FormControl>
+            <Select
+              onValueChange={field.onChange}
+              defaultValue={field.value}
+              {...field}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder='Select Font' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Fonts</SelectLabel>
+                  {Object.entries(Font).map(([key, value]) => (
+                    <SelectItem
+                      key={value}
+                      value={value}
+                    >
+                      {key}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </FormControl>
+          <FormDescription>Choose the font that makes it easiest for you to read the word.</FormDescription>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   )
 }

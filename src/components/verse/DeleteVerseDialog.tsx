@@ -1,3 +1,6 @@
+'use client'
+
+import { FormButton } from '@components/form/form-button'
 import { Button } from '@components/ui/button'
 import {
   Dialog,
@@ -9,8 +12,8 @@ import {
   DialogTrigger,
 } from '@components/ui/dialog'
 import { Verses } from '@util/verses'
-import { useVerses } from 'src/hooks/use-verses'
 import { PropsWithChildren, useState } from 'react'
+import { deleteVerse } from 'src/server/routers/verse'
 import { Verse } from 'src/service/verse/types'
 
 type DeleteVerseDialogProps = {
@@ -19,7 +22,7 @@ type DeleteVerseDialogProps = {
 
 export const DeleteVerseDialog = ({ verse, children }: PropsWithChildren<DeleteVerseDialogProps>) => {
   const [open, setOpen] = useState(false)
-  const { dispatchVerses, isMutating } = useVerses()
+  const onDelete = deleteVerse.bind(null, verse.id)
 
   return (
     <Dialog
@@ -47,13 +50,14 @@ export const DeleteVerseDialog = ({ verse, children }: PropsWithChildren<DeleteV
           >
             Cancel
           </Button>
-          <Button
-            variant='destructive'
-            onClick={() => dispatchVerses(verse, 'delete')}
-            loading={isMutating}
-          >
-            Delete
-          </Button>
+          <form action={onDelete}>
+            <FormButton
+              type='submit'
+              variant='destructive'
+            >
+              Delete
+            </FormButton>
+          </form>
         </DialogFooter>
       </DialogContent>
     </Dialog>

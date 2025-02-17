@@ -11,8 +11,8 @@ import {
 import { createClient } from '@lib/supabase/server'
 import { cache } from 'react'
 import { Input } from '@components/ui/input'
-import { Button } from '@components/ui/button'
 import { addMeditation } from './actions'
+import { FormButton } from '@components/form/form-button'
 
 const getMostRecentMeditation = cache(async () => {
   const supabase = await createClient()
@@ -47,7 +47,7 @@ export async function GlobalBanner() {
             className='flex flex-col gap-4 justify-end'
           >
             <Input name='meditation' />
-            <Button type='submit'>Submit</Button>
+            <FormButton>Submit</FormButton>
           </form>
         </CredenzaBody>
       </CredenzaContent>

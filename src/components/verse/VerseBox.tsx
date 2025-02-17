@@ -3,7 +3,6 @@
 import { useSwipeable } from 'react-swipeable'
 import { Pencil, Trash2, X } from 'lucide-react'
 import Link from 'next/link'
-import { useVerses } from 'src/hooks/use-verses'
 import { useSettings } from 'src/hooks/use-settings'
 import { Visibility } from '@configuration/settings'
 import { Verse } from 'src/service/verse/types'
@@ -15,6 +14,7 @@ import { Button } from '@components/ui/button'
 import { useState } from 'react'
 import { cn } from '@components/lib/utils'
 import { DeleteVerseDialog } from './DeleteVerseDialog'
+import { updateVerse } from 'src/server/routers/verse'
 
 /**
  * -1 === edit
@@ -38,10 +38,7 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
     preventScrollOnSwipe: true,
     trackMouse: true,
   })
-  const { dispatchVerses } = useVerses()
   const [settings] = useSettings()
-
-  const onUpdate = (newVerse: Verse) => dispatchVerses(newVerse, 'update')
 
   return (
     <div className='h-fit w-full relative'>
@@ -79,7 +76,7 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
           )}
         >
           <VerseSelector
-            submitVerse={onUpdate}
+            submitVerse={updateVerse}
             initialVerse={verse}
           >
             <Button
@@ -106,7 +103,7 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
       </Card>
       <div className='absolute inset-0 flex items-center justify-between'>
         <VerseSelector
-          submitVerse={onUpdate}
+          submitVerse={updateVerse}
           initialVerse={verse}
         >
           <Button
@@ -132,7 +129,7 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
   )
 }
 
-const VerseText = ({ text, visibility }: { text: string; visibility: Visibility | undefined }) => {
+export const VerseText = ({ text, visibility }: { text: string; visibility: Visibility | undefined }) => {
   if (Lodash.isNil(visibility) || visibility === 'full') {
     return text
   } else if (visibility === 'partial') {

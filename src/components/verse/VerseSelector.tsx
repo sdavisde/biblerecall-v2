@@ -25,7 +25,7 @@ import {
 import { DynamicVerseText } from './DynamicVerseText'
 
 type VerseSelectProps = PropsWithChildren<{
-  submitVerse: (verse: Verse) => void
+  submitVerse: (verse: Verse) => Promise<unknown>
   onSuccess?: (verse: Verse) => void
   initialVerse?: Verse
 }>
@@ -70,14 +70,12 @@ export const VerseSelector = ({ children, submitVerse, initialVerse, onSuccess }
 
   const onSave = async () => {
     setSubmitting(true)
-    const encounteredError = false
-
     try {
       const verse = VerseBuilder.toVerse(builder)
       if (!verse.hasValue) {
         throw Error(verse.error.message)
       }
-      submitVerse(verse.value)
+      await submitVerse(verse.value)
       resetState()
       setOpen(false)
       onSuccess?.(verse.value)

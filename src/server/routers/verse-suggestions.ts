@@ -4,8 +4,8 @@ import { Result } from '@util/result'
 import { verseSuggestionSchema } from '@components/discover/actions'
 import { VerseBuilder } from 'src/service/verse'
 import { Verses } from '@util/verses'
-import { api } from '@lib/trpc/server'
 import { revalidatePath } from 'next/cache'
+import { addVerse } from './verse'
 
 /**
  * Verse Suggestions API Routes
@@ -31,7 +31,7 @@ export const verseSuggestionsRouter = router({
         return newVerse
       }
 
-      const addedVerse = await api.verse.add(newVerse.value)
+      const addedVerse = await addVerse(newVerse.value)
 
       if (addedVerse.hasValue) {
         revalidatePath('/home/verses')

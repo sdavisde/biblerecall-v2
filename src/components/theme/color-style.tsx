@@ -1,7 +1,6 @@
 'use client'
 
 import { Tables } from 'database.types'
-import Head from 'next/head'
 
 type Props = {
   rootColors: Array<Tables<'colors'>>

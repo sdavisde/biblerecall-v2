@@ -2,15 +2,15 @@ export const dynamic = 'auto'
 
 import { Button } from '@components/ui/button'
 import { Separator } from '@components/ui/separator'
-import { api } from '@lib/trpc/server'
 import { Verses } from '@util/verses'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { TapToRead } from './game'
+import { getVerseById } from 'src/server/routers/verse'
 
 export default async function ReadVersePage(props: { params: Promise<{ verse: string }> }) {
-  const params = await props.params;
-  const verseResult = await api.verse.byId(params.verse)
+  const params = await props.params
+  const verseResult = await getVerseById(params.verse)
 
   if (!verseResult.hasValue) {
     return notFound()

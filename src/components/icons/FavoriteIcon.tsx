@@ -2,23 +2,22 @@
 
 import { Heart } from 'lucide-react'
 import { Hovered } from '@components/util/Hovered'
-import { useVerses } from 'src/hooks/use-verses'
 import LoadingCircle from './LoadingCircle'
 import { useState } from 'react'
 import { Verse } from 'src/service/verse/types'
+import { updateVerse } from 'src/server/routers/verse'
 
 type FavoriteIconProps = {
   verse: Verse
 }
 
 const FavoriteIcon = ({ verse }: FavoriteIconProps) => {
-  const { dispatchVerses } = useVerses()
   const [loading, setLoading] = useState(false)
 
   const toggleFavorite = async () => {
     const newVerse = { ...verse, favorite: !(verse.favorite ?? false) }
     setLoading(true)
-    await dispatchVerses(newVerse, 'update')
+    await updateVerse(newVerse)
     setLoading(false)
   }
 

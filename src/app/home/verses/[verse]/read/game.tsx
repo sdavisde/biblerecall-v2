@@ -3,12 +3,12 @@
 import { Button } from '@components/ui/button'
 import { Label } from '@components/ui/label'
 import { Switch } from '@components/ui/switch'
-import { api } from '@lib/trpc/client'
 import { Result } from '@util/result'
 import { Verses } from '@util/verses'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import { updateVerse } from 'src/server/routers/verse'
 import { Verse } from 'src/service/verse/types'
 
 type TapToReadProps = {
@@ -22,13 +22,13 @@ enum Direction {
 }
 
 export const TapToRead = ({ verse }: TapToReadProps) => {
+  const [updatingVerse, setUpdatingVerse] = useState(false)
   const [direction, setDirection] = useState<Direction>(Direction.Forward)
   // The current part of the verse the user is viewing
   const [currIndex, setCurrIndex] = useState(direction === Direction.Forward ? 0 : verse.text.length)
   const [finished, setFinished] = useState(false)
   const shownSection =
     direction === Direction.Forward ? verse.text.substring(0, currIndex) : verse.text.substring(currIndex)
-  const updateMutation = api.verse.update.useMutation()
   const router = useRouter()
 
   const resetCursor = () => setCurrIndex(direction === Direction.Forward ? 0 : verse.text.length - 1)
@@ -53,7 +53,8 @@ export const TapToRead = ({ verse }: TapToReadProps) => {
 
   async function onContinue() {
     try {
-      const response = await updateMutation.mutateAsync({ ...verse, completions: verse.completions + 1 })
+      setUpdatingVerse(true)
+      const response = await updateVerse({ ...verse, completions: verse.completions + 1 })
       if (!response.hasValue) {
         throw new Error(response.error.message)
       }
@@ -61,6 +62,7 @@ export const TapToRead = ({ verse }: TapToReadProps) => {
     } catch (e) {
       toast.error(`An error occurred while updating ${Verses.stringifyReference(verse)}`)
     }
+    setUpdatingVerse(false)
   }
 
   return (
@@ -102,7 +104,7 @@ export const TapToRead = ({ verse }: TapToReadProps) => {
         <Button
           className='w-full'
           onClick={onContinue}
-          loading={updateMutation.isPending}
+          loading={updatingVerse}
         >
           Continue
         </Button>
