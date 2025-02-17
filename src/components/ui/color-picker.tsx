@@ -27,7 +27,6 @@ export function ColorPicker({ color, onChange }: ColorPickerProps) {
   }, [inputRef])
 
   const handleColorChange = (newVal: ColorUtils.HSL) => {
-    console.log('setting ', newVal)
     setCurrentColor(newVal)
     onChange?.(newVal)
   }

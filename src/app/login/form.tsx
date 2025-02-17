@@ -39,7 +39,6 @@ export function LoginForm() {
     const { error } = await supabase.auth.signInWithPassword(data)
 
     if (error) {
-      console.log(error)
       setError('root', { message: error.message })
       return
     }

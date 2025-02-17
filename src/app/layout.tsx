@@ -103,7 +103,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       {/* IMPORTANT: This body tag gets swapped out in `SettingsProvider`, but needs to be here so the server doesn't throw hydration errors */}
       <body suppressHydrationWarning>
         <ThemeProvider
-          defaultTheme={settings?.theme}
+          defaultTheme={settings?.theme ?? 'system'}
           attribute='class'
         >
           <SettingsProvider authUserSettings={settings}>

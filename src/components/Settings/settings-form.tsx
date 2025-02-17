@@ -4,9 +4,9 @@ import { Button } from '@components/ui/button'
 import {
   Credenza,
   CredenzaBody,
-  CredenzaClose,
   CredenzaContent,
   CredenzaDescription,
+  CredenzaFooter,
   CredenzaHeader,
   CredenzaTitle,
   CredenzaTrigger,
@@ -42,25 +42,31 @@ export function SettingsForm({ settings }: Props) {
           <Edit />
         </Button>
       </CredenzaTrigger>
-      <CredenzaContent className='max-h-screen overflow-y-auto'>
-        <CredenzaClose>Close</CredenzaClose>
-        <CredenzaHeader>
-          <CredenzaTitle>Edit Application Settings</CredenzaTitle>
-          <CredenzaDescription>Customize the appearance of Bible Recall for you</CredenzaDescription>
-        </CredenzaHeader>
-        <CredenzaBody>
-          <Form {...form}>
-            <form
-              action={submitSettingsForm}
-              className='flex flex-col gap-4 justify-end'
-            >
-              <FontSelect />
-              <ThemeSelect />
-              <VisibilitySelect />
+      <CredenzaContent>
+        <Form {...form}>
+          <form action={submitSettingsForm}>
+            <input
+              name='id'
+              value={settings?.id}
+              readOnly
+              hidden
+            />
+            <CredenzaHeader>
+              <CredenzaTitle>Edit Application Settings</CredenzaTitle>
+              <CredenzaDescription>Customize the appearance of Bible Recall for you</CredenzaDescription>
+            </CredenzaHeader>
+            <CredenzaBody className='max-h-[60dvh] overflow-y-auto'>
+              <div className='flex flex-col gap-4 justify-end divide-y-2 divide-secondary space-y-2'>
+                <FontSelect />
+                <ThemeSelect />
+                <VisibilitySelect />
+              </div>
+            </CredenzaBody>
+            <CredenzaFooter>
               <FormButton>Submit</FormButton>
-            </form>
-          </Form>
-        </CredenzaBody>
+            </CredenzaFooter>
+          </form>
+        </Form>
       </CredenzaContent>
     </Credenza>
   )

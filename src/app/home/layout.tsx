@@ -8,7 +8,7 @@ export default async function HomeLayout({ children }: { children: React.ReactNo
     <>
       <GlobalBanner />
       <Toaster />
-      <main className='w-full min-h-[calc(100vh-5rem)] overflow-x-hidden relative bg-background text-foreground'>
+      <main className='w-full min-h-[calc(100vh-5rem)] pb-20 overflow-x-hidden relative bg-background text-foreground'>
         <div
           id='panel'
           className='w-full min-h-[calc(100vh-5rem)] flex flex-col items-center'

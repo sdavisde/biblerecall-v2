@@ -23,21 +23,17 @@ export async function getSettings(): Promise<Settings | null> {
 }
 
 export async function submitSettingsForm(formData: FormData) {
+  const id = (formData.get('id')?.toString() as string) ?? null
   const font = (formData.get('font')?.toString() as Font) ?? null
   const theme = (formData.get('theme')?.toString() as Theme) ?? null
   const visibility = (formData.get('visibility')?.toString() as Visibility) ?? null
 
-  const supabase = await createClient()
-  const userResult = await getUser()
-  if (!userResult.hasValue) {
-    return userResult
+  if (!id) {
+    return Result.failure({ code: 'id-missing' })
   }
-  const newSettings = await supabase
-    .from('settings')
-    .update({ font, theme, visibility })
-    .eq('user_id', userResult.value.id)
-    .select()
-    .single()
+
+  const supabase = await createClient()
+  const newSettings = await supabase.from('settings').update({ font, theme, visibility }).eq('id', id).select().single()
   if (newSettings.error) {
     return Result.failure(newSettings.error)
   }

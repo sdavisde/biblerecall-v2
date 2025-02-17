@@ -18,8 +18,17 @@ export function VisibilitySelect() {
       render={({ field }) => (
         <FormItem>
           <FormLabel>Visibility</FormLabel>
+          <FormDescription>
+            Visibility impacts how much verse text preview you will see on the verse page.
+          </FormDescription>
           <FormControl>
             <div className='grid grid-cols-1 md:grid-cols-3 auto-rows-[1fr] gap-4'>
+              <input
+                name={field.name}
+                value={field.value}
+                readOnly
+                hidden
+              />
               {Object.entries(Visibility).map(([name, value]) => (
                 <div
                   key={name}
@@ -40,9 +49,6 @@ export function VisibilitySelect() {
               ))}
             </div>
           </FormControl>
-          <FormDescription>
-            Visibility impacts how much verse text preview you will see on the verse page.
-          </FormDescription>
           <FormMessage />
         </FormItem>
       )}

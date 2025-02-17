@@ -1,20 +1,31 @@
-import { Button } from '@components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card'
+import { CardTitle } from '@components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar'
 import { Badge } from '@components/ui/badge'
 import { Progress } from '@components/ui/progress'
-import { Book, Users, Award, Bookmark, Edit } from 'lucide-react'
+import { Book, Users, Award, Bookmark } from 'lucide-react'
 import { SettingsForm } from '@components/Settings/settings-form'
 import { getSettings } from 'src/server/routers/settings'
+import { getUser } from 'src/server'
 
-async function getUser(email: string) {
-  // In a real application, you would fetch this data from your API
+async function fetchUser() {
+  const userResult = await getUser()
+  if (!userResult.hasValue) {
+    throw new Error('User missing, cannot render profile page')
+  }
+
+  const user = userResult.value
+
   return {
-    name: 'Sarah Johnson',
-    email: 'sarah.johnson@gmail.com',
-    avatar: '/placeholder.svg?height=100&width=100',
-    bio: 'Passionate about Scripture and helping others grow in faith',
-    joinDate: 'March 2022',
+    name: (user.user_metadata?.['full_name'] as string) ?? null,
+    email: user.user_metadata?.['email'] ?? null,
+    avatar: user.user_metadata?.['avatar_url'] ?? null,
+    bio: null,
+    joinDate: new Date(user.created_at).toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }),
     theme: 'Light',
     font: 'Serif',
     verseVisualization: 'Partial',
@@ -38,7 +49,7 @@ async function getUser(email: string) {
 }
 
 export default async function ProfilePage() {
-  const user = await getUser('sarahj')
+  const user = await fetchUser()
   const settings = await getSettings()
 
   return (
@@ -104,9 +115,9 @@ export default async function ProfilePage() {
               <SettingsForm settings={settings} />
             </h2>
             <div className='space-y-1'>
-              <p>Theme: {user.theme}</p>
-              <p>Font: {user.font}</p>
-              <p>Verse Visualization: {user.verseVisualization}</p>
+              <p>Theme: {settings?.theme ?? 'system'}</p>
+              <p>Font: {settings?.font}</p>
+              <p>Verse Visibility: {settings?.visibility}</p>
             </div>
           </div>
         </div>
