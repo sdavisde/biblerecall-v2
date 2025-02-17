@@ -23,13 +23,13 @@ export async function getVerseById(id: string): Promise<Result<Verse>> {
   return Result.success(from_verse(verse.data))
 }
 
-export async function getAllVerses(): Promise<Result<Array<Verse>>> {
+export async function getAllVerses(): Promise<Array<Verse>> {
   const supabase = await createClient()
   const verses = await supabase.from('verses').select()
   if (verses.error) {
-    return Result.failure(verses.error)
+    return []
   }
-  return Result.success(verses.data.map(from_verse))
+  return verses.data.map(from_verse)
 }
 
 export async function addVerse(verse: Verse): Promise<Result<Verse>> {

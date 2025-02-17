@@ -5,11 +5,25 @@ import { AudioLines, ChevronLeft, Keyboard, Puzzle } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getVerseById } from 'src/server/routers/verse'
+import { createBrowserClient } from '@supabase/ssr'
+import { Database } from 'database.types'
 
 type VersePageProps = {
   params: Promise<{
     verse: string
   }>
+}
+export async function generateStaticParams() {
+  const supabase = createBrowserClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+
+  const verses = await supabase.from('verses').select()
+
+  return verses.data?.map((verse) => ({
+    verse: verse.id,
+  }))
 }
 
 export default async function VersePage(props: VersePageProps) {

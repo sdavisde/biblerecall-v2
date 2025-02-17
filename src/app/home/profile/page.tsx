@@ -6,6 +6,7 @@ import { Book, Users, Award, Bookmark } from 'lucide-react'
 import { SettingsForm } from '@components/Settings/settings-form'
 import { getSettings } from 'src/server/routers/settings'
 import { getUser } from 'src/server'
+import { createClient } from '@lib/supabase/server'
 
 async function fetchUser() {
   const userResult = await getUser()
@@ -14,6 +15,8 @@ async function fetchUser() {
   }
 
   const user = userResult.value
+  const supabase = await createClient()
+  const { count } = await supabase.from('verses').select('*', { count: 'exact' }).eq('user_id', user.id)
 
   return {
     name: (user.user_metadata?.['full_name'] as string) ?? null,
@@ -29,7 +32,7 @@ async function fetchUser() {
     theme: 'Light',
     font: 'Serif',
     verseVisualization: 'Partial',
-    versesMemorized: 127,
+    versesMemorized: count,
     currentStreak: 15,
     longestStreak: 30,
     topVerse: 'Philippians 4:13',
@@ -39,12 +42,12 @@ async function fetchUser() {
       { action: 'Started', verse: 'Romans 8:28', date: '2023-06-08' },
     ],
     achievements: [
-      { name: 'Scripture Novice', description: 'Memorized first 10 verses' },
-      { name: 'Consistent Learner', description: '30-day streak' },
-      { name: 'Psalm Master', description: 'Memorized entire Psalm 23' },
+      // { name: 'Scripture Novice', description: 'Memorized first 10 verses' },
+      // { name: 'Consistent Learner', description: '30-day streak' },
+      // { name: 'Psalm Master', description: 'Memorized entire Psalm 23' },
     ],
-    friends: 24,
-    studyGroups: 3,
+    friends: 0,
+    studyGroups: 0,
   }
 }
 
@@ -144,7 +147,7 @@ export default async function ProfilePage() {
                 className='py-1'
               >
                 <Award className='w-4 h-4 mr-1' />
-                {achievement.name}
+                {/* {achievement.name} */}
               </Badge>
             ))}
           </div>

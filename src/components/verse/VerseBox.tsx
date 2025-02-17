@@ -45,7 +45,7 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
       <Card
         className={cn(
           'cursor-pointer text-start w-full relative flex gap-4 duration-300 transition-all z-20 group',
-          '!outline-0 !ring-0 focus:!ring-0',
+          '!outline-0 !ring-0 focus:!ring-0 !p-0',
           {
             '-translate-x-16': showDelete(editingState),
             'translate-x-16': showEdit(editingState),
@@ -53,7 +53,10 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
         )}
         {...handlers}
       >
-        <Link href={`/home/verses/${verse.id}`}>
+        <Link
+          href={`/home/verses/${verse.id}`}
+          className='w-full p-6'
+        >
           <div className='w-full h-fit'>
             <CardHeader className='!pb-0'>
               <CardTitle className='flex items-center justify-between'>
