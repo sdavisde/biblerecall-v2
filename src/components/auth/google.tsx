@@ -11,9 +11,13 @@ export const GoogleLogin = () => {
       variant='contrast'
       className='w-full flex items-center gap-2'
       onClick={async () => {
-        const redirectUrl = await handleGoogleLogin()
-        if (redirectUrl?.hasValue) {
-          window.location.assign(redirectUrl.value)
+        try {
+          const redirectUrl = await handleGoogleLogin()
+          if (redirectUrl?.hasValue) {
+            window.location.assign(redirectUrl.value)
+          }
+        } catch (e) {
+          console.error(e)
         }
       }}
     >
