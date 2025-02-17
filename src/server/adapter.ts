@@ -18,6 +18,7 @@ export function to_verse(verse: Verse, userId: string): Tables<'verses'> {
     created_at: verse.createdDate as unknown as string,
     group_id: null,
     user_id: userId,
+    notes: verse.notes,
   }
 }
 
@@ -28,7 +29,7 @@ export function from_verse(rawVerse: Tables<'verses'>): Verse {
     start: rawVerse.start_verse,
     end: rawVerse.end_verse ?? rawVerse.start_verse,
     createdDate: new Date(rawVerse.created_at),
-    notes: null,
+    notes: rawVerse.notes,
   }
 }
 

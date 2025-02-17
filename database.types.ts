@@ -93,6 +93,24 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          first_name: string | null
+          id: string
+          last_name: string | null
+        }
+        Insert: {
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+        }
+        Update: {
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+        }
+        Relationships: []
+      }
       settings: {
         Row: {
           created_at: string
@@ -160,6 +178,7 @@ export type Database = {
           favorite: boolean
           group_id: string | null
           id: string
+          notes: string | null
           start_verse: number
           text: string
           user_id: string
@@ -174,6 +193,7 @@ export type Database = {
           favorite?: boolean
           group_id?: string | null
           id?: string
+          notes?: string | null
           start_verse: number
           text: string
           user_id?: string
@@ -188,6 +208,7 @@ export type Database = {
           favorite?: boolean
           group_id?: string | null
           id?: string
+          notes?: string | null
           start_verse?: number
           text?: string
           user_id?: string

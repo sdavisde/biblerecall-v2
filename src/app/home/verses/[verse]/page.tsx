@@ -4,9 +4,13 @@ import { Verses } from '@util/verses'
 import { AudioLines, ChevronLeft, Keyboard, Puzzle } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getVerseById } from 'src/server/routers/verse'
+import { getVerseById, updateVerse } from 'src/server/routers/verse'
 import { createBrowserClient } from '@supabase/ssr'
 import { Database } from 'database.types'
+import { Textarea } from '@components/ui/textarea'
+import { Verse, verseSchema } from 'src/service/verse/types'
+import { FormButton } from '@components/form/form-button'
+import { Label } from '@components/ui/label'
 
 type VersePageProps = {
   params: Promise<{
@@ -28,6 +32,23 @@ export async function generateStaticParams() {
   )
 }
 
+async function saveNotes(verse: Verse, formData: FormData) {
+  'use server'
+  const result = verseSchema.safeParse({
+    ...verse,
+    notes: formData.get('notes'),
+  })
+  console.log(result)
+  if (result.error) {
+    return result.error.message
+  }
+
+  const verseResult = await updateVerse(result.data)
+  if (!verseResult.hasValue) {
+    return verseResult.error
+  }
+}
+
 export default async function VersePage(props: VersePageProps) {
   const params = await props.params
 
@@ -39,10 +60,28 @@ export default async function VersePage(props: VersePageProps) {
     return notFound()
   }
   const completions = verse.value.completions
+  const submitNotes = saveNotes.bind(null, verse.value)
 
   return (
     <>
       <h1 className='relative'>{Verses.stringifyReference(verse.value)}</h1>
+      <form
+        className='relative w-full'
+        action={submitNotes}
+      >
+        <Label>Notes</Label>
+        <Textarea
+          defaultValue={verse.value.notes ?? undefined}
+          placeholder='I want to memorize this verse because...'
+          name='notes'
+        />
+        <FormButton
+          variant='outline'
+          className='absolute bottom-4 right-4'
+        >
+          Save
+        </FormButton>
+      </form>
       <h3>Practiced {completions} times</h3>
       <div className='flex flex-col lg:grid w-full gap-2'>
         <Link

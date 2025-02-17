@@ -70,7 +70,9 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
             </CardContent>
             {!Lodash.isEmpty(verse.notes) && (
               <>
-                <Separator />
+                <Separator className='my-2 bg-muted' />
+                <span className='pe-1'>Note:</span>
+                <span className='text-muted-foreground text-sm'>{verse.notes}</span>
               </>
             )}
           </div>
