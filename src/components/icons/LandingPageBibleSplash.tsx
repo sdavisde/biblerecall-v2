@@ -1,24 +1,13 @@
-'use client'
-
-import { cn } from '@components/lib/utils'
-import { Theme } from '@configuration/settings'
-import { useTheme } from 'next-themes'
-
 export const LandingPageBibleSplash = () => {
-  const { resolvedTheme } = useTheme()
-
   return (
     <svg
       id='Layer_1'
       data-name='Layer 1'
       xmlns='http://www.w3.org/2000/svg'
       viewBox='0 0 1279.86 655.7'
-      className={cn('z-2 absolute left-0 !max-w-[140%] md:!w-[140%]', {
-        'fill-white': resolvedTheme === Theme.Dark,
-      })}
+      className='z-2 absolute left-0 !max-w-[140%] md:!w-[140%] fill-foreground'
       width={715}
       height={367}
-      suppressHydrationWarning
     >
       <defs>
         <style
