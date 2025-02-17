@@ -4,19 +4,20 @@ import { VisibilityMenu } from '@components/Settings/SettingSelectors/Visibility
 import { createClient } from '@lib/supabase/server'
 import { from_verse } from 'src/server/adapter'
 import { getUser } from 'src/server'
+import { Result } from '@util/result'
 
 // todo: add filters here
 async function getVerses() {
   const supabase = await createClient()
   const userResult = await getUser()
   if (!userResult.hasValue) {
-    throw new Error(userResult.error.message)
+    return userResult
   }
   const versesResult = await supabase.from('verses').select().eq('user_id', userResult.value.id)
   if (versesResult.error) {
-    throw new Error(versesResult.error.message)
+    return Result.failure(versesResult.error)
   }
-  return versesResult.data.map(from_verse)
+  return Result.success(versesResult.data.map(from_verse))
 }
 
 export default async function Verses() {
@@ -31,7 +32,7 @@ export default async function Verses() {
         <VisibilityMenu />
       </div>
       <hr className='w-full bg-foreground/80 h-[2px]' />
-      <VerseList verses={verses} />
+      <VerseList verses={verses.hasValue ? verses.value : []} />
     </>
   )
 }

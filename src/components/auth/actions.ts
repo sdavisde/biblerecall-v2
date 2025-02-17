@@ -2,6 +2,7 @@
 
 import { getBaseUrl } from '@components/lib/utils'
 import { createClient } from '@lib/supabase/server'
+import { Result } from '@util/result'
 
 export async function handleGoogleLogin() {
   const supabase = await createClient()
@@ -14,10 +15,10 @@ export async function handleGoogleLogin() {
     })
 
     if (error) {
-      throw new Error(error.message, error)
+      return Result.failure({ code: 'google-login:failed', message: error.message })
     }
 
-    return data.url
+    return Result.success(data.url)
   } catch (error) {
     console.error(error)
   }

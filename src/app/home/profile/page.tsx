@@ -9,11 +9,13 @@ import { getUser } from 'src/server'
 import { createClient } from '@lib/supabase/server'
 import { Button } from '@components/ui/button'
 import { logout } from '@lib/supabase/actions'
+import { Result } from '@util/result'
+import { notFound } from 'next/navigation'
 
 async function fetchUser() {
   const userResult = await getUser()
   if (!userResult.hasValue) {
-    throw new Error('User missing, cannot render profile page')
+    return userResult
   }
 
   const user = userResult.value
@@ -25,7 +27,7 @@ async function fetchUser() {
     .select('*', { count: 'exact' })
     .or(`user_id.eq.${user.id},friend_id.eq.${user.id}`)
 
-  return {
+  return Result.success({
     name:
       user.user_metadata?.['full_name'] ??
       `${user.user_metadata?.['first_name'] ?? ''} ${user.user_metadata?.['last_name'] ?? ''}`,
@@ -57,12 +59,18 @@ async function fetchUser() {
     ],
     friends: numFriends,
     studyGroups: 0,
-  }
+  })
 }
 
 export default async function ProfilePage() {
-  const user = await fetchUser()
+  const userResult = await fetchUser()
   const settings = await getSettings()
+
+  if (!userResult.hasValue) {
+    return notFound()
+  }
+
+  const user = userResult.value
 
   return (
     <div className='container mx-auto px-4 py-8 flex flex-col gap-8'>

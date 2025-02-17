@@ -12,8 +12,8 @@ export const GoogleLogin = () => {
       className='w-full flex items-center gap-2'
       onClick={async () => {
         const redirectUrl = await handleGoogleLogin()
-        if (redirectUrl) {
-          window.location.assign(redirectUrl)
+        if (redirectUrl?.hasValue) {
+          window.location.assign(redirectUrl.value)
         }
       }}
     >
