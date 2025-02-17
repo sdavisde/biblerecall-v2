@@ -28,6 +28,7 @@ export function from_verse(rawVerse: Tables<'verses'>): Verse {
     start: rawVerse.start_verse,
     end: rawVerse.end_verse ?? rawVerse.start_verse,
     createdDate: new Date(rawVerse.created_at),
+    notes: null,
   }
 }
 

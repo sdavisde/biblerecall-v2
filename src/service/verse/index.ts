@@ -28,6 +28,7 @@ export namespace VerseBuilder {
       end: null,
       createdDate: new Date(),
       completions: 0,
+      notes: null,
     }
   }
 
@@ -59,6 +60,7 @@ export namespace VerseBuilder {
       favorite: builder.favorite,
       createdDate: builder.createdDate,
       completions: builder.completions,
+      notes: builder.notes,
       ...reference.value,
     })
   }
