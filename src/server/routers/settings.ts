@@ -1,6 +1,6 @@
 'use server'
 
-import { Font, Settings, Theme, Visibility } from '@configuration/settings'
+import { Font, Settings, Theme, Version, Visibility } from '@configuration/settings'
 import { createClient } from '@lib/supabase/server'
 import { Result } from '@util/result'
 import { from_settings, SETTINGS_CACHE_TAG, to_settings } from '../adapter'
@@ -32,9 +32,18 @@ export async function submitSettingsForm(formData: FormData) {
     return Result.failure({ code: 'id-missing' })
   }
 
-  const supabase = await createClient()
-  const newSettings = await supabase.from('settings').update({ font, theme, visibility }).eq('id', id).select().single()
-  if (newSettings.error) {
+  const settings: Settings = {
+    id,
+    theme,
+    visibility,
+    font,
+    // todo: add to configuration
+    defaultVersion: Version.ESV,
+    verseDueDatesEnabled: false,
+    verseOfTheDayEnabled: false,
+  }
+  const newSettings = await upsertSettings(settings)
+  if (!newSettings.hasValue) {
     return Result.failure(newSettings.error)
   }
 
