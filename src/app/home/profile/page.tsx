@@ -16,7 +16,12 @@ async function fetchUser() {
 
   const user = userResult.value
   const supabase = await createClient()
-  const { count } = await supabase.from('verses').select('*', { count: 'exact' }).eq('user_id', user.id)
+  const { count: numVerses } = await supabase.from('verses').select('*', { count: 'exact' }).eq('user_id', user.id)
+
+  const { count: numFriends } = await supabase
+    .from('friends')
+    .select('*', { count: 'exact' })
+    .or(`user_id.eq.${user.id},friend_id.eq.${user.id}`)
 
   return {
     name: (user.user_metadata?.['full_name'] as string) ?? null,
@@ -32,7 +37,7 @@ async function fetchUser() {
     theme: 'Light',
     font: 'Serif',
     verseVisualization: 'Partial',
-    versesMemorized: count,
+    versesMemorized: numVerses,
     currentStreak: 15,
     longestStreak: 30,
     topVerse: 'Philippians 4:13',
@@ -46,7 +51,7 @@ async function fetchUser() {
       // { name: 'Consistent Learner', description: '30-day streak' },
       // { name: 'Psalm Master', description: 'Memorized entire Psalm 23' },
     ],
-    friends: 0,
+    friends: numFriends,
     studyGroups: 0,
   }
 }

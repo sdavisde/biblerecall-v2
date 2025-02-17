@@ -19,7 +19,7 @@ export default async function Home() {
       />
       <PageSelector
         text='Settings'
-        href='/home/settings'
+        href='/home/profile'
         Icon={Settings}
         variant='outline'
       />

@@ -9,9 +9,9 @@ export type NavItem = {
 }
 
 export const navItems = [
-  { name: 'Community', href: '/community', icon: Users, disabled: true },
   { name: 'Verses', href: '/home/verses', icon: Book },
-  { name: 'Add Verse', href: null, icon: Plus },
   { name: 'Search', href: '/home', icon: Search },
+  { name: 'Add Verse', href: null, icon: Plus },
+  { name: 'Community', href: '/community', icon: Users, disabled: true },
   { name: 'Profile', href: '/home/profile', icon: User },
 ]
