@@ -10,6 +10,8 @@ import { EmailField, emailSchema } from '@components/form/EmailField'
 import { loginUser } from './actions'
 import { CardDescription } from '@components/ui/card'
 import { FormButton } from '@components/form/form-button'
+import { useActionState } from 'react'
+import { FormActionState, RootError } from '@components/form/common'
 
 // Define Zod schema
 export type LoginFormData = z.infer<typeof formSchema>
@@ -19,13 +21,10 @@ const formSchema = z.object({
 })
 
 export function LoginForm() {
+  const [state, action] = useActionState<FormActionState, FormData>(loginUser, null)
   const {
     register,
-    setError,
-    watch,
-    trigger,
-    handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(formSchema),
     mode: 'onBlur',
@@ -45,7 +44,7 @@ export function LoginForm() {
       </div>
       <form
         className='grid gap-4'
-        action={loginUser}
+        action={action}
       >
         <CardDescription>Enter your email below to login to your account</CardDescription>
         <div className='grid gap-2'>
@@ -61,7 +60,7 @@ export function LoginForm() {
             error={errors.password}
           />
         </div>
-        {errors.root?.message && <p className='text-destructive text-center'>{errors.root.message}</p>}
+        <RootError state={state} />
         <FormButton className='w-full'>Login</FormButton>
       </form>
     </>

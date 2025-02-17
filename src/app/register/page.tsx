@@ -11,7 +11,10 @@ export default function RegisterPage() {
         <Image
           src={Logo}
           alt='Bible Recall'
-          className='rounded-xl w-20 aspect-square absolute top-[-100] left-1/2 -translate-x-1/2'
+          className='rounded-xl w-20 aspect-square absolute left-1/2 -translate-x-1/2'
+          style={{
+            top: '-100px',
+          }}
         />
         <CardHeader>
           <CardTitle className='text-2xl'>Register</CardTitle>

@@ -46,6 +46,7 @@ export const verseMetadataSchema = z.object({
   version: z.string(),
   createdDate: z.date(),
   completions: z.number().min(0),
+  notes: z.string().max(256),
 })
 
 export type Verse = z.infer<typeof verseSchema>

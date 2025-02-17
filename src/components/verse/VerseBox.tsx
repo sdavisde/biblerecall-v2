@@ -15,6 +15,7 @@ import { useState } from 'react'
 import { cn } from '@components/lib/utils'
 import { DeleteVerseDialog } from './DeleteVerseDialog'
 import { updateVerse } from 'src/server/routers/verse'
+import { Separator } from '@components/ui/separator'
 
 /**
  * -1 === edit
@@ -67,6 +68,11 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
                 visibility={settings?.visibility}
               />
             </CardContent>
+            {!Lodash.isEmpty(verse.notes) && (
+              <>
+                <Separator />
+              </>
+            )}
           </div>
         </Link>
         <div
