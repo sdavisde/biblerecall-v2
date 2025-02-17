@@ -21,9 +21,11 @@ export async function generateStaticParams() {
 
   const verses = await supabase.from('verses').select()
 
-  return verses.data?.map((verse) => ({
-    verse: verse.id,
-  }))
+  return (
+    verses.data?.map((verse) => ({
+      verse: verse.id,
+    })) ?? []
+  )
 }
 
 export default async function VersePage(props: VersePageProps) {
