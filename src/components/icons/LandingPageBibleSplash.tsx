@@ -18,6 +18,7 @@ export const LandingPageBibleSplash = () => {
       })}
       width={715}
       height={367}
+      suppressHydrationWarning
     >
       <defs>
         <style
