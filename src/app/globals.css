@@ -33,6 +33,10 @@ h3 {
   font-size: 28px;
   line-height: 30px;
 }
+h4 {
+  font-size: 20px;
+  line-height: 24px;
+}
 
 .target::first-letter {
   text-decoration: underline #676767;

@@ -2,11 +2,13 @@ import { CardTitle } from '@components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar'
 import { Badge } from '@components/ui/badge'
 import { Progress } from '@components/ui/progress'
-import { Book, Users, Award, Bookmark } from 'lucide-react'
+import { Book, Users, Award, Bookmark, LogOut } from 'lucide-react'
 import { SettingsForm } from '@components/Settings/settings-form'
 import { getSettings } from 'src/server/routers/settings'
 import { getUser } from 'src/server'
 import { createClient } from '@lib/supabase/server'
+import { Button } from '@components/ui/button'
+import { logout } from '@lib/supabase/actions'
 
 async function fetchUser() {
   const userResult = await getUser()
@@ -24,7 +26,9 @@ async function fetchUser() {
     .or(`user_id.eq.${user.id},friend_id.eq.${user.id}`)
 
   return {
-    name: (user.user_metadata?.['full_name'] as string) ?? null,
+    name:
+      user.user_metadata?.['full_name'] ??
+      `${user.user_metadata?.['first_name'] ?? ''} ${user.user_metadata?.['last_name'] ?? ''}`,
     email: user.user_metadata?.['email'] ?? null,
     avatar: user.user_metadata?.['avatar_url'] ?? null,
     bio: null,
@@ -66,13 +70,14 @@ export default async function ProfilePage() {
         <Avatar className='w-24 h-24'>
           <AvatarImage
             src={user.avatar}
-            alt={user.name}
+            alt={user.name ?? ''}
           />
           <AvatarFallback>
-            {user.name
-              .split(' ')
-              .map((n) => n[0])
-              .join('')}
+            {user.name ??
+              ''
+                .split(' ')
+                .map((n) => n[0])
+                .join('')}
           </AvatarFallback>
         </Avatar>
         <div className='text-center sm:text-left'>
@@ -157,6 +162,14 @@ export default async function ProfilePage() {
             ))}
           </div>
         </div>
+        <Button
+          variant='destructive'
+          size='sm'
+          onClick={logout}
+          className='gap-2'
+        >
+          <LogOut className='w-4 h-4' /> Log out
+        </Button>
       </div>
     </div>
   )

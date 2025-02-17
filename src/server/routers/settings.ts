@@ -15,7 +15,6 @@ export async function getSettings(): Promise<Settings | null> {
   const supabase = await createClient()
   const settings = await supabase.from('settings').select().single()
   if (settings.error) {
-    console.error(settings.error.message)
     return null
   }
 

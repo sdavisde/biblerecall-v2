@@ -44,7 +44,7 @@ export default async function VersePage(props: VersePageProps) {
     <>
       <h1 className='relative'>{Verses.stringifyReference(verse.value)}</h1>
       <h3>Practiced {completions} times</h3>
-      <div className='flex flex-col lg:grid lg:grid-cols-3 w-full gap-2'>
+      <div className='flex flex-col lg:grid w-full gap-2'>
         <Link
           href={`/home/verses/${id}/read`}
           className='flex flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 outline-none'

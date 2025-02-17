@@ -7,7 +7,6 @@ import { useTheme } from 'next-themes'
 import toast from 'react-hot-toast'
 import { Lodash } from '@util/lodash'
 import { updateColor } from 'src/server/routers/colors'
-import { revalidatePath } from 'next/cache'
 
 type Props = {
   colors: Array<Tables<'colors'>>
@@ -28,8 +27,6 @@ export function ColorGrid({ colors }: Props) {
       toast.error(`${color.name} failed to update`)
       return
     }
-
-    revalidatePath('/')
   }, 1000)
 
   return (

@@ -206,9 +206,9 @@ export const VerseSelector = ({ children, submitVerse, initialVerse, onSuccess }
                         key={verseNumber}
                         variant='outline'
                         className={cn('w-full h-auto aspect-square', {
-                          'bg-primary hover:bg-primary': verseNumber === builder.start,
-                          'bg-destructive hover:bg-destructive': verseNumber === builder.end,
-                          'bg-muted hover:bg-muted':
+                          'bg-primary hover:bg-primary/70': verseNumber === builder.start,
+                          'bg-primary/50 hover:bg-primary/20': verseNumber === builder.end,
+                          'bg-muted hover:bg-muted/70':
                             !Lodash.isNil(builder.start) &&
                             !Lodash.isNil(builder.end) &&
                             verseNumber > builder.start &&

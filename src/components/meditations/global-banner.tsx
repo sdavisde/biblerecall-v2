@@ -4,6 +4,7 @@ import {
   CredenzaClose,
   CredenzaContent,
   CredenzaDescription,
+  CredenzaFooter,
   CredenzaHeader,
   CredenzaTitle,
   CredenzaTrigger,
@@ -41,15 +42,17 @@ export async function GlobalBanner() {
             God speaks to us every day. Adding it here could help to remember what He says and put it into practice.
           </CredenzaDescription>
         </CredenzaHeader>
-        <CredenzaBody>
-          <form
-            action={addMeditation}
-            className='flex flex-col gap-4 justify-end'
-          >
+        <form
+          action={addMeditation}
+          className='flex flex-col gap-4 justify-end'
+        >
+          <CredenzaBody>
             <Input name='meditation' />
+          </CredenzaBody>
+          <CredenzaFooter>
             <FormButton>Submit</FormButton>
-          </form>
-        </CredenzaBody>
+          </CredenzaFooter>
+        </form>
       </CredenzaContent>
     </Credenza>
   )

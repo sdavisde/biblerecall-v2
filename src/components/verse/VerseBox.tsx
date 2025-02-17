@@ -59,9 +59,7 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
         >
           <div className='w-full h-fit'>
             <CardHeader className='!pb-0'>
-              <CardTitle className='flex items-center justify-between'>
-                <span>{Verses.stringifyReference(verse)}</span>
-              </CardTitle>
+              <h4 className='tracking-tight font-semibold'>{Verses.stringifyReference(verse)}</h4>
             </CardHeader>
             <CardContent>
               <VerseText
@@ -84,7 +82,7 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
           >
             <Button
               size='icon'
-              className='aspect-square'
+              className='w-6 h-6 p-[2px]'
               variant='secondary'
               asDiv
             >
@@ -96,7 +94,7 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
             <Button
               size='icon'
               variant='destructive'
-              className='aspect-square'
+              className='w-6 h-6 p-[2px]'
               asDiv
             >
               <Trash2 />
