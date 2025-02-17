@@ -2,6 +2,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ResetPasswordForm } from './form'
 import { LinkButton } from '@components/ui/link-button'
 
+/**
+ * TODO: Not sure if / when I'll reimplement this page so I've left it as private
+ */
 export default function ResetPasswordPage() {
   return (
     <div className='w-screen h-screen centered flex-col gap-4 p-4'>
