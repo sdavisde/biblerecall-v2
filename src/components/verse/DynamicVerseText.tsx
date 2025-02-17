@@ -1,8 +1,10 @@
 'use client'
 
 import LoadingDots from '@components/loading/LoadingDots'
-import { api } from '@lib/trpc/client'
+import { useQuery } from '@tanstack/react-query'
+import { Verses } from '@util/verses'
 import { Dispatch, SetStateAction, useEffect } from 'react'
+import { getVerse } from 'src/server/routers/bible'
 import { VerseBuilder } from 'src/service/verse'
 import { VerseReference } from 'src/service/verse/types'
 
@@ -12,7 +14,10 @@ type DynamicVerseTextProps = {
   updateBuilder: Dispatch<SetStateAction<VerseBuilder>>
 }
 export const DynamicVerseText = ({ reference, builder, updateBuilder }: DynamicVerseTextProps) => {
-  const text = api.bible.getVerse.useQuery({ reference, version: builder.version })
+  const text = useQuery({
+    queryKey: [Verses.stringifyReference(reference), builder.version],
+    queryFn: () => getVerse({ reference, version: builder.version }),
+  })
 
   useEffect(() => {
     if (text.data && text.data.hasValue) {

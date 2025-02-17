@@ -3,10 +3,8 @@
 import toast from 'react-hot-toast'
 import { Button } from '@components/ui/button'
 import { Bible, Verses } from '@util/verses'
-import { Result } from '@util/result'
 import { PropsWithChildren, useEffect, useMemo, useRef, useState } from 'react'
 import { Lodash } from '@util/lodash'
-import { api } from '@lib/trpc/client'
 import LoadingDots from '@components/loading/LoadingDots'
 import { VerseBuilder } from 'src/service/verse'
 import { Book, Verse, VerseReference } from 'src/service/verse/types'
@@ -23,6 +21,8 @@ import {
   CredenzaTrigger,
 } from '@components/ui/credenza'
 import { DynamicVerseText } from './DynamicVerseText'
+import { useQuery } from '@tanstack/react-query'
+import { getSkeleton } from 'src/server/routers/bible'
 
 type VerseSelectProps = PropsWithChildren<{
   submitVerse: (verse: Verse) => Promise<unknown>
@@ -278,7 +278,7 @@ export const VerseSelector = ({ children, submitVerse, initialVerse, onSuccess }
 }
 
 const useChapters = (book: Book | null): { chapters: Array<number>; isLoading: boolean } => {
-  const { data, isLoading } = api.bible.getSkeleton.useQuery()
+  const { data, isLoading } = useQuery({ queryKey: ['skeleton'], queryFn: getSkeleton })
 
   if (Lodash.isNil(book) || Lodash.isNil(data)) {
     return { chapters: [], isLoading }
@@ -288,7 +288,7 @@ const useChapters = (book: Book | null): { chapters: Array<number>; isLoading: b
 }
 
 const useVerses = (book: Book | null, chapter: number | null): { verses: number; isLoading: boolean } => {
-  const { data, isLoading } = api.bible.getSkeleton.useQuery()
+  const { data, isLoading } = useQuery({ queryKey: ['skeleton'], queryFn: getSkeleton })
 
   if (Lodash.isNil(book) || Lodash.isNil(chapter) || Lodash.isNil(data)) {
     return { verses: 0, isLoading }

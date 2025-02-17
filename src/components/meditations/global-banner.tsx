@@ -30,7 +30,7 @@ export async function GlobalBanner() {
 
   return (
     <Credenza>
-      <CredenzaTrigger className='w-full h-10 bg-accent text-accent-foreground'>
+      <CredenzaTrigger className='w-full h-10 bg-primary text-primary-foreground'>
         {migration?.text ?? 'Click here to add a meditation'}
       </CredenzaTrigger>
       <CredenzaContent>

@@ -2,10 +2,9 @@
 
 import { Font, Settings, Theme, Visibility } from '@configuration/settings'
 import { createClient } from '@lib/supabase/server'
-import { Lodash } from '@util/lodash'
 import { Result } from '@util/result'
 import { from_settings, SETTINGS_CACHE_TAG, to_settings } from '../adapter'
-import { getUser, missingUser } from '..'
+import { getUser } from '..'
 import { revalidatePath, revalidateTag } from 'next/cache'
 
 /**

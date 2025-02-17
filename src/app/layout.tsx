@@ -4,7 +4,6 @@ import { Urbanist, Rock_Salt, Satisfy } from 'next/font/google'
 import localFont from 'next/font/local'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import { TRPCReactProvider } from '@lib/trpc/client'
 import { SettingsProvider } from '@components/Settings/Provider'
 import { ThemeProvider } from 'next-themes'
 import Head from 'next/head'
@@ -14,7 +13,7 @@ import { ColorStyle } from '@components/theme/color-style'
 import { createClient } from '@lib/supabase/server'
 import { cache } from 'react'
 import { getSettings } from 'src/server/routers/settings'
-import { cacheTag } from 'next/dist/server/use-cache/cache-tag'
+import { QueryProvider } from '@components/common/QueryClientProvider'
 
 const urbanist = Urbanist({
   subsets: ['latin'],
@@ -108,7 +107,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           attribute='class'
         >
           <SettingsProvider authUserSettings={settings}>
-            <TRPCReactProvider>
+            <QueryProvider>
               {!process.env.VERCEL_PROJECT_PRODUCTION_URL && (
                 <ThemeModal>
                   <GearIcon
@@ -118,7 +117,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 </ThemeModal>
               )}
               {children}
-            </TRPCReactProvider>
+            </QueryProvider>
             <Analytics />
             <SpeedInsights />
           </SettingsProvider>

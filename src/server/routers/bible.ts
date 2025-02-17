@@ -1,7 +1,8 @@
+'use server'
+
 import { ErrorCode } from '@util/error'
 import { Lodash } from '@util/lodash'
 import { Result } from '@util/result'
-import { publicProcedure, router } from 'src/server/trpc'
 import { z } from 'zod'
 import { BIBLE_BOOKS_SKELETON } from '@util/bible'
 import { verseReferenceSchema } from 'src/service/verse/types'
@@ -26,70 +27,69 @@ export type KeplinVersion = {
   infoUrl: string
 }
 
+const verseRequestSchema = z.object({ reference: verseReferenceSchema.nullable(), version: z.string() })
+type VerseRequest = z.infer<typeof verseRequestSchema>
+
 /**
- * Bible-focused API Routes
- *
- * Each query handles input validation and error handling.
+ * Bible-focused actions
  */
 
-export const bibleRouter = router({
-  getVerse: publicProcedure
-    .input(z.object({ reference: verseReferenceSchema.nullable(), version: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const { reference, version } = input
+export async function getVerse({ reference, version }: VerseRequest) {
+  if (Lodash.isNil(reference)) {
+    return Result.failure({ code: 'get-verse:reference-missing' })
+  }
 
-      if (Lodash.isNil(reference)) {
-        return Result.failure({ code: 'get-verse:reference-missing' })
-      }
+  // Fetch is cached via the framework so this only refetches when url changes
+  const url = `https://bible-go-api.rkeplin.com/v1/books/${reference.book.id}/chapters/${reference.chapter}?translation=${version}`
+  const data = await fetch(url, { cache: 'force-cache', next: { revalidate: false } })
 
-      // Fetch is cached via the framework so this only refetches when url changes
-      const url = `https://bible-go-api.rkeplin.com/v1/books/${reference.book.id}/chapters/${reference.chapter}?translation=${version}`
-      const data = await fetch(url)
+  if (Lodash.isNil(data)) {
+    return Result.failure({ code: ErrorCode.FAILED_TO_FETCH, message: 'Failed to fetch' })
+  }
 
-      if (Lodash.isNil(data)) {
-        return Result.failure({ code: ErrorCode.FAILED_TO_FETCH, message: 'Failed to fetch' })
-      }
+  const fetchedVerses = (await data.json()) as KeplinVerse[]
 
-      const fetchedVerses = (await data.json()) as KeplinVerse[]
+  const startIndex = fetchedVerses.findIndex((v) => v.verseId === reference.start)
+  const end = fetchedVerses.findIndex((v) => v.verseId === reference.end)
 
-      const startIndex = fetchedVerses.findIndex((v) => v.verseId === reference.start)
-      const end = fetchedVerses.findIndex((v) => v.verseId === reference.end)
+  const endIndex = end >= 0 ? end : startIndex
 
-      const endIndex = end >= 0 ? end : startIndex
+  const verseText =
+    fetchedVerses
+      .slice(startIndex, endIndex + 1)
+      .map((v) => v.verse)
+      .join(' ') ?? 'Verse text not found'
 
-      const verseText =
-        fetchedVerses
-          .slice(startIndex, endIndex + 1)
-          .map((v) => v.verse)
-          .join(' ') ?? 'Verse text not found'
+  return Result.success({ verseText, verseReference: reference })
+}
 
-      return Result.success({ verseText, verseReference: reference })
-    }),
-  getVersions: publicProcedure.query(async () => {
-    const data = await fetch('https://bible-go-api.rkeplin.com/v1/translations', {})
+export async function getVersions() {
+  const data = await fetch('https://bible-go-api.rkeplin.com/v1/translations', {
+    cache: 'force-cache',
+    next: { revalidate: false },
+  })
+  const versions = (await data.json()) as KeplinVersion[]
 
-    const versions = (await data.json()) as KeplinVersion[]
+  const preferredSort = ['ESV', 'NIV', 'NLT', 'KJV']
+  versions.sort((a, b) => {
+    const a_index = preferredSort.indexOf(a.abbreviation)
+    const b_index = preferredSort.indexOf(b.abbreviation)
 
-    const preferredSort = ['ESV', 'NIV', 'NLT', 'KJV']
-    versions.sort((a, b) => {
-      const a_index = preferredSort.indexOf(a.abbreviation)
-      const b_index = preferredSort.indexOf(b.abbreviation)
+    if (a_index === -1 && b_index >= 0) {
+      return 1
+    }
+    if (a_index >= 0 && b_index === -1) {
+      return -1
+    }
+    if (a_index === -1 && b_index === -1) {
+      return 0
+    }
+    return a_index - b_index
+  })
 
-      if (a_index === -1 && b_index >= 0) {
-        return 1
-      }
-      if (a_index >= 0 && b_index === -1) {
-        return -1
-      }
-      if (a_index === -1 && b_index === -1) {
-        return 0
-      }
-      return a_index - b_index
-    })
+  return Result.success(versions)
+}
 
-    return Result.success(versions)
-  }),
-  getSkeleton: publicProcedure.query(async () => {
-    return Object.fromEntries(BIBLE_BOOKS_SKELETON.map((book) => [book.name, book]))
-  }),
-})
+export async function getSkeleton() {
+  return Object.fromEntries(BIBLE_BOOKS_SKELETON.map((book) => [book.name, book]))
+}

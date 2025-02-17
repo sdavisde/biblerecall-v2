@@ -4,7 +4,7 @@ import { VisibilityMenu } from '@components/Settings/SettingSelectors/Visibility
 import { createClient } from '@lib/supabase/server'
 import { from_verse } from 'src/server/adapter'
 
-// todo: add filters here - and move to router after removing trpc
+// todo: add filters here
 async function getVerses() {
   const supabase = await createClient()
   const versesResult = await supabase.from('verses').select()

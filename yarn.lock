@@ -1341,26 +1341,6 @@
   dependencies:
     "@tanstack/query-core" "5.59.0"
 
-"@trpc/client@^11.0.0-rc.566":
-  version "11.0.0-rc.566"
-  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-11.0.0-rc.566.tgz#b6e84c1bda636623e8d63a49c4307519dbd48e62"
-  integrity sha512-49WHcXXzv/EBF1fmuQBX8uea2dbZljx2BfbAVyvjNt+6QIMxpsOPIfVL9MDI3nCK7b1YNOhBBTCTto9Nx92tdw==
-
-"@trpc/next@^11.0.0-rc.571":
-  version "11.0.0-rc.571"
-  resolved "https://registry.yarnpkg.com/@trpc/next/-/next-11.0.0-rc.571.tgz#a12de498f7724dda419a67ca8a20f4a3cc2051dd"
-  integrity sha512-CoMh0FipQDJQUxd5y0qt24M6CV2RiccXQYd33OSoKSOQWypfSWj5IYhwAc6sz6V2hWOt/xMuXx+C+JvYmsX57w==
-
-"@trpc/react-query@^11.0.0-rc.566":
-  version "11.0.0-rc.566"
-  resolved "https://registry.yarnpkg.com/@trpc/react-query/-/react-query-11.0.0-rc.566.tgz#b30fcb7541b0b660c76d74b166f6b6ae2adefeed"
-  integrity sha512-O546uSoHiv3BfuMl6LIAiXH1NUvNxrV17rjRuQ+Puf5zcbhUbDmxVtU3II+DpBmHHxIZdaYMMsZiNzz7guqAkA==
-
-"@trpc/server@^11.0.0-rc.566":
-  version "11.0.0-rc.566"
-  resolved "https://registry.yarnpkg.com/@trpc/server/-/server-11.0.0-rc.566.tgz#6c384f820fd499e12a2504cb66f4c782c70dad20"
-  integrity sha512-AcCE9zqp7aXb0o4ehugELVk45XalzYi+wZYdOq+byLJq9yVeI5wcQaKA18Ux51hIyu3OFCaq9UwYa1a0P7IaZg==
-
 "@types/cookie@^0.6.0":
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.6.0.tgz#eac397f28bf1d6ae0ae081363eca2f425bedf0d5"

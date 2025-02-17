@@ -5,8 +5,9 @@ import * as ColorUtils from '@components/lib/color-utils'
 import { ColorPicker } from '@components/ui/color-picker'
 import { useTheme } from 'next-themes'
 import toast from 'react-hot-toast'
-import { api } from '@lib/trpc/client'
 import { Lodash } from '@util/lodash'
+import { updateColor } from 'src/server/routers/colors'
+import { revalidatePath } from 'next/cache'
 
 type Props = {
   colors: Array<Tables<'colors'>>
@@ -14,8 +15,6 @@ type Props = {
 export function ColorGrid({ colors }: Props) {
   const { resolvedTheme } = useTheme()
   const filteredColors = colors.filter((it) => it.theme === resolvedTheme)
-  const updateColor = api.colors.set.useMutation()
-  const utils = api.useUtils()
 
   const handleChange = Lodash.debounce(async (color: Tables<'colors'>, newVal: ColorUtils.HSL | null) => {
     if (!newVal) {
@@ -24,13 +23,13 @@ export function ColorGrid({ colors }: Props) {
     }
 
     const newColor = { ...color, hsl: `${newVal.h} ${newVal.s}% ${newVal.l}%` }
-    const result = await updateColor.mutateAsync(newColor)
+    const result = await updateColor(newColor)
     if (!result.hasValue) {
       toast.error(`${color.name} failed to update`)
       return
     }
 
-    utils.colors.invalidate()
+    revalidatePath('/')
   }, 1000)
 
   return (
