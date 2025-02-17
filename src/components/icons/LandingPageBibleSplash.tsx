@@ -1,6 +1,6 @@
 'use client'
 
-import cn from 'clsx'
+import { cn } from '@components/lib/utils'
 import { Theme } from '@configuration/settings'
 import { useTheme } from 'next-themes'
 

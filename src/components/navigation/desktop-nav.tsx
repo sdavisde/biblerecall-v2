@@ -1,6 +1,6 @@
 'use client'
 
-import cn from 'clsx'
+import { cn } from '@components/lib/utils'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'

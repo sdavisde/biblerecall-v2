@@ -1,6 +1,6 @@
 'use client'
 
-import cn from 'clsx'
+import { cn } from '@components/lib/utils'
 import { Visibility } from '@configuration/settings'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@components/ui/form'
 import { useFormContext } from 'react-hook-form'

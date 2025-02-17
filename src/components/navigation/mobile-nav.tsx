@@ -1,6 +1,6 @@
 'use client'
 
-import cn from 'clsx'
+import { cn } from '@components/lib/utils'
 import { usePathname, useRouter } from 'next/navigation'
 import { VerseSelector } from '@components/verse/VerseSelector'
 import { ConditionalLink } from '@components/ui/conditional-link'
