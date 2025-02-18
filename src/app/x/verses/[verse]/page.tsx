@@ -85,7 +85,7 @@ export default async function VersePage(props: VersePageProps) {
       <h3>Practiced {completions} times</h3>
       <div className='flex flex-col lg:grid w-full gap-2'>
         <Link
-          href={`/home/verses/${id}/read`}
+          href={`/x/verses/${id}/read`}
           className='flex flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 outline-none'
         >
           <AudioLines className='h-6 w-6' />
@@ -96,7 +96,7 @@ export default async function VersePage(props: VersePageProps) {
           </span>
         </Link>
         <Link
-          href={`/home/verses/${id}/type-it-out`}
+          href={`/x/verses/${id}/type-it-out`}
           className='flex flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 outline-none'
         >
           <Keyboard className='h-6 w-6' />
@@ -125,7 +125,7 @@ export default async function VersePage(props: VersePageProps) {
       </div>
       <div className='centered w-full gap-2 mt-4'>
         <Link
-          href='/home/verses'
+          href='/x/verses'
           className='w-1/2 centered'
         >
           <Button

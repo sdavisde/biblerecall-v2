@@ -51,6 +51,30 @@ export type Database = {
         }
         Relationships: []
       }
+      friend_requests: {
+        Row: {
+          created_at: string
+          from_user: string
+          id: number
+          status: Database["public"]["Enums"]["friend_request_status"]
+          to_user: string
+        }
+        Insert: {
+          created_at?: string
+          from_user: string
+          id?: number
+          status?: Database["public"]["Enums"]["friend_request_status"]
+          to_user: string
+        }
+        Update: {
+          created_at?: string
+          from_user?: string
+          id?: number
+          status?: Database["public"]["Enums"]["friend_request_status"]
+          to_user?: string
+        }
+        Relationships: []
+      }
       friends: {
         Row: {
           created_at: string | null
@@ -250,6 +274,7 @@ export type Database = {
         | "WEB"
         | "YLT"
       font: "urbanist" | "openDyslexic"
+      friend_request_status: "sent" | "accepted" | "declined"
       theme: "system" | "light" | "dark"
       verse_visibility: "full" | "partial" | "none"
     }

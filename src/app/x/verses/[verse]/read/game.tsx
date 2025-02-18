@@ -58,7 +58,7 @@ export const TapToRead = ({ verse }: TapToReadProps) => {
       if (!response.hasValue) {
         throw new Error(response.error.message)
       }
-      router.push(`/home/verses/${verse.id}`)
+      router.push(`/x/verses/${verse.id}`)
     } catch (e) {
       toast.error(`An error occurred while updating ${Verses.stringifyReference(verse)}`)
     }

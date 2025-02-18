@@ -7,7 +7,7 @@ export function Searchbar() {
   return (
     <div className='flex flex-col w-full max-w-md pt-16 pb-8 mx-auto stretch'>
       <Form
-        action='/home/discover'
+        action='/x/discover'
         className='centered flex-col gap-2'
       >
         <div className='flex items-center w-full max-w-sm space-x-2 rounded-lg border border-foreground bg-background px-3.5 py-2'>

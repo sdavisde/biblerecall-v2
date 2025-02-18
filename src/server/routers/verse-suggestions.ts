@@ -32,7 +32,7 @@ export async function addVerseSuggestion(suggestion: VerseSuggestion): Promise<R
   const addedVerse = await addVerse(newVerse.value)
 
   if (addedVerse.hasValue) {
-    revalidatePath('/home/verses')
+    revalidatePath('/x/verses')
   }
 
   return addedVerse

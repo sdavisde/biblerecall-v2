@@ -14,12 +14,12 @@ export default async function Home() {
       <Searchbar />
       <PageSelector
         text='Memorize your saved verses'
-        href='/home/verses'
+        href='/x/verses'
         Icon={BookOpenCheck}
       />
       <PageSelector
         text='Settings'
-        href='/home/profile'
+        href='/x/profile'
         Icon={Settings}
         variant='outline'
       />

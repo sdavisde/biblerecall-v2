@@ -105,7 +105,7 @@ function MenuItem({ item, index, toggleMenu }: { item: NavItem; index: number; t
     <VerseSelector
       submitVerse={addVerse}
       onSuccess={() => {
-        router.push('/home/verses')
+        router.push('/x/verses')
         toggleMenu()
       }}
     >

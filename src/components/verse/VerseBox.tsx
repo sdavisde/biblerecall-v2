@@ -55,7 +55,7 @@ export const VerseBox = ({ verse }: VerseBoxProps) => {
         {...handlers}
       >
         <Link
-          href={`/home/verses/${verse.id}`}
+          href={`/x/verses/${verse.id}`}
           className='w-full p-6'
         >
           <div className='w-full h-fit'>

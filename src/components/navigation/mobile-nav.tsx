@@ -26,7 +26,7 @@ export function MobileNav() {
                   className={cn('flex flex-col items-center justify-center py-1 px-2 relative transition-colors', {
                     'text-muted-foreground': isActive,
                     'text-muted-foreground hover:text-muted-foreground/50': !isActive,
-                    'opacity-50 pointer-events-none': item.disabled,
+                    // 'opacity-50 pointer-events-none': item.disabled,
                   })}
                 >
                   {isActive && <div className='absolute -top-[6px] left-0 right-0 h-0.5 bg-primary' />}
@@ -34,7 +34,7 @@ export function MobileNav() {
                     {isAddVerse ? (
                       <VerseSelector
                         submitVerse={addVerse}
-                        onSuccess={() => router.push('/home/verses')}
+                        onSuccess={() => router.push('/x/verses')}
                       >
                         <item.icon className={cn('w-6 h-6', { 'text-primary-foreground': isAddVerse })} />
                       </VerseSelector>

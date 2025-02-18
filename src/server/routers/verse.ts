@@ -42,7 +42,7 @@ export async function addVerse(verse: Verse): Promise<Result<Verse>> {
   if (newVerse.error) {
     return Result.failure(newVerse.error)
   }
-  revalidatePath('/home/verses')
+  revalidatePath('/x/verses')
   return Result.success(from_verse(newVerse.data))
 }
 
@@ -52,7 +52,7 @@ export async function deleteVerse(id: string): Promise<Result<null>> {
   if (result.error) {
     return Result.failure(result.error)
   }
-  revalidatePath('/home/verses')
+  revalidatePath('/x/verses')
   return Result.success(null)
 }
 
@@ -71,6 +71,6 @@ export async function updateVerse(verse: Verse): Promise<Result<Verse>> {
   if (updatedVerse.error) {
     return Result.failure(updatedVerse.error)
   }
-  revalidatePath('/home/verses')
+  revalidatePath('/x/verses')
   return Result.success(from_verse(updatedVerse.data))
 }

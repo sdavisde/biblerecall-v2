@@ -29,7 +29,7 @@ export default async function SuccessPage(props: SuccessPageProps) {
       <div className='flex flex-col gap-4 text-center w-1/2'>
         {nextDifficulty <= 2 && (
           <Link
-            href={`/home/verses/${verse}/type-it-out?diff=${nextDifficulty}`}
+            href={`/x/verses/${verse}/type-it-out?diff=${nextDifficulty}`}
             className='cursor-pointer mx-2'
           >
             <Button
@@ -42,7 +42,7 @@ export default async function SuccessPage(props: SuccessPageProps) {
           </Link>
         )}
         <Link
-          href={`/home/verses/${verse}/type-it-out?diff=${difficulty}`}
+          href={`/x/verses/${verse}/type-it-out?diff=${difficulty}`}
           className='cursor-pointer mx-2'
         >
           <Button
@@ -54,7 +54,7 @@ export default async function SuccessPage(props: SuccessPageProps) {
           </Button>
         </Link>
         <Link
-          href='/home/verses'
+          href='/x/verses'
           className='cursor-pointer mx-2'
         >
           <Button

@@ -18,7 +18,7 @@ export default function Landing() {
               Ephesians tells us that the sword of the Spirit is the word of God. Are you ready for the spiritual
               battles in your life?
             </p>
-            <LinkButton href='/home'>Start Memorizing</LinkButton>
+            <LinkButton href='/x/home'>Start Memorizing</LinkButton>
           </div>
           <div className='centered w-full h-full mt-4 relative overflow-hidden'>
             <LandingPageBibleSplash />

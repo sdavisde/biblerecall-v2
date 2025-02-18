@@ -18,6 +18,6 @@ export async function addMeditation(formData: FormData) {
     .from('user_meditations')
     .insert({ text: meditation.toString(), user_id: user.data.user.id })
   if (!result.error) {
-    revalidatePath('/home')
+    revalidatePath('/x/home')
   }
 }

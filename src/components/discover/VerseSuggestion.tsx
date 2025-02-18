@@ -15,7 +15,7 @@ export const VerseSuggestion = ({ verse }: { verse: VerseSuggestionType }) => {
     try {
       const response = await addVerseSuggestion(verse)
       if (response.hasValue) {
-        router.push('/home/verses')
+        router.push('/x/verses')
       } else {
         throw Error(response.error.message)
       }

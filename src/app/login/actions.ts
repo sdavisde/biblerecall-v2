@@ -36,5 +36,5 @@ export async function loginUser(state: FormActionState, formData: FormData) {
     })
   }
 
-  redirect('/home')
+  redirect('/x/home')
 }

@@ -27,7 +27,7 @@ export default async function ReadVersePage(props: { params: Promise<{ verse: st
         </div>
         {verseResult.hasValue ? <TapToRead verse={verseResult.value} /> : <>Verse Not Found</>}
         <div className='w-full'>
-          <Link href={`/home/verses/${verseResult.value.id}`}>
+          <Link href={`/x/verses/${verseResult.value.id}`}>
             <Button variant='link'>Go back</Button>
           </Link>
         </div>

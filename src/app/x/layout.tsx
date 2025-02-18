@@ -3,7 +3,7 @@ import { MobileNav } from '@components/navigation/mobile-nav'
 import { GlobalBanner } from '@components/meditations/global-banner'
 import { DesktopNav } from '@components/navigation/desktop-nav'
 
-export default async function HomeLayout({ children }: { children: React.ReactNode }) {
+export default async function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <GlobalBanner />

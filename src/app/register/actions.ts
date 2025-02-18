@@ -35,7 +35,7 @@ export async function signUpNewUser(state: FormActionState, formData: FormData):
     email: result.data.email,
     password: result.data.password,
     options: {
-      emailRedirectTo: `${process.env.VERCEL_PROJECT_PRODUCTION_URL}/home`,
+      emailRedirectTo: `${process.env.VERCEL_PROJECT_PRODUCTION_URL}/x/home`,
       data: {
         first_name: result.data.firstName,
         last_name: result.data.lastName,
@@ -50,5 +50,5 @@ export async function signUpNewUser(state: FormActionState, formData: FormData):
     })
   }
 
-  redirect('/home')
+  redirect('/x/home')
 }

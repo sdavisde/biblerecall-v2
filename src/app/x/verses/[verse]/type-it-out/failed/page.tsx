@@ -31,7 +31,7 @@ export default async function FailedPage(props: FailedPageProps) {
       <Progress value={percentCorrect} />
       <div className='flex flex-col gap-4 text-center w-1/2'>
         <Link
-          href={`/home/verses/${verse}/type-it-out?diff=${difficulty}`}
+          href={`/x/verses/${verse}/type-it-out?diff=${difficulty}`}
           className='cursor-pointer mx-2'
         >
           <Button className='text-base gap-2 w-full'>
@@ -39,7 +39,7 @@ export default async function FailedPage(props: FailedPageProps) {
           </Button>
         </Link>
         <Link
-          href='/home/verses'
+          href='/x/verses'
           className='cursor-pointer mx-2'
         >
           <Button

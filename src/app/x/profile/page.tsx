@@ -1,4 +1,4 @@
-import { CardTitle } from '@components/ui/card'
+import { Card, CardTitle } from '@components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar'
 import { Badge } from '@components/ui/badge'
 import { Progress } from '@components/ui/progress'
@@ -11,6 +11,7 @@ import { Button } from '@components/ui/button'
 import { logout } from '@lib/supabase/actions'
 import { Result } from '@util/result'
 import { notFound } from 'next/navigation'
+import { Theme } from '@configuration/settings'
 
 async function fetchUser() {
   const userResult = await getUser()
@@ -32,7 +33,7 @@ async function fetchUser() {
       user.user_metadata?.['full_name'] ??
       `${user.user_metadata?.['first_name'] ?? ''} ${user.user_metadata?.['last_name'] ?? ''}`,
     email: user.user_metadata?.['email'] ?? null,
-    avatar: user.user_metadata?.['avatar_url'] ?? null,
+    avatar: user.user_metadata?.['picture'] ?? null,
     bio: null,
     joinDate: new Date(user.created_at).toLocaleDateString('en-US', {
       weekday: 'long',
@@ -74,7 +75,7 @@ export default async function ProfilePage() {
 
   return (
     <div className='container mx-auto px-4 py-8 flex flex-col gap-8'>
-      <div className='flex flex-col sm:flex-row items-center gap-4'>
+      <Card className='flex flex-col sm:flex-row items-center gap-4'>
         <Avatar className='w-24 h-24'>
           <AvatarImage
             src={user.avatar}
@@ -101,18 +102,19 @@ export default async function ProfilePage() {
               <Users className='w-4 h-4 mr-1' />
               {user.friends} Friends
             </Badge>
-            <Badge variant='secondary'>
+            {/* <Badge variant='secondary'>
               <Award className='w-4 h-4 mr-1' />
               {user.achievements.length} Achievements
-            </Badge>
+            </Badge> */}
           </div>
         </div>
-      </div>
+      </Card>
       <div>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-          <div>
+          <Card>
             <h2 className='text-lg font-semibold mb-2'>Memorization Stats</h2>
-            <div className='space-y-2'>
+            <p className='italic text-muted-foreground'>Under development</p>
+            {/* <div className='space-y-2'>
               <div>
                 <div className='flex justify-between text-sm'>
                   <span>Current Streak</span>
@@ -128,23 +130,29 @@ export default async function ProfilePage() {
                 <Bookmark className='inline w-4 h-4 mr-1' />
                 Top Verse: {user.topVerse}
               </p>
-            </div>
-          </div>
-          <div>
-            <h2 className='text-lg font-semibold mb-2 flex items-center gap-2'>
+            </div> */}
+          </Card>
+          <Card>
+            <CardTitle className='text-lg mb-2 flex items-center justify-between gap-2'>
               App Settings
               <SettingsForm settings={settings} />
-            </h2>
+            </CardTitle>
             <div className='space-y-1'>
-              <p>Theme: {settings?.theme ?? 'system'}</p>
-              <p>Font: {settings?.font}</p>
-              <p>Verse Visibility: {settings?.visibility}</p>
+              {Object.entries(settings ?? {})
+                .filter(([key]) => ['theme', 'visibility', 'font'].includes(key))
+                .map(([key, value]) => (
+                  <p key={key}>
+                    <span className='font-semibold me-1 capitalize'>{key}:</span>
+                    <span className='italic'>{value}</span>
+                  </p>
+                ))}
             </div>
-          </div>
+          </Card>
         </div>
-        <div className='mt-6'>
-          <h2 className='text-lg font-semibold mb-2'>Recent Activity</h2>
-          <ul className='space-y-2'>
+        <Card className='mt-6'>
+          <CardTitle className='text-lg mb-2'>Recent Activity</CardTitle>
+          <p className='italic text-muted-foreground'>Under development</p>
+          {/* <ul className='space-y-2'>
             {user.recentActivity.map((activity, index) => (
               <li
                 key={index}
@@ -153,11 +161,12 @@ export default async function ProfilePage() {
                 {activity.action} <strong>{activity.verse}</strong> on {activity.date}
               </li>
             ))}
-          </ul>
-        </div>
-        <div className='mt-6'>
-          <h2 className='text-lg font-semibold mb-2'>Achievements</h2>
-          <div className='flex flex-wrap gap-2'>
+          </ul> */}
+        </Card>
+        <Card className='mt-6'>
+          <CardTitle className='text-lg mb-2'>Achievements</CardTitle>
+          <p className='italic text-muted-foreground'>Under development</p>
+          {/* <div className='flex flex-wrap gap-2'>
             {user.achievements.map((achievement, index) => (
               <Badge
                 key={index}
@@ -165,16 +174,16 @@ export default async function ProfilePage() {
                 className='py-1'
               >
                 <Award className='w-4 h-4 mr-1' />
-                {/* {achievement.name} */}
+                {achievement.name} 
               </Badge>
             ))}
-          </div>
-        </div>
+          </div> */}
+        </Card>
         <Button
           variant='destructive'
           size='sm'
           onClick={logout}
-          className='gap-2'
+          className='gap-2 mt-6'
         >
           <LogOut className='w-4 h-4' /> Log out
         </Button>
