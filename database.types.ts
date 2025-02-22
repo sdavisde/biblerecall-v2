@@ -54,26 +54,41 @@ export type Database = {
       friend_requests: {
         Row: {
           created_at: string
-          from_user: string
+          from_profile: string | null
           id: number
-          status: Database["public"]["Enums"]["friend_request_status"]
-          to_user: string
+          status: Database["public"]["Enums"]["friend_request_status"] | null
+          to_profile: string | null
         }
         Insert: {
           created_at?: string
-          from_user: string
+          from_profile?: string | null
           id?: number
-          status?: Database["public"]["Enums"]["friend_request_status"]
-          to_user: string
+          status?: Database["public"]["Enums"]["friend_request_status"] | null
+          to_profile?: string | null
         }
         Update: {
           created_at?: string
-          from_user?: string
+          from_profile?: string | null
           id?: number
-          status?: Database["public"]["Enums"]["friend_request_status"]
-          to_user?: string
+          status?: Database["public"]["Enums"]["friend_request_status"] | null
+          to_profile?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "friend_requests_from_profile_fkey"
+            columns: ["from_profile"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "friend_requests_to_profile_fkey"
+            columns: ["to_profile"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       friends: {
         Row: {

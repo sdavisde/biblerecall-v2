@@ -16,7 +16,8 @@ export function FriendsList() {
         <CardTitle>Friends</CardTitle>
       </CardHeader>
       <CardContent>
-        <ul className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+        <p className='text-muted-foreground'>Currently in development</p>
+        {/* <ul className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
           {friends.map((friend) => (
             <li
               key={friend.id}
@@ -35,7 +36,7 @@ export function FriendsList() {
               </div>
             </li>
           ))}
-        </ul>
+        </ul> */}
       </CardContent>
     </Card>
   )

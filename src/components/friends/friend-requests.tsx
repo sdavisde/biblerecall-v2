@@ -3,17 +3,23 @@ import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar'
 import { createClient } from '@lib/supabase/server'
 import { getUser } from 'src/server'
+import { Check, Trash2 } from 'lucide-react'
+import { cache } from 'react'
 
-async function getFriendRequests() {
+const getFriendRequests = cache(async () => {
   const supabase = await createClient()
   const userResult = await getUser()
   if (!userResult.hasValue) {
     return []
   }
-  const { data } = await supabase.from('friend_requests').select().eq('to_user', userResult.value.id)
-  // todo: join on users table to get profile pic - will have to add profile pic to public.profiles
+  const { data, error } = await supabase
+    .from('friend_requests')
+    .select(
+      'id, created_at, from_profile, to_profile, status, profiles!friend_requests_from_profile_fkey (first_name, last_name)'
+    )
+    .eq('to_profile', userResult.value.id)
   return data ?? []
-}
+})
 
 export async function FriendRequests() {
   const friendRequests = await getFriendRequests()
@@ -27,7 +33,7 @@ export async function FriendRequests() {
           {friendRequests.map((request) => (
             <li
               key={request.id}
-              className='flex items-center justify-between'
+              className='flex flex-col xl:flex-row items-start xl:items-center justify-between'
             >
               <div className='flex items-center space-x-4'>
                 {/* <Avatar>
@@ -37,20 +43,25 @@ export async function FriendRequests() {
                   />
                   <AvatarFallback>{request.name.charAt(0)}</AvatarFallback>
                 </Avatar> */}
-                <span>{request.id}</span>
+                <span>
+                  {request.profiles?.first_name} {request.profiles?.last_name}
+                </span>
               </div>
-              <div className='space-x-2'>
+              <div className='flex items-center gap-1'>
                 <Button
                   size='sm'
-                  variant='outline'
+                  variant='ghost'
                 >
-                  Accept
+                  <Check
+                    color='green'
+                    className='w-5 h-5'
+                  />
                 </Button>
                 <Button
                   size='sm'
                   variant='ghost'
                 >
-                  Decline
+                  <Trash2 className='w-5 h-5' />
                 </Button>
               </div>
             </li>

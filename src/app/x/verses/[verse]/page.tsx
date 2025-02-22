@@ -74,6 +74,7 @@ export default async function VersePage(props: VersePageProps) {
           defaultValue={verse.value.notes ?? undefined}
           placeholder='I want to memorize this verse because...'
           name='notes'
+          className='text-sm pe-24'
         />
         <FormButton
           variant='outline'

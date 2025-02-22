@@ -19,6 +19,7 @@ export default async function SocialPage({ searchParams }: { searchParams: Promi
           <FriendRequests />
         </div>
       </div>
+      {/* TODO: instead of sending a request here, if a UID exists I should just auto-friend them */}
       <SendRequest potentialFriendId={uid ?? null} />
     </div>
   )

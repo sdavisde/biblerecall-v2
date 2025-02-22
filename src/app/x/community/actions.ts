@@ -17,7 +17,9 @@ export async function sendFriendRequest(friendId: string): Promise<Result<null>>
   const matchingFriendRequest = await supabase
     .from('friend_requests')
     .select()
-    .or(`and(from_user.eq.${userId},to_user.eq.${friendId}),and(from_user.eq.${friendId},to_user.eq.${userId})`)
+    .or(
+      `and(from_profile.eq.${userId},to_profile.eq.${friendId}),and(from_profile.eq.${friendId},to_profile.eq.${userId})`
+    )
     .single()
   const areFriends = !!matchingFriendRequest.data
   if (areFriends) {
@@ -30,8 +32,8 @@ export async function sendFriendRequest(friendId: string): Promise<Result<null>>
   }
 
   const newRequest: Omit<Tables<'friend_requests'>, 'id' | 'created_at'> = {
-    from_user: userId,
-    to_user: friendId,
+    from_profile: userId,
+    to_profile: friendId,
     status: 'sent',
   }
   console.log(newRequest)

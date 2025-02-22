@@ -32,7 +32,9 @@ export function RecentActivity() {
         <CardTitle>Recent Activity</CardTitle>
       </CardHeader>
       <CardContent>
-        <ul className='space-y-4'>
+        <p className='text-muted-foreground'>Currently in development</p>
+
+        {/* <ul className='space-y-4'>
           {activities.map((activity) => (
             <li
               key={activity.id}
@@ -53,7 +55,7 @@ export function RecentActivity() {
               </div>
             </li>
           ))}
-        </ul>
+        </ul> */}
       </CardContent>
     </Card>
   )
