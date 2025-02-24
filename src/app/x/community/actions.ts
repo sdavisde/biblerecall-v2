@@ -5,7 +5,9 @@ import { Result } from '@util/result'
 import { Tables } from 'database.types'
 import { getUser } from 'src/server'
 
-export async function sendFriendRequest(friendId: string): Promise<Result<null>> {
+type FriendRequestStatus = Tables<'friend_requests'>['status']
+
+export async function sendFriendRequest(friendId: string, status: FriendRequestStatus = 'sent'): Promise<Result<null>> {
   const supabase = await createClient()
   const userResult = await getUser()
   if (!userResult.hasValue) {
@@ -34,7 +36,7 @@ export async function sendFriendRequest(friendId: string): Promise<Result<null>>
   const newRequest: Omit<Tables<'friend_requests'>, 'id' | 'created_at'> = {
     from_profile: userId,
     to_profile: friendId,
-    status: 'sent',
+    status,
   }
   console.log(newRequest)
   const { error } = await supabase.from('friend_requests').insert(newRequest).select()

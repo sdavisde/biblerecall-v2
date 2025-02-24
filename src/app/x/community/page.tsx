@@ -1,7 +1,7 @@
 import { FriendRequests } from '@components/friends/friend-requests'
 import { FriendsList } from '@components/friends/friends-list'
 import { RecentActivity } from '@components/friends/recent-activity'
-import { SendRequest } from './send-request'
+import { DetectAutoFriend } from './send-request'
 
 export default async function SocialPage({ searchParams }: { searchParams: Promise<{ uid?: string }> }) {
   const { uid } = await searchParams
@@ -20,7 +20,7 @@ export default async function SocialPage({ searchParams }: { searchParams: Promi
         </div>
       </div>
       {/* TODO: instead of sending a request here, if a UID exists I should just auto-friend them */}
-      <SendRequest potentialFriendId={uid ?? null} />
+      <DetectAutoFriend potentialFriendId={uid ?? null} />
     </div>
   )
 }

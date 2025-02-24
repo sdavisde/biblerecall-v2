@@ -8,7 +8,7 @@ import { sendFriendRequest } from './actions'
 interface Props {
   potentialFriendId: string | null
 }
-export function SendRequest({ potentialFriendId }: Props) {
+export function DetectAutoFriend({ potentialFriendId }: Props) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -18,7 +18,7 @@ export function SendRequest({ potentialFriendId }: Props) {
         return
       }
       // Try to send a request
-      const result = await sendFriendRequest(potentialFriendId)
+      const result = await sendFriendRequest(potentialFriendId, 'accepted')
       // Toast for the user to know if it was successful or not
       if (result.hasValue) {
         toast.success('✅ Successfully sent friend request')

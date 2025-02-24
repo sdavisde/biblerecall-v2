@@ -1,8 +1,7 @@
 import { Card, CardTitle } from '@components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar'
 import { Badge } from '@components/ui/badge'
-import { Progress } from '@components/ui/progress'
-import { Book, Users, Award, Bookmark, LogOut } from 'lucide-react'
+import { Book, Users, LogOut } from 'lucide-react'
 import { SettingsForm } from '@components/Settings/settings-form'
 import { getSettings } from 'src/server/routers/settings'
 import { getUser } from 'src/server'
@@ -11,7 +10,7 @@ import { Button } from '@components/ui/button'
 import { logout } from '@lib/supabase/actions'
 import { Result } from '@util/result'
 import { notFound } from 'next/navigation'
-import { Theme } from '@configuration/settings'
+import { ShareProfileQR } from '@components/friends/share-profile-qr'
 
 async function fetchUser() {
   const userResult = await getUser()
@@ -29,9 +28,9 @@ async function fetchUser() {
     .or(`user_id.eq.${user.id},friend_id.eq.${user.id}`)
 
   return Result.success({
-    name:
-      user.user_metadata?.['full_name'] ??
-      `${user.user_metadata?.['first_name'] ?? ''} ${user.user_metadata?.['last_name'] ?? ''}`,
+    id: user.id,
+    name: (user.user_metadata?.['full_name'] ??
+      `${user.user_metadata?.['first_name'] ?? ''} ${user.user_metadata?.['last_name'] ?? ''}`) as string,
     email: user.user_metadata?.['email'] ?? null,
     avatar: user.user_metadata?.['picture'] ?? null,
     bio: null,
@@ -75,39 +74,44 @@ export default async function ProfilePage() {
 
   return (
     <div className='container mx-auto px-4 py-8 flex flex-col gap-8'>
-      <Card className='flex flex-col sm:flex-row items-center gap-4'>
-        <Avatar className='w-24 h-24'>
-          <AvatarImage
-            src={user.avatar}
-            alt={user.name ?? ''}
-          />
-          <AvatarFallback>
-            {user.name ??
-              ''
+      <Card className='flex flex-col sm:flex-row items-start justify-between gap-4'>
+        <div className='flex gap-4'>
+          <Avatar className='w-24 h-24'>
+            <AvatarImage
+              src={user.avatar}
+              alt={user.name ?? ''}
+            />
+            <AvatarFallback>
+              {(user.name ?? '')
                 .split(' ')
                 .map((n) => n[0])
                 .join('')}
-          </AvatarFallback>
-        </Avatar>
-        <div className='text-center sm:text-left'>
-          <CardTitle className='text-2xl font-bold'>{user.name}</CardTitle>
-          <p className='text-muted-foreground'>{user.email}</p>
-          <p className='mt-2'>{user.bio}</p>
-          <div className='flex justify-center sm:justify-start gap-2 mt-2'>
-            <Badge variant='secondary'>
-              <Book className='w-4 h-4 mr-1' />
-              {user.versesMemorized} Verses
-            </Badge>
-            <Badge variant='secondary'>
-              <Users className='w-4 h-4 mr-1' />
-              {user.friends} Friends
-            </Badge>
-            {/* <Badge variant='secondary'>
+            </AvatarFallback>
+          </Avatar>
+          <div className='text-center sm:text-left w-full'>
+            <CardTitle className='text-2xl font-bold'>{user.name}</CardTitle>
+            <p className='text-muted-foreground'>{user.email}</p>
+            <p className='mt-2'>{user.bio}</p>
+            <div className='flex justify-center sm:justify-start gap-2 mt-2'>
+              <Badge variant='secondary'>
+                <Book className='w-4 h-4 mr-1' />
+                {user.versesMemorized} Verses
+              </Badge>
+              <Badge variant='secondary'>
+                <Users className='w-4 h-4 mr-1' />
+                {user.friends} Friends
+              </Badge>
+              {/* <Badge variant='secondary'>
               <Award className='w-4 h-4 mr-1' />
               {user.achievements.length} Achievements
             </Badge> */}
+            </div>
           </div>
         </div>
+        <ShareProfileQR
+          userId={user.id}
+          userName={user.name}
+        />
       </Card>
       <div>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
