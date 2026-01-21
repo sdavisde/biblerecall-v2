@@ -57,7 +57,7 @@
     "jquery": "^3.7.1",
     "lodash": "^4.17.21",
     "lucide-react": "^0.447.0",
-    "next": "15.1.7",
+    "next": "15.1.11",
     "next-qrcode": "^2.5.1",
     "next-themes": "^0.3.0",
     "postcss": "^8.4.28",
